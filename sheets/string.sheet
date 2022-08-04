@@ -1,3 +1,40 @@
+
+memory functions:
+
+#
+|memchr|
+|memory|search|
+void* memchr(const void* str, int c, size_t n)
+    search the first occurance of char 'c' in string 'str'
+    n bytes of 'str' to be searched, starting at 0
+    returns pointer to found char
+    ! returns NULL if no match found
+    ~ [strchr]
+    ~ included in <string.h>
+    example: 
+      char* s = "hi, whats up ._.";
+      void* r = memchr(s, '.', strlen(s));
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_memchr.htm >?
+#
+|memcmp|
+|memory|compare|
+int memcmp(const void* str0, const char* str1, size_t n)
+    compares the first n bytes of str0 and str1
+    n bytes of 'str0' and 'str1' to be compared
+    returns 0  if memory matches
+    returns <0 if 'str0' has lower value than 'str1'
+    returns >0 if 'str0' has higher value than 'str1'
+    ! doesn't stop comparing upon reaching NULL like [strcmp]
+    ~ [strcmp] [strncmp]
+    ~ included in <string.h>
+    example: 
+      char* a = "hi, whats up ._.";
+      char* b = "hi, whats up ._. adcbefg";
+      int r   = memcmp(a, b, strlen(a));
+        -> 0, because "abcsefg" in 'b' isn't compared
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_memcmp.htm >?
 #
 |memcpy|
 |memory|copy|
@@ -7,6 +44,7 @@ void* memcpy(void* dest, const void* src, size_t n)
     returns pointer to dest
     ! causes overflow if dest is too small
     ! returns NULL on fail
+    ~ [memcpy] [strncpy]
     ~ included in <string.h>
     example: 
       char s0[25] = "hi, whats up ._.";
@@ -17,3 +55,293 @@ void* memcpy(void* dest, const void* src, size_t n)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_memcpy.htm >?
 #
+|memmove|
+|memory|move|
+void* memmove(void* str0, const char* str1, size_t n)
+    copies n bytes from 'str1' to 'str0'
+    n bytes of 'str0' and 'str1' to be moved
+    returns 'str0'
+    ~ safer for overlapping memory than [memcpy]
+    ~ included in <string.h>
+    example: 
+      char s0[25] = "hi, whats up ._.";
+      char s1[25];
+      memmove(s1, s0, sizeof(char) * strlen(s0));
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_memmove.htm >?
+#
+|memset|
+|memory|copy|set|
+void* memset(void* str, int c, size_t n)
+    copies 'c' 'n' times into 'str'
+    returns 'str'
+    ~ [strncat]
+    ~ included in <string.h>
+    example: 
+      char* s = "hi, whats up ._.";
+      memset(s, '0', sizeof(char) * strlen(s));
+        -> 's' is all '0'
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_memset.htm >?
+#
+
+string functions:
+
+#
+|strcat|
+|string|cat|concatenate|add|append|
+char* strcat(char* str0, const char* str1)
+    appends / concatenates 'str1' to the end of 'str0'
+    returns 'str0'
+    ! str0 must be big enough to house the extra data or it overflows
+    ~ [strcat]
+    ~ included in <string.h>
+    example: 
+      char  s0[64] = "hi, whats up ._.";
+      char* s1     = ", nothing mush :)";
+      strcat(s0, s1);
+        -> 's0': "hi, whats up ._., nothing mush :)"
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strcat.htm >?
+#
+|strncat|
+|string|cat|concatenate|add|append|
+char* strncat(char* str0, const char* str1, size_t n)
+    appends / concatenates 'n' char from 'str1' to the end of 'str0'
+    returns 'str0'
+    ! str0 must be big enough to house the extra data or it overflows
+    ~ [strcat]
+    ~ included in <string.h>
+    example: 
+      char  s0[64] = "hi, whats up ._.";
+      char* s1     = ", nothing mush :)";
+      strncat(s0, s1, 9);
+        -> 's0': "hi, whats up ._., nothing"
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strncat.htm >?
+#
+|strchr|
+|string|search|
+char* strchr(const char* str, int c)
+    search the first occurance of char 'c' in string 'str'
+    returns pointer to found char
+    ! returns NULL if no match found
+    ~ [memchr]
+    ~ included in <string.h>
+    example: 
+      char* s = "hi, whats up ._.";
+      void* r = strchr(s, '.');
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strchr.htm >?
+#
+|strcmp|
+|string|compare|
+int strcmp(const char* str0, const char* str1)
+    compares  'str0' and 'str1'
+    returns 0  if memory matches
+    returns <0 if 'str0' has lower value than 'str1'
+    returns >0 if 'str0' has higher value than 'str1'
+    ~ [memcmp] [strncmp]
+    ~ included in <string.h>
+    example: 
+      char* a = "hi, whats up ._.";
+      char* b = "hi, whats up ._. adcbefg";
+      int r   = strcmp(a, b);
+        -> <0, because "abcsefg" 
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strcmp.htm >?
+#
+|strncmp|
+|string|compare|
+int strncmp(const char* str0, const char* str1, size_t n)
+    compares at most the first 'n' bytes of 'str0' and 'str1'
+    returns 0  if memory matches
+    returns <0 if 'str0' has lower value than 'str1'
+    returns >0 if 'str0' has higher value than 'str1'
+    ~ [memcmp] [strcmp]
+    ~ included in <string.h>
+    example: 
+      char* a = "hi, whats up ._.";
+      char* b = "hi, whats up ._. adcbefg";
+      int r   = strcmp(a, b, strlen(a));
+        -> 0, because "abcsefg" in 'b' isn't compared
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strncmp.htm >?
+#
+|strcoll|
+|string|compare|
+int strcoll(const char* str0, const char* str1)
+    compares 'str0' and 'str1' based on 'LC_COLLATE'
+    returns 0  if strings match
+    returns <0 if 'str0' has lower value than 'str1'
+    returns >0 if 'str0' has higher value than 'str1'
+    ~ [memcmp] [strcmp]
+    ~ included in <string.h>
+    example: 
+      char* a = "hi, whats up ._.";
+      char* b = "hi, whats up ._. adcbefg";
+      int r   = strcoll(a, b);
+        -> <0, because "abcsefg"
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strcoll.htm >?
+#
+|strncpy|
+|string|copy|
+char* strncpy(char* str0, const char* str1, size_t n)
+    copy max 'n' chars from 'str1' to 'str0'
+    returns pointer to 'str0'
+    ! causes overflow if 'str0' is too small
+    ! returns NULL on fail
+    ~ [memcpy] [strcpy]
+    ~ included in <string.h>
+    example: 
+      char s0[25] = "hi, whats up ._.";
+      char s1[25];
+      strncpy(s1, s0, strlen(s0));
+      printf("%s\n", s1); 
+      -> "hi, whats up ._."
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strncpy.htm >?
+#
+|strcspn|
+|string|compare|count|
+size_t strcspn(const char* str0, const char* str1)
+    counts the uninterrupted length of chars in 'str0' 
+    not contained in 'str1'
+    returns number of chars
+    ~ included in <string.h>
+    example: 
+      char* s0 = "123456abcde";
+      char* s1 = "a";
+      size_t n = strcspn(s1, s0);
+      -> 6
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strcspn.htm >?
+#
+|strerror|
+|string|error|ernro|
+char* strerror(int errnum) 
+    searches an internal array for the error number errnum and 
+    returns a pointer to an error message string
+    the error strings produced by strerror depend on the developing platform and compiler
+    ~ [errno]
+    ~ included in <string.h>
+    example: 
+      FILE* f = fopen("file.txt", "r");
+      printf("error: %s\n", strerror(errno));
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strerror.htm >?
+#
+|strlen|
+|string|length|count|
+size_t strlen(const char* str)
+    counts the length of chars in 'str' 
+    returns number of chars
+    ~ included in <string.h>
+    example: 
+      char* s  = "hello :)";
+      size_t n = strlen(s);
+      -> 8
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strlen.htm >?
+#
+|strpbrk|
+|string|search|compare|
+char* strpbrk(const char* str0, const char* str1)
+    finds the first char in thst is common between 'str0' and 'str1'  
+    ! returns NULL if no match is found
+    ~ included in <string.h>
+    example: 
+      char* a = "abcdef1gh3"
+      char* b = "213";
+      char* c = strpbrk(a, b);
+        -> c: "1gh3"
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strpbrk.htm >?
+#
+|strrchr|
+|string|search|
+char* strrchr(const char* str, int n)
+    finds first occorance of 'c' in 'str'
+    returns first occorance of 'c' in 'str'
+    ! returns NULL if no match found
+    ~ included in <string.h>
+    example: 
+      char* s = "hello :)";
+      char* a = strrchr(s, 'o');
+      -> a: "o :)"
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strrchr.htm >?
+#
+|strspn|
+|string|length|count|
+size_t strspn(const char* str0, const char* str1)
+    counts the uninterrupted length of chars in 'str0'
+    purely consisting of chars in 'str1'
+    returns number of chars
+    ~ included in <string.h>
+    example: 
+      char* s0 = "hello :)";
+      char* s1 = "hello";
+      size_t n = strspn(s0, s1);
+      -> 5
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strspn.htm >?
+#
+|strstr|
+|string|search|
+char* strstr(const char* str0, const char* str1)
+    finds the first occurance of 'str1' in 'str0'
+    returns pointer to 'str1' occurance in 'str0'
+    ! return NULL if no match found
+    ~ included in <string.h>
+    example: 
+      char* s0 = "hello :)";
+      char* s1 = ":)";
+      char* s2 = strstr(s0, s1);
+      -> s2: ":)"
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strstr.htm >?
+#
+|strtok|
+|string|seperate|sort|
+char* strtok(const char* str0, const char* str1)
+    breaks 'str0' into tokens seperated by 'str1'
+    returns first token
+    ! returns NULL if no match is found
+    ~ after first token get next tokens with strtok(NULL, str1)
+    ~ included in <string.h>
+    example: 
+      char* s0 = "hello :) ._.";
+      char* s1 = " ";
+
+      char* token = strstr(s0, s1); // get first token
+      while (token != NULL)
+      {
+        printf("%s\n", token);
+        strstr(NULL, s1);           // get other tokens
+      }
+
+      -> "hello"
+      -> ":)"
+      -> "._."
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm >?
+#
+|strxfrm|
+|string|replace|
+size_t strxfrm(const char* str0, const char* str1, size_t n)
+    replaces the first 'n' chars in 'str1' with current locale
+    and puts them into 'str0'
+    returns length of 'str0'
+    ~ included in <string.h>
+    example: 
+      char  s0[32];
+      char* s1 = "hello :)";
+      size_t n = strxfrm(s0, s1, strlen(s1));
+      -> s0: "hello :)", n: 8
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strxfrm.htm >?
+#
+
+

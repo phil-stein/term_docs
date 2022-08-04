@@ -219,6 +219,11 @@ void doc_color_code_section(char* sec)
           sec[i +2] == 'n' && sec[i +3] == 's' &&
           sec[i +4] == 't')
       { DUMP_COLORED(5, COL_TYPE); }
+      if (sec[i +0] == 't' && sec[i +1] == 'y' &&
+          sec[i +2] == 'p' && sec[i +3] == 'e' &&
+          sec[i +4] == 'd' && sec[i +5] == 'e' &&
+          sec[i +6] == 'f' )
+      { DUMP_COLORED(7, COL_TYPE); }
     }
     // -- values --
 

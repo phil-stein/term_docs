@@ -1,7 +1,75 @@
+
+'modifiers':
+
+#
+|unsigned|type|signed|signdness|
+    unsigned integer type variables can hold numbers 2x as big 
+    as their signed equivalent, but can't hold negative numbers
+    ! unsigned number going negative causes overflow
+    example: 
+      unsigned int   = 10;
+      unsigned short = 10;
+      unsigned char  = 10;
+#
+|const|type|constant|
+    variables marked const cant be modified during runtime
+    can be applied to all types and structs
+    ~ using const vars can speed up the program
+    ~ using const can also prevent you from 
+    ~ accidentally changing a value you shouln't
+    example:
+      const int c = 10;
+      int a = c * 2;    // legal
+      c = a * 2;        // illegal
+#
+|array|data|type|
+    arrays hold multiple variables 
+    of the same type in direct succesion in memory
+    arrays can be formed out of all variable types and structs
+    ~ syntax: type var_name[]
+    ~ first element in an array has index 0: array[0]
+    example:
+      int a[10];  // array of size 10 with undefined content
+      int b[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }
+      printf("%d", b[3]); // access third element in b
+        -> 3
+#
+|struct|structure|data|type|
+    structs hold variables like an [array], but
+    they can hold different types
+    ~ [typedef]
+    example:
+      // definition
+      struct data_t { int a; float b; }
+      struct data_t var = { .a = 10, .b = 0.1f };
+      int a = var.a;      // access variable in struct
+      struct data_t* ptr = &var;
+      float b = ptr->b;   // access variable in struct-pointer
+#
+|typedef|typedef|syntax|
+    add a second name for a symbol
+    example:
+      // types
+      typedef unsigned char u8;
+      u8 a = 10;
+      // enums
+      enum a { A };
+      typedef enum { A }b;
+
+      enum a var_a = A;
+      b      var_b = A;
+      // structs
+      struct a { int a; };
+      typedef struct { int a; }b;
+
+      struct a var_a = { .a = 0 };
+      b        var_t = { .a = 0 };
+#
+
+actual types:
+
 #
 |void|type|
-void  name
-void* name
     used in functions with no return
     void* can point to anything
     ! void* doesn't give any information
@@ -10,28 +78,65 @@ void* name
       void  func() {}
       void* ptr = &var;
 #
+|char|type|
+    short is a whole number
+    signed by default
+    8 bit wide
+    ! size of types varies, use sizeof() to test
+    ~ can use [unsigned] modifier
+    example: 
+      char  func() {}
+      char  val = 10;
+      char  val = 'A';
+      char* ptr = &val;
+#
 |short|type|
-short  name
-short* name
     short is a whole number
     signed by default
     16 bit wide
+    ! size of types varies, use sizeof() to test
+    ~ can use [unsigned] modifier
     example: 
       short  func() {}
       short  val = 10;
       short* ptr = &val;
 #
 |int|type|
-int  name
-int* name
     int is a whole number
     signed by default
     abrev. for integer 
     32 bit wide
+    ! size of types varies, use sizeof() to test
+    ~ can use [unsigned] modifier
     example: 
       int  func() {}
       int  val = 10;
       int* ptr = &val;
 #
+@TODO: long, long long
+#
+|float|type|
+    float is a decimal number
+    32 bit wide
+    ! size of types varies, use sizeof() to test
+    ~ literals end in 'f': '1.2f'
+    example: 
+      float  func() {}
+      float  val = 12.345f;
+      float* ptr = &val;
+#
+#
+|double|type|
+    double is a decimal number
+    64 bit wide
+    ! size of types varies, use sizeof() to test
+    ~ unlike [float] literals dont end in 'f'
+    example: 
+      double  func() {}
+      double  val = 12.345;
+      double* ptr = &val;
+#
+
+@TODO: size_t, uint_8, etc..., but maybe add them in the sheet for the header that defines them ?
 
 

@@ -52,17 +52,6 @@ int main(int argc, char** argv)
       PF_COLOR(PF_CYAN); PF("-f"); PF_COLOR(PF_WHITE);
       PF("' to search through '.h' files, @TODO: this\n");
     }
-
-    // @NOTE: '-todo' for current todo list
-     if (argv[i][0] == '-' && 
-         argv[i][1] == 't' &&
-         argv[i][2] == 'o' &&
-         argv[i][3] == 'd' &&
-         argv[i][4] == 'o' )
-    {
-      cmd_count++;
-      P("todo:\n  -> add remaining c-header doc's\n  -> add search for struct definitions\n  -> add search for function calls\n");
-    }
     
     // @NOTE: '-c' or '-color' to disable color and styles
     if ((argv[i][0] == '-'  && 

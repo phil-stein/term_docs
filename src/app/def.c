@@ -16,7 +16,6 @@ void def_print_result(search_result_t* r)
   core_data_t* core_data = core_data_get();
 
   // @NOTE: no syntaxt highlighting
-
   if (!core_data->style_act)
   {
     PF("%s\n", r->txt);
@@ -240,6 +239,7 @@ bool def_search_section(const char* path, const char* file, const char* keyword,
   {
     if (txt[start] == '\n') { lne_counter++; }  // count lines
 
+    // @TODO: struct defninitions
     // @NOTE: func definitions
     if (txt[start] == keyword[0] && 
         isspace(txt[start -1]))
@@ -297,10 +297,6 @@ bool def_search_section(const char* path, const char* file, const char* keyword,
 
     }
    
-
-    // @NOTE: struct defninitions
-    
-
     if (found) 
     { 
       char tmp = txt[end];

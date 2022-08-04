@@ -1,18 +1,20 @@
 
 # term docs
 
-**[not finished see [todo](#todo) for planned features]**
+** [!] not finished see [todo](#todo) for planned features **
+** [!] only tested on windows **
 
 c documentation for the terminal <br>
 works offline and is customizable <br>
-
+also has seqarch utility functions <br>
+most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
 
 ## table of contents
   - [features](#features)
   - [example](#example)
   - [instalation](#instalation)
   - [troubleshoot](#troubleshoot)
-  - [custimization](#custimization)
+  - [customization](#customization)
   - [todo](#todo)
 
 
@@ -29,7 +31,13 @@ works offline and is customizable <br>
 doc -h -help    -> help
 doc -c -color   -> disable syntax highlighting  
 
-doc malloc  -> documentation
+'-abc' modifiers always at the end
+example:
+  doc malloc -h -c
+
+doc [keyword]  -> documentation
+example:
+  doc malloc
 
 stdlib.sheet|malloc -------------------------------
 
@@ -49,7 +57,9 @@ void* malloc(size_t size)
 
 --------------------------------------------------
 
-doc ../code function -> search
+doc [dir] [keyword]   -> search
+example:
+  doc ../code function 
 
 function -----------------------------------------
 
@@ -67,7 +77,7 @@ void function(char arg);
 ## instalation
   1. clone git repo
   2. use gcc & make to compile <br>
-    -> type ``make`` into terminal in root dir
+    -> type `make` into terminal in root dir
   3. add root/build directory to your path
 
 ## troubleshoot
@@ -76,7 +86,12 @@ void function(char arg);
     some terminals don't support it, like command prompt on windows <br>
     on windows the new windows terminal, found in microsoft stor, supports it
 
-## custimization
+## customization
+
+  - [custom documentation](#custom documentation)
+  - [custom executable name](#custom executable name)
+
+### custom documentation
 the documentation in in the '.sheet' file in the 'sheets' folder <br>
 adding a new file here lets you add any documentation, using a custom markup style <br>
 
@@ -103,9 +118,29 @@ void* malloc(size_t size)
 '~' info <br>
 '?' link <br>
 
+### custom executable name
+in the makefile in the root directory at the top there is a variable called NAME `NAME = doc.exe` <br>
+change this and call `make clean` and `make` in the root directory
 
 ## todo 
   - search structure definitions in specified dir
   - search function / structure references
+  - incomplete search, i.e. func_ -> func_a, func_b, ...
+  - standard c documentation
+    - [ ] types e.g. int, float, etc. [wip]
+    - [x] ctype.h
+    - [x] stdlib.h
+    - [x] string.h
+    - [ ] stdio.h
+    - [ ] math.h
+    - [ ] assert.h
+    - [ ] stdarg.h
+    - [ ] time.h
+    - [ ] float.h
+    - [ ] erno.h 
+    - [ ] limits.h
+    - [ ] locale.h
+    - [ ] signal.h
+    - [ ] setjmp.h
 
 
