@@ -1,8 +1,9 @@
 #include "app/doc.h"
 #include "app/def.h"
 #include "app/style.h"
+#include "app/file_io.h"
+#include "app/core_data.h"
 #include "global/global.h"
-#include "file_io.h"
 
 #define STB_DS_IMPLEMENTATION   // only define once
 #include "stb/stb_ds.h"
@@ -13,6 +14,8 @@
 
 int main(int argc, char** argv)
 {
+  core_data_t* core_data = core_data_get();
+    
 
   if (argc < 2)
   { 
@@ -24,7 +27,6 @@ int main(int argc, char** argv)
   }
  
   // ---- commands ----
-
 
   u32 cmd_count = 0;
   for (u32 i = 1; i < argc; ++i)
@@ -60,6 +62,21 @@ int main(int argc, char** argv)
     {
       cmd_count++;
       P("todo:\n  -> add remaining c-header doc's\n  -> add search for struct definitions\n  -> add search for function calls\n");
+    }
+    
+    // @NOTE: '-c' or '-color' to disable color and styles
+    if ((argv[i][0] == '-'  && 
+         argv[i][1] == 'c') ||
+        
+        (argv[i][0] == '-'  && 
+         argv[i][1] == 'c'  && 
+         argv[i][2] == 'o'  && 
+         argv[i][3] == 'l'  && 
+         argv[i][4] == 'l'  && 
+         argv[i][5] == 'r') ) 
+    {
+      cmd_count++;
+      core_data->style_act = false;
     }
 
     // if (argv[i][0] == '-' && 

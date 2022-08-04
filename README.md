@@ -4,13 +4,16 @@
 **[not finished see [todo](#todo) for planned features]**
 
 c documentation for the terminal <br>
-works offline and is customizable
+works offline and is customizable <br>
+
 
 ## table of contents
   - [features](#features)
   - [example](#example)
   - [instalation](#instalation)
+  - [troubleshoot](#troubleshoot)
   - [custimization](#custimization)
+  - [todo](#todo)
 
 
 ## features
@@ -23,7 +26,8 @@ works offline and is customizable
 
 ```c
 
-doc -h      -> help          
+doc -h -help    -> help
+doc -c -color   -> disable syntax highlighting  
 
 doc malloc  -> documentation
 
@@ -65,6 +69,12 @@ void function(char arg);
   2. use gcc & make to compile <br>
     -> type ``make`` into terminal in root dir
   3. add root/build directory to your path
+
+## troubleshoot
+  - output text is messed up
+    try adding '-c' to your command to disable syntax highlighting, <br>
+    some terminals don't support it, like command prompt on windows <br>
+    on windows the new windows terminal, found in microsoft stor, supports it
 
 ## custimization
 the documentation in in the '.sheet' file in the 'sheets' folder <br>

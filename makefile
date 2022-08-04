@@ -20,7 +20,8 @@ _OBJS =					\
 	file_io.o			\
 	style.o				\
 	doc.o					\
-	def.o
+	def.o					\
+	core_data.o
 
 # put the OBJ_DIR in front of the obj names
 OBJS = $(patsubst %,$(OBJ_DIR)/%,$(_OBJS))

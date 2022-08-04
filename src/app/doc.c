@@ -1,6 +1,7 @@
 #include "app/doc.h"
 #include "app/file_io.h"
 #include "app/style.h"
+#include "app/core_data.h"
 
 #include <ctype.h>
 
@@ -121,6 +122,15 @@ void doc_print_section(char* sec, const char* keyword, const char* file)
 
 void doc_color_code_section(char* sec)
 {
+  core_data_t* core_data = core_data_get();
+  // @NOTE: no syntax highlighting
+  if (!core_data->style_act)
+  {
+    PF("%s\n", sec);
+    return;
+  }
+
+  // @NOTE: syntax highlighting
   int  len = strlen(sec);
   char buf[512];
   int  buf_pos = 0;

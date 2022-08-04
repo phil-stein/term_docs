@@ -1,6 +1,7 @@
 #include "app/def.h"
 #include "app/file_io.h"
 #include "app/style.h"
+#include "app/core_data.h"
 
 #include "stb/stb_ds.h" // STB_DS_IMPLEMEMTATION in main.c
 
@@ -12,6 +13,18 @@
 
 void def_print_result(search_result_t* r)
 {
+  core_data_t* core_data = core_data_get();
+
+  // @NOTE: no syntaxt highlighting
+
+  if (!core_data->style_act)
+  {
+    PF("%s\n", r->txt);
+    return;
+  }
+
+  // @NOTE: syntax highlighted 
+
   // PF_COLOR(PF_PURPLE); PF("\n%s", r->txt); PF_COLOR(PF_WHITE); 
   int  len = strlen(r->txt);
   char buf[512];
@@ -30,6 +43,7 @@ void def_print_result(search_result_t* r)
       BUF_DUMP();                                               \
       PF_COLOR(PF_WHITE); }
   
+
   for (u32 i = 0; i < len -1; ++i)
   { 
     u32 j = 0;
@@ -226,6 +240,7 @@ bool def_search_section(const char* path, const char* file, const char* keyword,
   {
     if (txt[start] == '\n') { lne_counter++; }  // count lines
 
+    // @NOTE: func definitions
     if (txt[start] == keyword[0] && 
         isspace(txt[start -1]))
     {
@@ -248,38 +263,46 @@ bool def_search_section(const char* path, const char* file, const char* keyword,
       }
 
       end = start + j;
+      
+      if (found)
+      {
+        // @NOTE: include comments
+        bool comment_in_line = true;
+        for (u32 k = start; k >= 0; --k)
+        {
+          // if ((txt[k -1] == '\n' || k -1 == 0) &&
+          if (txt[k +0] == '/' && txt[k +1] == '/')
+          { start = k; comment_in_line = true; }
+
+          if ((txt[k] == '\n' || k == 0) && !comment_in_line) 
+          { break; }
+
+          if (txt[k] == '\n')
+          { comment_in_line = false; }       
+
+        }
+        // @NOTE: go to start of line
+        for (u32 k = start; k > 0; --k)
+        {
+          if (txt[k] == '\n' || k == 0) { start = k +1; break; }
+        }
+
+        // @NOTE: include args
+        for (;end < txt_len; ++end)
+        {
+          if (txt[end] == ';')  { end++; break; }
+          if (txt[end] == '\n') { break; }
+        }
+      }
+
     }
+   
+
+    // @NOTE: struct defninitions
     
+
     if (found) 
     { 
-      // @NOTE: include comments
-      bool comment_in_line = true;
-      for (u32 k = start; k >= 0; --k)
-      {
-        // if ((txt[k -1] == '\n' || k -1 == 0) &&
-        if (txt[k +0] == '/' && txt[k +1] == '/')
-        { start = k; comment_in_line = true; }
-        
-        if ((txt[k] == '\n' || k == 0) && !comment_in_line) 
-        { break; }
-
-        if (txt[k] == '\n')
-        { comment_in_line = false; }       
-
-      }
-      // @NOTE: go to start of line
-      for (u32 k = start; k > 0; --k)
-      {
-        if (txt[k] == '\n' || k == 0) { start = k +1; break; }
-      }
-      
-      // @NOTE: include args
-      for (;end < txt_len; ++end)
-      {
-        if (txt[end] == ';')  { end++; break; }
-        if (txt[end] == '\n') { break; }
-      }
-
       char tmp = txt[end];
       txt[end] = '\0'; 
 
@@ -306,6 +329,7 @@ bool def_search_section(const char* path, const char* file, const char* keyword,
       start = end;
       found = false;
     }
+
   }
   FREE(txt);
   
