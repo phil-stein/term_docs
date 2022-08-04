@@ -1,0 +1,19 @@
+#
+|memcpy|
+|memory|copy|
+void* memcpy(void* dest, const void* src, size_t n)
+    copy data from one array (pointer) to another one
+    n size in bytes
+    returns pointer to dest
+    ! causes overflow if dest is too small
+    ! returns NULL on fail
+    ~ included in <string.h>
+    example: 
+      char s0[25] = "hi, whats up ._.";
+      char s1[25];
+      memcpy(s1, s0, sizeof(char) * 25);
+      printf("%s\n", s1); 
+      -> "hi, whats up ._."
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_memcpy.htm >?
+#

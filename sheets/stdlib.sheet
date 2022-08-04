@@ -1,0 +1,191 @@
+#
+|malloc|
+|allocate|memory|dynamic memory|
+void* malloc(size_t size)   
+    allocate the specified amount of memory.
+    ! needs to be freed using [free]
+    ! size is in bytes
+    ! returns NULL on fail
+    ~ included in <stdlib.h>
+    example: 
+      // array now has space for 10 int's
+      int* array = malloc(10 * sizeof(int));
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm >?
+#
+|calloc|
+|allocate|memory|dynamic memory|
+void* calloc(size_t items, size_t size)   
+    allocate the specified amount of memory.
+    sets memory to 0.
+    ! needs to be freed using [free]
+    ! returns NULL on fail
+    ~ included in <stdlib.h>
+    example: 
+      // array now has space for 10 int's
+      int* array = calloc(10, sizeof(int));
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_calloc.html >?
+#
+|realloc|
+|reallocate|allocate|memory|dynamic memory|
+void* realloc(void* ptr, size_t size)   
+    allocate the specified amount of memory.
+    if ptr already allocated, allocates
+    the requested amount of memeory and moves data
+    ! needs to be freed using [free]
+    ! returns NULL on fail
+    ~ included in <stdlib.h>
+    example: 
+      // array now has space for 10 int's
+      int* array = realloc(array, 10 * sizeof(int));
+      // array now has space for 20 int's
+      array = realloc(array, 20 * sizeof(int));
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_realloc.htm >?
+#
+|free|
+|deallocate|memory|dynamic memory|
+void free(void* mem)   
+    free a previously allocated bit of memory
+    ! mem may not be NULL
+    ! after freeing mem isn't NULL
+    ~ included in <stdlib.h>
+    example: 
+      int* array = malloc(10 * sizeof(int));
+      free(array);
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_free.htm >?
+#
+|atof|
+|convert|
+double atof(const char* str)   
+    convert string to double
+    ! returns 0.0 if invalid str
+    ~ included in <stdlib.h>
+    example: 
+      double d = atof("123.456");
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_atof.htm >?
+#
+|atoi|
+|convert|
+int atoi(const char* str)   
+    convert string to int
+    ! returns 0 if invalid str
+    ~ included in <stdlib.h>
+    example: 
+      int d = atoi("123");
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_atoi.htm >?
+#
+|atol|
+|convert|
+long int atol(const char* str)   
+    convert string to long int
+    ! returns 0 if invalid str
+    ~ included in <stdlib.h>
+    example: 
+      long int d = atol("123456");
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_atol.htm >?
+#
+|strtod|
+|convert|
+double strtod(const char* str, char** endptr)   
+    convert string to double
+    endptr will be set to the next char after num
+    ! returns 0.0 if invalid str
+    ~ endptr can be set to NULL
+    ~ included in <stdlib.h>
+    example: 
+      double d = strtod("123.456", NULL);
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strtod.htm >?
+#
+|strtol|
+|convert|
+long int strtol(const char* str, char** endptri, int base)   
+    convert string to long int
+    endptr will be set to the next char after num
+    base is base 2 / 8/ 10 / 16/ etc.
+    ! base has to be between 2 - 36
+    ! returns 0 if invalid str
+    ~ endptr can be set to NULL
+    ~ included in <stdlib.h>
+    example: 
+      long int d = strtod("123456", NULL, 10);
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strtol.htm >?
+#
+|strtoul|
+|convert|
+unsigned long int strtoul(const char* str, char** endptr)   
+    convert string to unsigned long int
+    endptr will be set to the next char after num
+    base is base 2 / 8/ 10 / 16/ etc.
+    ! base has to be between 2 - 36
+    ! returns 0 if invalid str
+    ~ endptr can be set to NULL
+    example: 
+      long int d = strtod("123456", NULL, 10);
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strtoul.htm >?
+#
+|abort|
+|exit|quit|
+void abort()   
+    exits program directly from the place it was called
+    ~ included in <stdlib.h>
+    example: 
+      abort();
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_abort.htm >?
+#
+|exit|
+|quit|
+void exit(int code)   
+    exits program directly from the place it was called
+    outputs the error code 'code' to the terminal
+    ~ code 0 is no error
+    ~ code 1 is minor error
+    ~ included in <stdlib.h>
+    example: 
+      exit(1);
+
+?< https://www.geeksforgeeks.org/exit-codes-in-c-c-with-examples/ >?
+?< https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm >?
+#
+|atexit|
+|exit|quit|
+void atexit(void (*func)(void))   
+    registers function pointer to be called right 
+    before program termination
+    ~ included in <stdlib.h>
+    example: 
+      void exit_func() { ... }
+      atexit(exit_func);
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm >?
+#
+|system|
+|command|command line|
+int exit(const char* command)   
+    gives command to the os's terminal
+    ! available commands depend on current os
+    ~ included in <stdlib.h>
+    example: 
+      system("dir"); // windows
+      system("ls");  // unix
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_system.htm >?
+#
+
+
+
+
+
+
+
+
+

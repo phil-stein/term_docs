@@ -1,0 +1,37 @@
+#
+|void|type|
+void  name
+void* name
+    used in functions with no return
+    void* can point to anything
+    ! void* doesn't give any information
+    ! about the size/type of the value
+    example: 
+      void  func() {}
+      void* ptr = &var;
+#
+|short|type|
+short  name
+short* name
+    short is a whole number
+    signed by default
+    16 bit wide
+    example: 
+      short  func() {}
+      short  val = 10;
+      short* ptr = &val;
+#
+|int|type|
+int  name
+int* name
+    int is a whole number
+    signed by default
+    abrev. for integer 
+    32 bit wide
+    example: 
+      int  func() {}
+      int  val = 10;
+      int* ptr = &val;
+#
+
+

@@ -1,0 +1,51 @@
+#
+|isdigit|
+|ctype|digit|number|
+int isdigit(int c)   
+    returns true if c is a digit / number
+    ~ included in <ctype.h>
+    example: 
+        char c = '1';
+        bool b = isdigit(c);
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_isdigit.htm >?
+#
+|isalpha|
+|ctype|alpha|letter|
+int isalpha(int c)   
+    returns true if c is a letter
+    ~ included in <ctype.h>
+    example: 
+        char c = 'a';
+        bool b = isalpha(c);
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_isalpha.htm >?
+#
+|isalnum|
+|ctype|alpha|letter|number|
+int isalnum(int c)   
+    returns true if c is a letter 
+    or a number
+    ~ included in <ctype.h>
+    example: 
+        char c = 'a';
+        bool b = isalnum(c);
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_isalnum.htm >?
+#
+|isspace|
+|ctype|space|whitespace|
+int isspace(int c)   
+    returns true if c is whitespace
+    ~ included in <ctype.h>
+    example: 
+        char c = '\n';
+        bool b = isspace(c);
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_isspace.htm >?
+#
+
+
+
+
+
