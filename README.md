@@ -11,6 +11,26 @@ doc malloc           -> documentation
 doc ../code function -> search
 
 ```
+```
+stdlib.sheet|malloc -------------------------------
+
+|malloc|
+|allocate|memory|dynamic memory|
+void* malloc(size_t size)
+    allocate the specified amount of memory.
+    ! needs to be freed using [free]
+    ! size is in bytes
+    ! returns NULL on fail
+    ~ included in <stdlib.h>
+    example:
+      // array now has space for 10 int's
+      int* array = malloc(10 * sizeof(int));
+
+  < https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm >
+
+--------------------------------------------------
+```
+
 
 
 ## features
