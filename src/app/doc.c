@@ -30,7 +30,7 @@ void doc_search_dir(const char* dir_path, const char* keyword, int* n)
           dp->d_name[dp->d_namlen -3] == 'e' &&
           dp->d_name[dp->d_namlen -2] == 'e' &&
           dp->d_name[dp->d_namlen -1] == 't' )
-      { 
+      {
         char buf[300];
         SPRINTF(300, buf, "%s%s", dir_path, dp->d_name);
         if (doc_search_section(buf, dp->d_name, keyword)) 
@@ -67,7 +67,6 @@ bool doc_search_section(const char* path, const char* file, const char* keyword)
     if (txt[start] == keyword[0] && 
         txt[start -1] == BORDER_CHAR)
     {
-      found_one = true;
       found = true;
       int j = 0;
       for (j = 0; keyword[j] != '\0'; j++)
@@ -81,9 +80,9 @@ bool doc_search_section(const char* path, const char* file, const char* keyword)
     if (found) 
     { 
       // -- section start & end --
-      while (txt[start] != '#') { start--; }
+      while (txt[start] != '#' || txt[start -1] == '\\') { start--; }
       int end = start +1;
-      while (txt[end] != '#')   { end++; }
+      while (txt[end] != '#' || txt[end -1] == '\\')   { end++; }
 
       start++;          // skip '#'
       char end_char = txt[end];
@@ -92,9 +91,9 @@ bool doc_search_section(const char* path, const char* file, const char* keyword)
       doc_print_section(txt + start, keyword, file);
       txt[end] = end_char;
       start = end +1;
+      found_one = true;
       found = false;
-      // break; 
-    } 
+    }
   }
   FREE(txt);
   
@@ -140,7 +139,12 @@ void doc_color_code_section(char* sec)
       buf[buf_pos] = '\0';  \
       PF("%s", buf);        \
       buf_pos = 0;
-
+ 
+  #define BUF_DUMP_OFFSET(offset) \
+      buf[buf_pos] = '\0';        \
+      PF("%s", buf +(offset));    \
+      buf_pos = 0;
+  
   #define DUMP_COLORED(n, col)                              \
       { BUF_DUMP();                                         \
       PF_COLOR(col);                                        \
@@ -149,11 +153,14 @@ void doc_color_code_section(char* sec)
       BUF_DUMP();                                           \
       PF_COLOR(PF_WHITE); }
 
+  // check if char is valid as an ending for a type name
+  #define TYPE_END(c) (isspace((c)) || (c) == '*')
+
   for (int i = 0; i < len -1; ++i)
   {
     // -- functions --
     int j = 0;
-    while(isalnum(sec[i +j])) 
+    while(isalnum(sec[i +j]) || sec[i +j] == '_') 
     { j++; }
     if (sec[i +j] == '(')
     {
@@ -164,8 +171,6 @@ void doc_color_code_section(char* sec)
       PF_COLOR(PF_WHITE);
     }
     
-  
-
     // @TODO: 
     // style_highlight_c(&sec, &buf, &buf_pos, &i);
 
@@ -173,61 +178,71 @@ void doc_color_code_section(char* sec)
     if (!isalnum(sec[i -1]) && sec[i -1] != '|')
     {
       if (sec[i +0] == 'v' && sec[i +1] == 'o' &&
-          sec[i +2] == 'i' && sec[i +3] == 'd')
+          sec[i +2] == 'i' && sec[i +3] == 'd' && 
+          TYPE_END(sec[i +4]))
       { DUMP_COLORED(4, COL_TYPE); }
       if (sec[i +0] == 'i' && sec[i +1] == 'n' &&
-          sec[i +2] == 't')
+          sec[i +2] == 't' && TYPE_END(sec[i +3]))
       { DUMP_COLORED(3, COL_TYPE); }
       if (sec[i +0] == 'f' && sec[i +1] == 'l' &&
           sec[i +2] == 'o' && sec[i +3] == 'a' &&
-          sec[i +4] == 't')
+          sec[i +4] == 't' && TYPE_END(sec[i +5]))
       { DUMP_COLORED(5, COL_TYPE); }
       if (sec[i +0] == 'd' && sec[i +1] == 'o' &&
           sec[i +2] == 'u' && sec[i +3] == 'b' &&
-          sec[i +4] == 'l' && sec[i +5] == 'e')
+          sec[i +4] == 'l' && sec[i +5] == 'e' && 
+          TYPE_END(sec[i +6]))
       { DUMP_COLORED(6, COL_TYPE); }
       if (sec[i +0] == 's' && sec[i +1] == 'h' &&
           sec[i +2] == 'o' && sec[i +3] == 'r' &&
-          sec[i +4] == 't')
+          sec[i +4] == 't' && TYPE_END(sec[i +5]))
       { DUMP_COLORED(5, COL_TYPE); }
       if (sec[i +0] == 'l' && sec[i +1] == 'o' &&
-          sec[i +2] == 'n' && sec[i +3] == 'g')
+          sec[i +2] == 'n' && sec[i +3] == 'g' && 
+          TYPE_END(sec[i +4]))
       { DUMP_COLORED(4, COL_TYPE); }
       if (sec[i +0] == 's' && sec[i +1] == 'i' &&
           sec[i +2] == 'z' && sec[i +3] == 'e' &&
-          sec[i +4] == '_' && sec[i +5] == 't')
+          sec[i +4] == '_' && sec[i +5] == 't' && 
+          TYPE_END(sec[i +6]))
       { DUMP_COLORED(6, COL_TYPE); }
       if (sec[i +0] == 'u' && sec[i +1] == 'n' &&
           sec[i +2] == 's' && sec[i +3] == 'i' &&
           sec[i +4] == 'g' && sec[i +5] == 'n' &&
-          sec[i +6] == 'e' && sec[i +7] == 'd')
+          sec[i +6] == 'e' && sec[i +7] == 'd' && 
+          TYPE_END(sec[i +8]))
       { DUMP_COLORED(8, COL_TYPE); }
       if (sec[i +0] == 'e' && sec[i +1] == 'n' &&
-          sec[i +2] == 'u' && sec[i +3] == 'm')
+          sec[i +2] == 'u' && sec[i +3] == 'm' && 
+          TYPE_END(sec[i +4]))
       { DUMP_COLORED(4, COL_TYPE); }
       if (sec[i +0] == 's' && sec[i +1] == 't' &&
           sec[i +2] == 'r' && sec[i +3] == 'u' &&
-          sec[i +4] == 'c' && sec[i +5] == 't')
+          sec[i +4] == 'c' && sec[i +5] == 't' && 
+          TYPE_END(sec[i +6]))
       { DUMP_COLORED(6, COL_TYPE); }
       if (sec[i +0] == 'c' && sec[i +1] == 'h' &&
-          sec[i +2] == 'a' && sec[i +3] == 'r')
+          sec[i +2] == 'a' && sec[i +3] == 'r' && 
+          TYPE_END(sec[i +4]))
       { DUMP_COLORED(4, COL_TYPE); }
       if (sec[i +0] == 'b' && sec[i +1] == 'o' &&
-          sec[i +2] == 'o' && sec[i +3] == 'l')
+          sec[i +2] == 'o' && sec[i +3] == 'l' && 
+          TYPE_END(sec[i +4]))
       { DUMP_COLORED(4, COL_TYPE); }
       if (sec[i +0] == 'c' && sec[i +1] == 'o' &&
           sec[i +2] == 'n' && sec[i +3] == 's' &&
-          sec[i +4] == 't')
+          sec[i +4] == 't' && TYPE_END(sec[i +5]))
       { DUMP_COLORED(5, COL_TYPE); }
       if (sec[i +0] == 't' && sec[i +1] == 'y' &&
           sec[i +2] == 'p' && sec[i +3] == 'e' &&
           sec[i +4] == 'd' && sec[i +5] == 'e' &&
-          sec[i +6] == 'f' )
+          sec[i +6] == 'f' && TYPE_END(sec[i +7]))
       { DUMP_COLORED(7, COL_TYPE); }
     }
     // -- values --
 
-    if (isdigit(sec[i]))                      // numbers
+    if (isdigit(sec[i]) && !isalpha(sec[i -1]) && 
+        (!isalpha(sec[i +1]) || sec[i +1] == 'f'))                      // numbers
     {
       BUF_DUMP();
       PF_COLOR(COL_VALUE);
@@ -272,7 +287,9 @@ void doc_color_code_section(char* sec)
     // -- warnings --
     if (sec[i] == '!')
     {
-      BUF_DUMP();
+      // skip escaped char
+      if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
+      else { BUF_DUMP(); }
       PF_STYLE_COL(PF_ITALIC, COL_WARNING);
       while (sec[i] != '\n') { buf[buf_pos++] = sec[i++]; }
       BUF_DUMP();
@@ -282,7 +299,9 @@ void doc_color_code_section(char* sec)
     // -- info --
     if (sec[i] == '~')
     {
-      BUF_DUMP();
+      // skip escaped char
+      if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
+      else { BUF_DUMP(); }
       PF_STYLE_COL(PF_ITALIC, COL_INFO);
       while (sec[i] != '\n') { buf[buf_pos++] = sec[i++]; }
       BUF_DUMP();
@@ -320,23 +339,30 @@ void doc_color_code_section(char* sec)
         sec[i +6] == 'e' && sec[i +7] == ':')
     { DUMP_COLORED(8, COL_EXAMPLE); }
 
+    // -- escasped --
+    if (sec[i] == '\\' && sec[i +1] == '#')
+    {
+      BUF_DUMP();
+      i++;
+    }
+
     // -- copy from sec --
     buf[buf_pos++] = sec[i];
 
     // -- tags --
-    if (sec[i] == '|' && isspace(sec[i+1]) && in_tag)
+    if (sec[i] == '|' && isspace(sec[i+1]) && in_tag) // end tag
     { 
       BUF_DUMP();
-      PF_COLOR(PF_WHITE);;
+      PF_COLOR(PF_WHITE);
       in_tag = false;
-      continue;
+      // continue;
     }
-    else if (sec[i +1] == '|')
+    else if (sec[i +1] == '|')  // start tag
     {
       BUF_DUMP();
       PF_STYLE_COL(PF_UNDERLINE, COL_TAG);;
       in_tag = true;
-      continue;
+      // continue;
     }
 
   }

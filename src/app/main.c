@@ -15,7 +15,6 @@
 int main(int argc, char** argv)
 {
   core_data_t* core_data = core_data_get();
-    
 
   if (argc < 2)
   { 
@@ -135,9 +134,9 @@ int main(int argc, char** argv)
   else
   {
     doc_search_dir("/workspace/c/term_docs/sheets/", argv[1], &n);
-    // search_dir("../sheets/", argv[1], &n);
+    // doc_search_dir("../sheets/", argv[1], &n);
   }
-  
+
   if (n <= 0)
   { 
     PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  

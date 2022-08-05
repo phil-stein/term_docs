@@ -185,6 +185,24 @@ int strcoll(const char* str0, const char* str1)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strcoll.htm >?
 #
+|strcpy|
+|string|copy|
+char* strcpy(char* str0, const char* str1)
+    copy 'str1' to 'str0'
+    returns pointer to 'str0'
+    ! causes overflow if 'str0' is too small
+    ! returns NULL on fail
+    ~ [memcpy] [strcpy]
+    ~ included in <string.h>
+    example: 
+      char s0[25] = "hi, whats up ._.";
+      char s1[25];
+      strcpy(s1, s0);
+      printf("%s\n", s1); 
+      -> "hi, whats up ._."
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strcpy.htm >?
+#
 |strncpy|
 |string|copy|
 char* strncpy(char* str0, const char* str1, size_t n)

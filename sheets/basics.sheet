@@ -1,5 +1,5 @@
 
-'modifiers':
+modifiers:
 
 #
 |unsigned|type|signed|signdness|
@@ -21,6 +21,10 @@
       const int c = 10;
       int a = c * 2;    // legal
       c = a * 2;        // illegal
+#
+
+data structures:
+
 #
 |array|data|type|
     arrays hold multiple variables 
@@ -78,8 +82,24 @@ actual types:
       void  func() {}
       void* ptr = &var;
 #
+|bool|boolean|type|
+    either true or false
+    true: 1, false: 0
+    8 bit wide
+    ! size of types varies, use sizeof() to test
+    ! not included in all versions of c
+    ~ include "stdbool.h"
+    ~ or [define]/[typedef] bool, true, false
+    example:
+      bool a = true;
+      a = false;
+      a = 1;
+      a = 0;
+      if (a)  {...}
+      if (!a) {...} // true->false, false->true
+#
 |char|type|
-    short is a whole number
+    char is a whole number
     signed by default
     8 bit wide
     ! size of types varies, use sizeof() to test
@@ -113,7 +133,30 @@ actual types:
       int  val = 10;
       int* ptr = &val;
 #
-@TODO: long, long long
+|long|type|
+    long is a whole number
+    signed by default
+    abrev. for integer 
+    32 bit wide
+    same as [int]
+    ! size of types varies, use sizeof() to test
+    ~ can use [unsigned] modifier
+    example: 
+      long  func() {}
+      long  val = 10;
+      long* ptr = &val;
+#
+|long-long|long|type|
+    long long is a whole number
+    signed by default
+    abrev. for integer 
+    64 bit wide
+    ! size of types varies, use sizeof() to test
+    ~ can use [unsigned] modifier
+    example: 
+      long long  func() {}
+      long long  val = 10;
+      long long* ptr = &val;
 #
 |float|type|
     float is a decimal number
@@ -138,5 +181,27 @@ actual types:
 #
 
 @TODO: size_t, uint_8, etc..., but maybe add them in the sheet for the header that defines them ?
+
+#
+|define|macro|
+    the define macro registeres a piece of code under a name
+    \~ use '\' to make multiline macros, no whitespace after '\'
+    ~ wrapping args in parenthesis makes it safer 
+    \! hello
+    ! hi
+    example:
+      \#define NAME 34 * 67
+      \#define ADD(a, b) ((a) + (b))
+      \#define WARNING()      \
+        printf("[!!!]");      \
+        printf(" warning\n")
+
+      printf("%d\n", NAME);
+      printf("%d\n", ADD(30, 70));
+      WARNING();
+        -> 2278 
+        -> 100
+        -> "[!!!] warning"
+#
 
 
