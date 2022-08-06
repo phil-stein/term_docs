@@ -118,6 +118,10 @@ void* malloc(size_t size)
 '~' info <br>
 '?' link <br>
 
+to include a '#' symbol in your documentation you need to escape it ``\#define`` <br>
+the same applied to `` ! ~ ? ``  `` \! \~ \? `` hides them in the documentation
+
+
 ### custom executable name
 in the makefile in the root directory at the top there is a variable called NAME `NAME = doc.exe` <br>
 change this and call `make clean` and `make` in the root directory

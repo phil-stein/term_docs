@@ -7,9 +7,12 @@ modifiers:
     as their signed equivalent, but can't hold negative numbers
     ! unsigned number going negative causes overflow
     example: 
-      unsigned int   = 10;
-      unsigned short = 10;
-      unsigned char  = 10;
+      unsigned long long = 10;
+      unsigned int       = 10;
+      unsigned short     = 10;
+      unsigned char      = 10;
+
+      unsigned = 10;  // same as unsigned int 
 #
 |const|type|constant|
     variables marked const cant be modified during runtime
@@ -182,6 +185,8 @@ actual types:
 
 @TODO: size_t, uint_8, etc..., but maybe add them in the sheet for the header that defines them ?
 
+macros:
+
 #
 |define|macro|
     the define macro registeres a piece of code under a name
@@ -203,5 +208,61 @@ actual types:
         -> 100
         -> "[!!!] warning"
 #
+@TODO: if, idef, else, ifndef, elif, etc.
+#
+|c-version|c|version|c89|c99|c11|c18|compiler|macro|
+    c was originally made in 1972 by Dennis Ritchie, 
+    so theres been a lot of versions since then
+    if you want to check which version you are
+    currently compiling in use the macros shown below
+
+    setting a specific c version to use 
+    depends on the compiler see below
+
+    example:
+      // print version
+      if (__STDC_VERSION__ >=  201710L)       
+      { printf("-- using c18 --\n"); }            
+      else if (__STDC_VERSION__ >= 201112L)   
+      { printf("-- using c11 --\n"); }            
+      else if (__STDC_VERSION__ >= 199901L)   
+      { printf("-- using c99 --\n"); }            
+      else                                    
+      { printf("-- using c89/c90 --\n"); }
+      
+      // set version in compiler
+      // in makefile / directly in terminal
+      
+      gcc -std=c90  // c89 / c90
+      gcc -std=c99  // c99
+      gcc -std=c11  // c11
+      gcc -std=c17  // c17 / 18
+      // c89 and c90 is the same version
+      // in gcc c99 implemnts corrertions of the early 2000s versions
+      // in gcc c11 and c17 only differ in the value '__STDC_VERSION__'
+
+      clang -std=c89 -std=c90   // c89 / c90
+      clang -std=gnu89          // c89 with gnu extensins
+      clang -std=c99
+      clang -std=gnu99          // c99 with gnu extensins
+      clang -std=c11
+      clang -std=gnu11          // c11 with gnu extensins
+      clang -std=c17
+      clang -std=gnu17          // c17 with gnu extensins
+
+      // msvc is a windows specific compiler made by
+      // microsoft for Visial Studio, etc.
+      // could not find older versions supported by msvc
+      // use '/' or '-' to start a command  
+      msvc /std:c11 -std:c11
+      msvc /std:c17 -std:c17
+
+      ?< gcc: https://gcc.gnu.org/onlinedocs/gcc/Standards.html >?
+      ?< clang: https://clang.llvm.org/docs/CommandGuide/clang.html >?
+      ?< msvc: https://docs.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-by-category?view=msvc-170 >?
+      ?<c: https://en.wikipedia.org/wiki/C_(programming_language) >?
+           
+#
+
 
 

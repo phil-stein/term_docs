@@ -9,12 +9,31 @@
 #include "stb/stb_ds.h"
 
 #include <ctype.h>
+#include <direct.h>
+#include <dirent/dirent.h>
 
 
 
 int main(int argc, char** argv)
 {
   core_data_t* core_data = core_data_get();
+
+  // -- get executable name --
+  // P_STR(_getcwd(NULL, 0));
+  GetModuleFileName(NULL, core_data->exec_path, CORE_PATH_MAX);   // get executable location
+  assert(core_data->exec_path != NULL);
+  // P_STR(core_data->exec_path);
+  strncpy(core_data->sheets_path, core_data->exec_path, CORE_PATH_MAX);
+  assert(core_data->sheets_path != NULL);
+  int dirs_walk_back = 2;
+  for (u32 i = strlen(core_data->sheets_path) -1; i > 0; --i)
+  {
+    if (core_data->sheets_path[i] == '\\') 
+    { dirs_walk_back--; if (dirs_walk_back <= 0) { break; } }
+    core_data->sheets_path[i] = '\0';
+  }
+  strcat(core_data->sheets_path, "sheets/");
+  // P_STR(core_data->sheets_path);
 
   if (argc < 2)
   { 
@@ -133,7 +152,8 @@ int main(int argc, char** argv)
   }
   else
   {
-    doc_search_dir("/workspace/c/term_docs/sheets/", argv[1], &n);
+    doc_search_dir(core_data->sheets_path, argv[1], &n);
+    // doc_search_dir("/workspace/c/term_docs/sheets/", argv[1], &n);
     // doc_search_dir("../sheets/", argv[1], &n);
   }
 

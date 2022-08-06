@@ -1,0 +1,26 @@
+
+#
+|_getcwd|
+|dirent|cwd|getcwd|working-directory|
+char* _getcwd(char* buffer, int max_len)
+    get the current working directory
+    returns poointer to buffer
+    ! if 'buffer' < 'max_len' overflow
+    ~ 'buffer' NULL and 'max_len' 0 works
+    example:
+      char* cwd = _getcwd(NULL, 0);
+      char  cwd[256];
+      _getcwd(cwd, 256);
+#
+|GetModuleFileName|
+|winbase|win32|executable|
+WINAPI DWORD GetModuleFileName(HMODULE hModule, LPWSTR lpFilename, DWORD nSize)
+__stdcall unsigned GetModuleFileName(void* module, char* buffer, unsigned size)
+    writes the filepath of an executable into 'buffer', not exceeding 'size'
+    'module' is the handle of the process to find the executable
+    ~ 'module' = NULL means current executable
+    ~ returns length of string in chars
+    ~ defined in 'Winbase.h'
+    ! only works on windows
+    ! return = 0 is error
+#

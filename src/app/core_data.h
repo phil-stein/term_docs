@@ -3,9 +3,13 @@
 
 #include "global/global.h"
 
+#define CORE_PATH_MAX   256
+
 typedef struct core_data_t
 {
-  bool style_act;    // use syntax highlighting
+  bool style_act;                     // use syntax highlighting
+  char exec_path[CORE_PATH_MAX];      // path to executable
+  char sheets_path[CORE_PATH_MAX];    // path to sheets folder
 
 }core_data_t;
 #define CORE_DATA_INIT()    \

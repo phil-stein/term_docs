@@ -1,0 +1,49 @@
+
+@NOTE: testing ground no actual docs here
+
+#
+|test|wip|
+    ! not actual documentation just a test
+
+    char    character achar
+    short   shotest   ashort
+    int     integer   aint
+    long    longest   along
+    float   floating  afloat
+    double  doubled   adouble
+    unsigned, const, struct, enum, typedef
+    func(), func(int a, float b), func(int a), func(int,int b), func ()
+    122 12.2 12.2f
+    0x12 0b0101   1230x21 0g324
+    'c' "hello"
+    true, false
+    NULL
+
+    if ()       if()
+    else if ()  else if()
+    else 
+    for ()      for()
+    while ()    while()
+    switch ()   switch()
+
+    // comment
+    /*
+     | multi
+     | line
+     | comment
+    */
+
+    \#if     condition
+    \#elif   condition
+    \#else
+    \#define MACRO
+    \#ifdef  MACRO
+    \#ifndef MACRO
+    
+    
+    ~ info
+    ! warning
+    ? link
+
+    example:
+#
