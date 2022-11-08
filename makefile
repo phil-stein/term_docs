@@ -6,8 +6,9 @@
 # compiler plus flags, -g: debug info, -Wall: all warnings
 CC = @gcc -g -Wall
 
-NAME = doc.exe
-OUT  = build\$(NAME)
+NAME      = doc
+NAME_FULL = $(NAME).exe
+OUT       = build\$(NAME_FULL)
 
 SRC_DIR  = src
 GLOBL_DIR = $(SRC_DIR)/global

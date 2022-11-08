@@ -8,6 +8,8 @@ c documentation for the terminal <br>
 works offline and is customizable <br>
 also has seqarch utility functions <br>
 most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
+| <img src="https://github.com/phil-stein/term_docs/blob/main/screenshots/screenshot_doc01.png" alt="logo" width="500"> | <img src="https://github.com/phil-stein/term_docs/blob/main/screenshots/screenshot_search01.png" alt="logo" width="500"> |
+
 
 ## table of contents
   - [features](#features)
@@ -88,8 +90,8 @@ void function(char arg);
 
 ## customization
 
-  - [custom documentation](#custom documentation)
-  - [custom executable name](#custom executable name)
+  - [custom documentation](#custom-documentation)
+  - [custom executable name](#custom-executable-name)
 
 ### custom documentation
 the documentation in in the '.sheet' file in the 'sheets' folder <br>
@@ -131,7 +133,7 @@ change this and call `make clean` and `make` in the root directory
   - search function / structure references
   - incomplete search, i.e. func_ -> func_a, func_b, ...
   - standard c documentation
-    - [ ] types e.g. int, float, etc. [wip]
+    - [ ] basics e.g. types, macros, flow control, etc. [wip]
     - [x] ctype.h
     - [x] stdlib.h
     - [x] string.h
@@ -146,5 +148,7 @@ change this and call `make clean` and `make` in the root directory
     - [ ] locale.h
     - [ ] signal.h
     - [ ] setjmp.h
+    - [ ] compiler e.g. make, gcc, clang, msvc
+    - [ ] vim cheatsheet
 
 

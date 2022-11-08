@@ -169,7 +169,9 @@ void doc_color_code_section(char* sec)
       if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
       else { BUF_DUMP(); }
       PF_STYLE_COL(PF_ITALIC, COL_WARNING);
-      while (sec[i] != '\n') { buf[buf_pos++] = sec[i++]; }
+      buf[buf_pos++] = sec[i++];
+      while (sec[i] != '\n' && sec[i] != '!') { buf[buf_pos++] = sec[i++]; }
+      if (sec[i] == '!') { i++; }
       BUF_DUMP();
       PF_COLOR(PF_WHITE);
     }
@@ -181,7 +183,9 @@ void doc_color_code_section(char* sec)
       if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
       else { BUF_DUMP(); }
       PF_STYLE_COL(PF_ITALIC, COL_INFO);
-      while (sec[i] != '\n') { buf[buf_pos++] = sec[i++]; }
+      buf[buf_pos++] = sec[i++];
+      while (sec[i] != '\n' && sec[i] != '~') { buf[buf_pos++] = sec[i++]; }
+      if (sec[i] == '~') { i++; }
       BUF_DUMP();
       PF_COLOR(PF_WHITE);
     }
@@ -189,12 +193,15 @@ void doc_color_code_section(char* sec)
     // -- links --
     if (sec[i] == '?')
     {
-      BUF_DUMP();
-      i++; PF(" ");
+      // skip escaped char
+      if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
+      else { BUF_DUMP(); }
+      buf[buf_pos++] = sec[i++];
+      while (sec[i] != '\n' && sec[i] != '?') { buf[buf_pos++] = sec[i++]; }
+      if (sec[i] == '?') { i++; }
       PF_STYLE(PF_DIM);
       PF_STYLE_COL(PF_ITALIC, COL_LINK);
-      while (sec[i] != '?') { buf[buf_pos++] = sec[i++]; }
-      i++; PF(" ");
+      // i++; PF(" ");
       BUF_DUMP();
       PF_COLOR(PF_WHITE);
     }

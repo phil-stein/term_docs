@@ -42,8 +42,16 @@
     
     
     ~ info
+    ~ info ~ not info
+    \~ info
     ! warning
+    ! warning ! not warning   \!!!
+    \! warning
     ? link
+    ? link ? not link
+    \? link
+
+    hello! this is a test ? whats going on !? buga buga 
 
     example:
 #
