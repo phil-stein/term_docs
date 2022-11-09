@@ -199,7 +199,7 @@ void def_search_dir(const char* dir_path, const char* keyword, int* n, search_re
   struct dirent* dp;
   DIR* dir = opendir(dir_path);
   // unable to open directory stream
-  if (!dir) { return; }
+  if (!dir) { /*P_ERR("directory not found"); PF("dir: %s\n", dir_path);*/ return; }
 
   // recursively read the directory and its sub-directories
   while ((dp = readdir(dir)) != NULL)
@@ -217,13 +217,16 @@ void def_search_dir(const char* dir_path, const char* keyword, int* n, search_re
         SPRINTF(300, buf, "%s/%s", dir_path, dp->d_name);
         if (def_search_section(buf, dp->d_name, keyword, search_results)) 
         { 
-          *n += 1;
+          *n += 1; 
+          // P("n+++");
         }
+        // P("-----------------------");
       }
 
       // construct new path from our base path
       strcpy(path, dir_path);
       strcat(path, "/");
+      // strcat(path, "\\");
       strcat(path, dp->d_name);
 
       def_search_dir(path, keyword, n, search_results); // search recursively

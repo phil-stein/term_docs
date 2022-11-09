@@ -102,16 +102,27 @@ int main(int argc, char** argv)
   }
   if (argc -cmd_count <= 1) { exit(1); } // @NOTE: no actual stuff just '-abc' type stuff
   
-  bool search_mode = false;
-  if (argc - cmd_count == 3) { search_mode = true; }
+  bool search_mode = argc - cmd_count == 3; // 2(3) arguments == search_mode
 
   // ---- keywords ----
 
   int n = 0;  // counts found matches for keyword
   if (search_mode)
   {
-    char* directory = argv[1];
-    char* keyword   = argv[2];
+    char* dir_name = argv[1];
+    char* keyword  = argv[2];
+    // P_STR(argv[0]);
+    // P_STR(dir_name);
+    
+    char* cwd = _getcwd(NULL, 0);
+    cwd += 2; // cut off the "C:" before "\directory\..."
+    for (int i = 0; i < strlen(cwd); ++i)       // replace \ with /
+    { cwd[i] = cwd[i] == '\\' ? '/' : cwd[i]; }
+    // P_STR(cwd);
+    
+    char dir_path[128];
+    sprintf(dir_path, "%s/%s", cwd, dir_name);
+    // P_STR(dir_path);
 
     // remove '/' as 'def_search_dir()' appends it
     u32 len = strlen(argv[1]);
@@ -119,7 +130,14 @@ int main(int argc, char** argv)
     { argv[1][len -1] = '\0'; }
 
     search_result_t* results = NULL;
-    def_search_dir(directory, keyword, &n, &results);
+    def_search_dir(dir_path, keyword, &n, &results);
+    n = arrlen(results);  // @BUGG: n seems to be inaccurate
+    // P_INT(n);
+    // P_INT((int)arrlen(results));
+    // for (int i = 0; i < arrlen(results); ++i)
+    // {
+    //   P_STR(results[i].file); 
+    // }
 
     // @NOTE: draw bottom / top lines and results
     const int lne = 50;
