@@ -79,7 +79,7 @@ int main(int argc, char** argv)
          argv[i][1] == 'c'  && 
          argv[i][2] == 'o'  && 
          argv[i][3] == 'l'  && 
-         argv[i][4] == 'l'  && 
+         argv[i][4] == 'o'  && 
          argv[i][5] == 'r') ) 
     {
       cmd_count++;
@@ -129,8 +129,9 @@ int main(int argc, char** argv)
     if (argv[1][len -1] == '/' || argv[1][len -1] == '\\') 
     { argv[1][len -1] = '\0'; }
 
+    int dir_depth = 0;
     search_result_t* results = NULL;
-    def_search_dir(dir_path, keyword, &n, &results);
+    def_search_dir(dir_path, keyword, &n, &results, &dir_depth);
     n = arrlen(results);  // @BUGG: n seems to be inaccurate
     // P_INT(n);
     // P_INT((int)arrlen(results));
@@ -171,8 +172,6 @@ int main(int argc, char** argv)
   else
   {
     doc_search_dir(core_data->sheets_path, argv[1], &n);
-    // doc_search_dir("/workspace/c/term_docs/sheets/", argv[1], &n);
-    // doc_search_dir("../sheets/", argv[1], &n);
   }
 
   if (n <= 0)

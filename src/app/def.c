@@ -193,13 +193,18 @@ void def_print_result(search_result_t* r)
   PF("\n -> '%s', line: [%d]\n", r->file, r->lne);
 }
 
-void def_search_dir(const char* dir_path, const char* keyword, int* n, search_result_t** search_results)
-{
+
+#define MAX_DIR_DEPTH 2
+void def_search_dir(const char* dir_path, const char* keyword, int* n, search_result_t** search_results, int* dir_depth)
+{  
   char path[256];
   struct dirent* dp;
   DIR* dir = opendir(dir_path);
   // unable to open directory stream
   if (!dir) { /*P_ERR("directory not found"); PF("dir: %s\n", dir_path);*/ return; }
+  // if (*dir_depth >= MAX_DIR_DEPTH) { P_INT(*dir_depth); return; }
+  P_INT(*dir_depth);
+  (*dir_depth)++;
 
   // recursively read the directory and its sub-directories
   while ((dp = readdir(dir)) != NULL)
@@ -229,7 +234,7 @@ void def_search_dir(const char* dir_path, const char* keyword, int* n, search_re
       // strcat(path, "\\");
       strcat(path, dp->d_name);
 
-      def_search_dir(path, keyword, n, search_results); // search recursively
+      def_search_dir(path, keyword, n, search_results, dir_depth); // search recursively
     }
   }
 

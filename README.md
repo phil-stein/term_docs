@@ -123,8 +123,8 @@ void* malloc(size_t size)
 '~' info <br>
 '?' link <br>
 
-to include a '#' symbol in your documentation you need to escape it ``\#define`` <br>
-the same applied to `` ! ~ ? ``  `` \! \~ \? `` hides them in the documentation
+to include a '#' symbol in your documentation you need to escape it ``\\#``, or escape once for macros ``\#define`` <br>
+the same applies to `` ! ~ ? ``  `` \! \~ \? ``  ``a = a \!= b \? c : d; -> a = a != b ? c : d;`` 
 
 
 ### custom executable name
@@ -132,15 +132,15 @@ in the makefile in the root directory at the top there is a variable called NAME
 change this and call `make clean` and `make` in the root directory
 
 ## todo 
-  - search structure definitions in specified dir
-  - search function / structure references
-  - incomplete search, i.e. func_ -> func_a, func_b, ...
-  - standard c documentation
-    - [ ] basics e.g. types, macros, flow control, etc. [wip]
+  - [ ] search structure definitions in specified dir
+  - [ ] search function / structure references
+  - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
+  - [ ] standard c documentation
+    - [ ] basics e.g. types, macros, flow control, etc. `WIP`
     - [x] ctype.h
     - [x] stdlib.h
     - [x] string.h
-    - [ ] stdio.h
+    - [x] stdio.h
     - [ ] math.h
     - [ ] assert.h
     - [ ] stdarg.h
@@ -151,7 +151,13 @@ change this and call `make clean` and `make` in the root directory
     - [ ] locale.h
     - [ ] signal.h
     - [ ] setjmp.h
-    - [ ] compiler e.g. make, gcc, clang, msvc
+    - [ ] make
+    - [ ] gcc
     - [ ] vim cheatsheet
-
+    - [ ] my stuff ?
+      - [ ] global.h
+      - [ ] serialization
+      - [ ] text
+      - [ ] math
+ 
 

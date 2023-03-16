@@ -163,11 +163,12 @@ void doc_color_code_section(char* sec)
     bool skip_char = false;
 
     // -- warnings --
-    if (sec[i] == '!')
+    if (sec[i] == '!' && sec[i -1] != '\\')
     {
-      // skip escaped char
-      if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
-      else { BUF_DUMP(); }
+      // // skip escaped char, not doing that anymore
+      // if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
+      // else { BUF_DUMP(); }
+      BUF_DUMP();
       PF_STYLE_COL(PF_ITALIC, COL_WARNING);
       buf[buf_pos++] = sec[i++];
       while (sec[i] != '\n' && sec[i] != '!') { buf[buf_pos++] = sec[i++]; }
@@ -175,13 +176,15 @@ void doc_color_code_section(char* sec)
       BUF_DUMP();
       PF_COLOR(PF_WHITE);
     }
+    else if (sec[i] == '!' && sec[i -1] == '\\') { buf_pos -= 1; BUF_DUMP(); } // skip '\'
 
     // -- info --
-    if (sec[i] == '~')
+    if (sec[i] == '~' && sec[i -1] != '\\')
     {
-      // skip escaped char
-      if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
-      else { BUF_DUMP(); }
+      // // skip escaped char, not doing that anymore
+      // if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
+      // else { BUF_DUMP(); }
+      BUF_DUMP();
       PF_STYLE_COL(PF_ITALIC, COL_INFO);
       buf[buf_pos++] = sec[i++];
       while (sec[i] != '\n' && sec[i] != '~') { buf[buf_pos++] = sec[i++]; }
@@ -189,13 +192,15 @@ void doc_color_code_section(char* sec)
       BUF_DUMP();
       PF_COLOR(PF_WHITE);
     }
+    else if (sec[i] == '~' && sec[i -1] == '\\') { buf_pos -= 1; BUF_DUMP(); } // skip '\'
 
     // -- links --
-    if (sec[i] == '?')
+    if (sec[i] == '?' && sec[i -1] != '\\')
     {
-      // skip escaped char
-      if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
-      else { BUF_DUMP(); }
+      // // skip escaped char, not doing that anymore
+      // if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
+      // else { BUF_DUMP(); }
+      BUF_DUMP();
       buf[buf_pos++] = sec[i++];
       while (sec[i] != '\n' && sec[i] != '?') { buf[buf_pos++] = sec[i++]; }
       if (sec[i] == '?') { i++; }
@@ -205,6 +210,7 @@ void doc_color_code_section(char* sec)
       BUF_DUMP();
       PF_COLOR(PF_WHITE);
     }
+    else if (sec[i] == '?' && sec[i -1] == '\\') { buf_pos -= 1; BUF_DUMP(); } // skip '\'
 
     // -- example --
     if (sec[i +0] == 'e' && sec[i +1] == 'x' &&

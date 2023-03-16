@@ -5,12 +5,16 @@
 #include <ctype.h>
 
 #define KEY_MAX 32
-const u32  key_types_len = 12;   // @TODO: do this automatically
-const char key_types[][KEY_MAX] = { "unsigned", "const", "void", "char", "short", "int", "long", "float", "double", "struct", "enum", "typedef" };
-const u32  key_flow_ctrl_len = 7;
+
+const char key_types[][KEY_MAX] = { "unsigned", "const", "void", "char", "short", "int", "long", "float", "double", "struct", "enum", "typedef", "size_t", "FILE"};
+const u32  key_types_len = sizeof(key_types) / sizeof(key_types[0]);   
+
+// @TODO: break & conmtinue dont get highlighted because they dont have () at the end
 const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "switch", "break", "continue" };
-const u32  key_values_len = 3;
+const u32  key_flow_ctrl_len = sizeof(key_flow_ctrl) / sizeof(key_flow_ctrl[0]);
+
 const char key_values[][KEY_MAX] = { "NULL", "true", "false" };
+const u32  key_values_len = sizeof(key_values) / sizeof(key_values[0]);
 
 
 // check if char is valid as an ending for a type name
@@ -186,7 +190,9 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   } 
 
   // -- macros --
-  if (txt[i] == '#')
+  if (txt[i] == '\\' && txt[i +1] == '#')     // skipp escaped #
+  { buf_pos--; i++; buf[buf_pos++] = txt[i++]; BUF_DUMP();}
+  else if (txt[i] == '#')  
   {
     PF_COLOR(COL_TYPE);
     BUF_DUMP();

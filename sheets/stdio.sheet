@@ -1,0 +1,704 @@
+
+#
+|stdio|
+|FILE|fpos_t|BUFSIZ|EOF|FOPEN_MAX|FILENAME_MAX|
+|SEEK_SET|SEEK_CUR|SEEK_END|stderr|stdin|stdout|
+defines & types for stdio.h
+  FILE         is object type for file streams, eg. FILE fopen(...)
+  fpos_t       stores the position in a file
+  BUFSIZ       is the size needed for buffer used with setbuf()
+  EOF          neg. integer indicating the end of file has been reached
+  FOPEN_MAX    max number of files opened simultaneously
+  FILENAME_MAX longest length for file names
+  SEEK_SET     indicates beginnig of file to fseek() 
+  SEEK_CUR     indicates current position to fseek()
+  SEEK_END     indicates end of file to fseek()
+  stderr       standard output stream for errors
+  stdin        standard input stream
+  stdout       standard output stream, f.e. printf()
+  _IOFBF       setvbuf() full buffering
+               written once full
+               filled when written to and empty
+  _IOLBF       setvbuf() line buffering
+               written when \n 
+               on write filled to next \n
+  _IONBF       setvbuf() no buffering
+               buffer and size args are ignored
+#
+#
+|printf_format|
+|print|printf|fprintf|sprintf|vsprintf|vfprintf|vprintf|
+  the formatting used by printf and other functions
+
+  format, per referenced variable:
+  %[flags][width][.precision][length]specifier
+
+  flags:
+  -: if width is specified, used left-justify, right is default
+  +: forces +/- sign infront of number
+   : if no sign + is written, then a ' ' is written  
+  \\#: with %o, %x, %X number is started with 0, 0x, 0X
+     with %f, %e, %E decimal point is forced
+  0: if width is specified, padds with 0 istead of ' '
+
+  width:
+  number: min num of character to be printed
+  *:      min num of character to be printed, specified in args
+
+  .precision:
+  .number: for integer types, min digits written
+           for float types, min digits after decimal point
+  .*:      number defined in args
+
+  length: 
+  h: arg is interpreted as short / unsigned short, if arg is integer type
+  I: arg is interpreted as long int / unsigned long int, if arg is integer type
+  L: arg is interpreted as long double, if arg is float type
+
+  specifiers:
+  %c:     char
+  %s:     string of chars, null terminated, '\0'
+  %i, %d: signed integer, short, int, long long
+  %f:     floating point, float, double
+  %u:     unsigned integer, unsigned short, int, long long
+  %p:     pointer addres, all pointer types
+  %e:     scientific with manitissa/exponent with 'e',
+          floating point, float, double 
+  %E:     scientific with manitissa/exponent with 'E',
+          floating point, float, double 
+  %g:     use the shortest between %e/%f
+  %G:     use the shortest between %E/%f
+  %o:     signed octal
+  %x:     unsigned hexadecimal integer
+  %X:     unsigned hexadecimal integer, capital letters
+  %n:     nothing printed
+  %%:     print % character
+
+  example:
+    printf ("Characters: %c %c \n", 'a', 65);
+    printf ("Decimals: %d %ld\n", 1977, 650000L);
+    printf ("Preceding with blanks: %10d \n", 1977);
+    printf ("Preceding with zeros: %010d \n", 1977);
+    printf ("Some different radices: %d %x %o %\\#x %\arg is interpreted as short / unsigned short, if arg is integer type\#o \n", 100, 100, 100, 100, 100);
+    printf ("floats: %4.2f %+.0e %E \n", 3.1416, 3.1416, 3.1416);
+    printf ("Width trick: %*d \n", 5, 10);
+    printf ("%s \n", "A string");
+    --- output ----------------------------------
+    Characters: a A
+    Decimals: 1977 650000
+    Preceding with blanks:       1977
+    Preceding with zeros: 0000001977
+    Some different radices: 100 64 144 0x64 0144
+    floats: 3.14 +3e+000 3.141600E+000
+    Width trick:    10
+    A string
+
+?< https://cplusplus.com/reference/cstdio/printf/ >? 
+?< https://www.tutorialspoint.com/c_standard_library/c_function_printf.htm >?
+#
+#
+|fclose|
+|file|stdio|
+int fclose(FILE* stream)   
+  closes file-stream stream
+  ! returns EOF on fail, 0 on succsess
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    ...
+    fclose(f);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fclose.htm >?
+#
+#
+|clearerr|
+|file|stdio|
+void clearerr(FILE* stream)   
+    clears error for file-stream stream
+    ~ included in <stdio.h>
+    example: 
+      FILE* f = fopen("path", "rb");
+      ferror(f);   
+      clearerr(f);
+      ferror(f);    // always returns 0
+?< https://www.tutorialspoint.com/c_standard_library/c_function_clearerr.htm >?
+#
+#
+|feof|
+|file|stdio|
+int feof(FILE* stream)   
+  checks if eond of file reached
+  ! returns non 0, positive on reached eof
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    while (true)
+    {
+      char c = fgetc(f)
+      if (feof(f)) { break; }
+    }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_feof.htm >?
+#
+#
+|ferror|
+|file|stdio|
+int ferror(FILE* stream)   
+  returns error code or 0
+  ! returns non 0 on error
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    if (ferror(f)) { }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_ferror.htm >?
+#
+#
+|fflush|
+|file|stdio|
+int fflush(FILE* stream)   
+  flushes the output buffer of stream
+  ! returns 0, EOF on fail
+  ! not sure how this works
+  ~ included in <stdio.h>
+  example: 
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fflush.htm >?
+#
+#
+|fgetpos|
+|file|stdio|
+int fgetpos(FILE* stream, fpos_t* pos)   
+  writes stream's current position into pos
+  ! returns non 0 on error
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    ...
+    fpos_t pos;
+    fgetpos(f, &pos);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fgetpos.htm >?
+#
+#
+|fopen|
+|file|stdio|
+FILE* fopen(const char* path, const char* mode)   
+  opens file under path, mode specifies what for
+  mode: "r"reading, file has to exist
+        "w"write, make new / overwrite file
+        "a"append, ad data at the end of file
+        "r+", "rw"read&write
+        "w+"write&read
+        "a+"append&read
+        "rb"read bytes
+        "wb"write bytes
+  ! returns non 0 on error
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    ...
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fopen.htm >?
+#
+#
+|fread|
+|file|stdio|
+size_t fread(void* arr, size_t size, size_t count, FILE* stream)   
+  read data from stream into array arr
+  arr:   array to be written to
+  size:  size of each element ot be read, i.e. sizeof(...)
+  count: amount of elems of size 'size' to be written 
+  ! returns number of copied data, error if < count
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    char buf[100];
+    size_t rtn = fread(buf, sizeof(char), 100, f);
+    if (rtn < 100) { printf("error"); }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fread.htm >?
+#
+#
+|freopen|
+|file|stdio|
+FILE* freopen(const char* path, const char* mode, FILE* stream)   
+  opens new file under path, mode specifies what for
+  closes given file stream
+  mode: "r"reading, file has to exist
+        "w"write, make new / overwrite file
+        "a"append, ad data at the end of file
+        "r+", "rw"read&write
+        "w+"write&read
+        "a+"append&read
+        "rb"read bytes
+        "wb"write bytes
+  ! returns NULL on error
+  ~ included in <stdio.h>
+  example: 
+    FILE* f; 
+    f = freopen("file.txt", "w+", stdout);
+    printf("this is now written to file.txt, instead of the console");
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fopen.htm >?
+#
+#
+|fseek|
+|file|stdio|
+int fseek(FILE* stream, long int offset, int start)   
+  set stream position to offset
+  offset: offset to streams positon
+  start:  position from which to add offset
+          SEEK_SET: beginnig of file
+          SEEK_CUR: current position
+          SEEK_END: end of file
+  ! returns non 0 on fail 
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    int rtn = fseek(f, 10, SEEK_SET);
+    // now at 10'th char in f
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fseek.htm >?
+#
+#
+|ftell|
+|file|stdio|
+long int ftell(FILE* stream)   
+  returns streams position
+  ! returns -1 on fail 
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    ...
+    long int pos = ftell(f);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_ftell.htm >?
+#
+#
+|fwrite|
+|file|stdio|
+size_t fwrite(const void* arr, size_t size, size_t count, FILE* stream)   
+  write to stream from buffer
+  arr:   array to be written from
+  size:  size of each element to be written, i.e. sizeof(...)
+  count: amount of elems of size 'size' to be written
+  ! returns number of copied data, error if < count
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    char str[] = "hello";
+    size_t rtn = fwrite(str, sizeof(char), sizeof(str), f);
+    if (rtn \!= sizeof(str)) { printf("error"); }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_ftell.htm >?
+#
+#
+|remove|
+|file|stdio|
+int remove(const char* path)   
+  delete file at path
+  ! returns 0 on succsess, -1 on fail
+  ~ included in <stdio.h>
+  example: 
+    int rtn = remove("folder/file.txt");
+    if (rtn == 0) { printf("error"); }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_remove.htm >?
+#
+#
+|rename|
+|file|stdio|
+int rename(const char* old_path, const char* new_path)   
+  rename file at path
+  ! returns 0 on succsess, -1 on fail
+  ~ included in <stdio.h>
+  example: 
+    int rtn = rename("folder/file.txt", "folder/filename.txt");
+    if (rtn == 0) { printf("error"); }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_rename.htm >?
+#
+#
+|rewind|
+|file|stdio|
+void rewind(FILE* stream)   
+  set streams position to the beginning of the file
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("path", "rb");
+    ...
+    rewind(f);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_rewind.htm >?
+#
+#
+|setbuf|
+|file|stdio|
+void setbuf(FILE* stream, char* buffer)   
+  set a streams buffer
+  ! should be called after stream has been opened, 
+  ! but before any in/output calls to stream
+  ~ BUFSIZ macro defines the needed size
+  ~ included in <stdio.h>
+  example:
+    char buf[BUFSIZ];
+    setbuf(stdout, buf);
+    printf("this is going into buf");
+?< https://www.tutorialspoint.com/c_standard_library/c_function_setbuf.htm >?
+#
+#
+|setvbuf|
+|file|stdio|
+int setvbuf(FILE* stream, char* buffer, int mode, size_t size)   
+  set how a stream should be buffered
+  mode: _IOFBF: full buffering
+                written once full
+                filled when written to and empty
+        _IOLBF: line buffering
+                written when \n 
+                on write filled to next \n
+        _IONBF: no buffering
+                buffer and size args are ignored
+  ! should be called after stream has been opened, 
+  ! but before any in/output calls to stream
+  ! returns 0 on success, non 0 on error
+  ~ if buffer is NULL, it geta auto. allocated
+  ~ included in <stdio.h>
+  example:
+    char buf[10];
+    setvbuf(stdout, buf, _IOFBF, sizeof(buf));
+    fprintf(stdout, "012345678"); // not printed
+    sleep(5);
+    fprintf(stdout, "filled buf"); // now both printed
+?< https://www.tutorialspoint.com/c_standard_library/c_function_setvbuf.htm >?
+#
+#
+|tmpfile|
+|file|stdio|
+FILE* tmpfile()   
+  creates temporary file thats deleted when the stream is closed
+  ~ file created/opened in "wb+" mode, see fopen()
+  ! returns NULL on error
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = tmpfile();
+    ...
+    fclose(f);            // deletes file
+?< https://www.tutorialspoint.com/c_standard_library/c_function_tmpfile.htm >?
+#
+#
+|tmpnam|
+|file|stdio|
+char* tmpnam(char* str)   
+  creates temporary, non-existing filename
+  writes it into str
+  ~ if str is NULL it returns the filename
+  ! returns NULL on error
+  ~ included in <stdio.h>
+  example:
+    char name[100];
+    tmpnam(name);
+    printf("name: %s", name);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_tmpnam.htm >?
+#
+#
+|fprintf|
+|file|print|stdio|
+int fprintf(FILE* stream, char* format, ...)   
+  print/write formatted string to file
+  ! returns number of chars written, neg on error
+  ~ for formatting see printf_format
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = tmpfile();
+    fprintf(f, "hello %d", 10);
+    fprintf(stdout, "hello %s", "hello, again");
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fprintf.htm >?
+#
+#
+|printf|
+|print|stdio|
+int printf(char* format, ...) 
+  print/write formatted string to stdout
+  ! returns number of chars written, neg on error
+  ~ for formatting see printf_format
+  ~ included in <stdio.h>
+  example: 
+    printf("hello %s", "hello, again");
+?< https://www.tutorialspoint.com/c_standard_library/c_function_printf.htm >?
+#
+#
+|sprintf|
+|print|stdio|
+int sprintf(char* str, char* format, ...) 
+  print/write formatted string to str
+  ! returns number of chars written, neg on error
+  ~ for formatting see printf_format
+  ~ included in <stdio.h>
+  example: 
+    char str[64];
+    int rtn = sprintf(str, "hello %s", "hello, again");
+    if (rtn >= 64) { printf("error"); }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_sprintf.htm >?
+#
+#
+|vfprintf|
+|file|print|stdio|
+int vfprintf(FILE* stream, char* format, va_list arg)   
+  print/write formatted string to file, using va_list
+  ! returns number of chars written, neg on error
+  ~ for formatting see printf_format
+  ~ for va_args, va_start, va_end, __VA_ARGS__
+    see <stdarg.h>
+  ~ included in <stdio.h>
+  example: 
+    void func(char* format, ...)
+    {
+      va_list args;
+      va_start(args, format);
+      vfprintf(stdout, format, args);
+      va_end();
+    }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_vfprintf.htm >?
+#
+#
+|vprintf|
+|file|print|stdio|
+int vprintf(char* format, va_list arg)   
+  print/write formatted string to stdout, using va_list
+  ! returns number of chars written, neg on error
+  ~ for formatting see printf_format
+  ~ for va_args, va_start, va_end, __VA_ARGS__
+    see <stdarg.h>
+  ~ included in <stdio.h>
+  example: 
+    void func(char* format, ...)
+    {
+      va_list args;
+      va_start(args, format);
+      fprintf(format, args);
+      va_end();
+    }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_vfprintf.htm >?
+#
+#
+|vsprintf|
+|print|stdio|
+int vsprintf(char* str, char* format, va_list arg) 
+  print/write formatted string to str, using va_list
+  ! returns number of chars written, neg on error
+  ~ for formatting see printf_format
+  ~ included in <stdio.h>
+  example:i
+    void func(char* format, ...)
+    {
+      char str[64];
+      va_list args;
+      
+      va_start(args, format);
+      int rtn = vsprintf(str, format, );
+      if (rtn >= 64) { printf("error"); }
+      va_end();
+    }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_sprintf.htm >?
+#
+#
+|fscanf|
+|scan|stdio|
+int fscanf(FILE* stream, char* format, ...) 
+  reads formatted input from stream
+  ! returns number of matching chars read, 0 if no matches
+  ~ for formatting see printf_format
+  ~ included in <stdio.h>
+  example: 
+    FILE* f = fopen("file.txt", "rw");
+    fputs("string 10", f);
+    rewind(f);  // set pos to beginning of file
+    char str[64];
+    int  num;
+    fscanf(f, "%s %d", str, &num);
+    printf("%s, %d", str, num);
+    --- output "string 10"
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fscanf.htm >?
+#
+#
+|scanf|
+|scan|stdio|
+int fscanf(char* format, ...) 
+  reads formatted input from stdin
+  ! returns number of matching chars read, 0 if no matches
+  ~ for formatting see printf_format
+  ~ included in <stdio.h>
+  example: 
+    char str[64];
+    printf("enter string\n");
+    scanf("%s", str);
+    
+    int  num;
+    printf("enter number\n");
+    scanf("%d", &num);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_scanf.htm >?
+#
+#
+|sscanf|
+|scan|stdio|
+int sscanf(const char* str, const char* format, ...) 
+  reads formatted input from str
+  ! returns number of matching chars read, 0 if no matches
+  ~ for formatting see printf_format
+  ~ included in <stdio.h>
+  example: 
+    char* str = "string 10";
+    char buf[64];
+    int num;
+    sscanf(str, "%s %d", buf, &num);
+    printf("%s, %d", s, num); 
+    --- output "string 10"
+?< https://www.tutorialspoint.com/c_standard_library/c_function_scanf.htm >?
+#
+#
+|fgetc|
+|file|stdio|
+int fgetc(FILE* stream)
+  get the next char from stream
+  ! returns char as int or EOF on end of file or error
+  ~included in <stdio.h>
+  example: 
+    FILE* f = fopen("file.txt", "r");
+    int c;
+    while ((c = fgetc(f)) != EOF)
+    { ... }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fgetc.htm >?
+#
+#
+|fgets|
+|file|stdio|
+char* fgets(char* str, int count, FILE* stream)
+  get the next line from stream
+  reads either count-1 chars, till next '\n' or EOF
+  ! returns str on success, NULL on failure
+  ~included in <stdio.h>
+  example: 
+    FILE* f = fopen("file.txt", "r");
+    char str[64];
+    fgets(str, 64, f);  // get first line
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fgets.htm >?
+#
+#
+|fputc|
+|file|stdio|
+int fputc(int c, FILE* stream)
+  writes char c to current pos in stream
+  ! returns char c as int or EOF on error
+  ~included in <stdio.h>
+  example: 
+    FILE* f = fopen("file.txt", "r");
+    int c = 'c';
+    fputc(c, f);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fputc.htm >?
+#
+#
+|fputs|
+|file|stdio|
+int fputs(const char* str, FILE* stream)
+  writes string to current pos in stream
+  ! returns positive on succsses or EOF on error
+  ~included in <stdio.h>
+  example: 
+    FILE* f = fopen("file.txt", "r");
+    fputs("hello, world", f);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fputc.htm >?
+#
+#
+|getc|
+|file|stdio|
+int getc(FILE* stream)
+  get the next char from stream
+  ! returns char as int or EOF on end of file or error
+  ~included in <stdio.h>
+  example: 
+    printf("enter a char:\n");
+    int c = getc(stdin);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_getc.htm >?
+#
+#
+|getchar|
+|file|stdio|
+int getchar()
+  get the next char from stdin
+  ! returns char as int or EOF on end of file or error
+  ~ identical to getc(stdin)
+  ~included in <stdio.h>
+  example: 
+    printf("enter a char:\n");
+    int c = getchar();
+?< https://www.tutorialspoint.com/c_standard_library/c_function_getchar.htm >?
+#
+#
+|gets|
+|file|stdio|
+char* gets(char* str)
+  get the next line from stdin
+  reads either till next '\n' or EOF
+  ! returns str on success, NULL on failure
+  ~included in <stdio.h>
+  example: 
+    printf("enter a string:\n");
+    char str[64];
+    gets(str);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_gets.htm >?
+#
+#
+|putc|
+|file|stdio|
+int putc(int c, FILE* stream)
+  writes char c to current pos in stream
+  ! returns char c as int or EOF on error
+  ~included in <stdio.h>
+  example: 
+    int c = 'c';
+    putc(c, stdout);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_putc.htm >?
+#
+#
+|putchar|
+|file|stdio|
+int putchar(int c)
+  writes char c to stdout
+  ! returns char c as int or EOF on error
+  ~included in <stdio.h>
+  example: 
+    int c = 'c';
+    putchar(c);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_putchar.htm >?
+#
+#
+|puts|
+|file|stdio|
+int puts(const char* str)
+  writes string to stdout
+  ! returns positive on succsses or EOF on error
+  ~included in <stdio.h>
+  example: 
+    puts("hello, world");
+?< https://www.tutorialspoint.com/c_standard_library/c_function_putc.htm >?
+#
+#
+|ungetc|
+|file|stdio|
+int ungetc(int c, FILE* stream)
+  push char c onto stream so its available for next read
+  ! returns char as int or EOF on end of file or error
+  ~included in <stdio.h>
+  example: 
+    FILE* f = fopen("file.txt", "rw");
+    int c;
+    while ((c = getc(f)) != EOF)
+    {
+      if (c == 'a')
+      {
+        ungetc('A', f); // replace a with A
+      }
+    }
+?< https://www.tutorialspoint.com/c_standard_library/c_function_getc.htm >?
+#
+#
+|perror|
+|print|error|stdio|
+void perror(const char* str)
+  writes string to stderr, with additional error info
+  ~included in <stdio.h>
+  example:
+    FILE* f = fopen("not a file", "r");
+    perror("error: ");
+    --- output error: No such file or directory
+?< https://www.tutorialspoint.com/c_standard_library/c_function_perror.htm >?
+#
+

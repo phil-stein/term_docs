@@ -183,17 +183,44 @@ actual types:
       double* ptr = &val;
 #
 
-@TODO: size_t, uint_8, etc..., but maybe add them in the sheet for the header that defines them ?
+non-standard:
+
+#
+|size_t|type|
+    unsigned integer, defined in most standard header files
+    32 bit wide when compiling 32bit, unsigned int
+    64 bit wide when compiling 64bit, unsigned long long
+    ! size of types varies, use sizeof() to test
+    ~ no different from using an unsigned int directly
+    ~ just for clarification of intent, i.e. loops, arrays, etc.
+    ~ many standard headers use size_t when numbers cant be neg.
+    example: 
+      size_t size = sizeof(float);
+#
+#
+|NULL|null|pointer|
+    pointer of value 0, defined in most standard header files
+    ! trying to acces a null pointer causes a crash
+    ~ NULL is (void*)0
+    example: 
+     \#ifndef NULL
+      \#define NULL (void*)0
+     \#endif
+     int* ptr = NULL;
+     if (ptr \!= NULL) { free(ptr); }
+     if (ptr)  { printf("ptr = not null"); }
+     if (\!ptr) { printf("ptr = null"); }
+#
+
+@TODO: uint_8, etc..., but maybe add them in the sheet for the header that defines them ?
 
 macros:
 
 #
 |define|macro|
     the define macro registeres a piece of code under a name
-    \~ use '\' to make multiline macros, no whitespace after '\'
+    ~ use '\' to make multiline macros, no whitespace after '\'
     ~ wrapping args in parenthesis makes it safer 
-    \! hello
-    ! hi
     example:
       \#define NAME 34 * 67
       \#define ADD(a, b) ((a) + (b))
