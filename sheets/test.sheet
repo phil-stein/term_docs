@@ -39,7 +39,7 @@
     \#define MACRO
     \#ifdef  MACRO
     \#ifndef MACRO
-    
+    \\# escaped hashtag    
     
     ~ info
     ~ info ~ not info

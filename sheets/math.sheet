@@ -1,0 +1,275 @@
+
+math functions:
+
+#
+|HUGE_VAL|
+|math|
+    HUGE_VAL is returned by math.h functions if 
+    return value is too big for double
+#
+#
+|acos|
+|math|arc_cosine|arc|cosine|
+double acos(double x)
+    x: value between -1 to +1
+    ~ return is between 0 to pi radians
+    ~ included in <math.h>
+    example:
+      double val = acos(0.9);
+      // x radians * (180/PI) = x degree
+      val *= 180 / 3.14159265; 
+      val is 25.85504 degree
+?< https://www.tutorialspoint.com/c_standard_library/c_function_acos.htm >?
+#
+#
+|asin|
+|math|arc_sine|arc|sine|
+double asin(double x)
+    x: value between -1 to +1
+    ~ return is between -pi/2 to pi/2 radians
+    ~ included in <math.h>
+    example: 
+      double val = asin(0.9);
+      // x radians * (180/PI) = x degree
+      val *= 180 / 3.14159265;  
+      val is 64.158067 degree
+?< https://www.tutorialspoint.com/c_standard_library/c_function_asin.htm >?
+#
+#
+|atan|
+|math|arc_tangent|arc|tangent|
+double atan(double x)
+    x: value between -1 to +1
+    ~ return is between -pi/2 to pi/2 radians
+    ~ included in <math.h>
+    example: 
+      double val = atan(1.0);
+      // x radians * (180/PI) = x degree
+      val *= 180 / 3.14159265;  
+      val is 45.0 degree
+?< https://www.tutorialspoint.com/c_standard_library/c_function_atan.htm >?
+#
+#
+|atan2|
+|math|atan|arc_tangent|arc|tangent|
+double atan2(double y, double x)
+    x: value between -1 to +1
+    ~ return is between -pi to pi radians
+    ~ included in <math.h>
+    example: 
+      double val = atan2(7.0, -7.0);
+      // x radians * (180/PI) = x degree
+      val *= 180 / 3.14159265;  
+      val is 135.0 degree
+?< https://www.tutorialspoint.com/c_standard_library/c_function_atan2.htm >?
+#
+#
+|cos|
+|math|cosine|
+double cos(double x)
+    x: radian angle value
+    ~ included in <math.h>
+    example:
+      // x radians * (180/PI) = x degree
+      double rad = 60.0 * (180/3.14159265);  
+      double val = cos(rad);
+      val is 0.5
+?< https://www.tutorialspoint.com/c_standard_library/c_function_cos.htm >?
+#
+#
+|cosh|
+|math|hyperbolic_cosine|hyperbolic|cosine|
+double cosh(double x)
+    x: value
+    ~ included in <math.h>
+    example:
+      double val = cosh(0.5);
+      val is 1.127626
+?< https://www.tutorialspoint.com/c_standard_library/c_function_cosh.htm >?
+#
+#
+|sin|
+|math|sine|
+double sin(double x)
+    x: radian angle value
+    ~ included in <math.h>
+    example:
+      // x radians * (180/PI) = x degree
+      double rad = 45.0 * (180 / 3.14159265);  
+      double val = sin(rad);
+      val is 0.707107
+?< https://www.tutorialspoint.com/c_standard_library/c_function_sin.htm >?
+#
+#
+|sinh|
+|math|hyperbolic_sine|hyperbolic|sine|
+double sinh(double x)
+    ~ returns degrees
+    ~ included in <math.h>
+    example:
+      double val = sinh(0.5);
+      val is 0.521095 degree
+?< https://www.tutorialspoint.com/c_standard_library/c_function_sinh.htm >?
+#
+#
+|tanh|
+|math|hyperbolic_tangent|hyperbolic|tangent|
+double tanh(double x)
+    ~ returns degrees
+    ~ included in <math.h>
+    example:
+      double val = tanh(0.5);
+      val is 0.462117 degree
+?< https://www.tutorialspoint.com/c_standard_library/c_function_tanh.htm >?
+#
+#
+|exp|
+|math|exponential|exponential_value|power|power_of|
+double exp(double x)
+    returns e raised to the x'th power
+    ~ included in <math.h>
+    example:
+      double rtn = exp(1.0);
+      rtn is 2.718282
+?< https://www.tutorialspoint.com/c_standard_library/c_function_exp.htm >?
+#
+#
+|frexp|
+|math|fraction|exponential|exponential_value|power|power_of|
+double frexp(double x, int* exponent)
+    x:        value 
+    exponent: gets set to the exponent
+    returns mantissa for x = mantissa * 2 ^ exponent
+    ~ included in <math.h>
+    example:
+      int exp;
+      double mantissa = frexp(1024.0, &exp);
+      mantissa is 0.50, e is 11
+      therefore
+      0.50 * 2^11 = 1024.0
+?< https://www.tutorialspoint.com/c_standard_library/c_function_frexp.htm >?
+#
+#
+|ldexp|
+|math|exponential|exponential_value|power|power_of|
+double ldexp(double x, int exponent)
+    returns x * 2^exponent 
+    ~ included in <math.h>
+    example:
+      double rtn = ldexp(0.65, 3);
+      rtn is 5.2
+?< https://www.tutorialspoint.com/c_standard_library/c_function_ldexp.htm >?
+#
+#
+|log|
+|math|logarithm|
+double log(double x)
+    returns natural base-e logarithm of x
+    ~ included in <math.h>
+    example:
+      double rtn = log(2.7);
+      rtn is 0.993252
+?< https://www.tutorialspoint.com/c_standard_library/c_function_log.htm >?
+#
+#
+|log10|
+|math|log|logarithm|
+double log10(double x)
+    returns natural base-10 logarithm of x
+    ~ included in <math.h>
+    example:
+      double rtn = log10(10000);
+      rtn is 4.0
+?< https://www.tutorialspoint.com/c_standard_library/c_function_log10.htm >?
+#
+#
+|modf|
+|math|mod|
+double modf(double x, double* integer)
+    integer: gets set to the integer component of x
+    returns the fraction component of x
+    ~ included in <math.h>
+    example:
+      double integer;
+      double fraction = modf(123.456, &integer);
+      fraction is 0.456, integer is 123.0
+?< https://www.tutorialspoint.com/c_standard_library/c_function_modf.htm >?
+#
+#
+|pow|
+|math|power|power_of|
+double pow(double x, double y)
+    returns x^y
+    ~ included in <math.h>
+    example:
+      double rtn = pow(8.0, 3.0);
+      rtn is 512
+?< https://www.tutorialspoint.com/c_standard_library/c_function_pow.htm >?
+#
+#
+|sqrt|
+|math|squareroot|square_root|
+double sqrt(double x)
+    returns squareroot of x
+    ~ included in <math.h>
+    example:
+      double rtn = sqrt(4.0);
+      rtn is 2.0
+?< https://www.tutorialspoint.com/c_standard_library/c_function_sqrt.htm >?
+#
+#
+|ceil|
+|math|round|round_up|
+double ceil(double x)
+    returns smallest integer value >= x
+    ~ included in <math.h>
+    example:
+      double rtn0 = ceil(1.1);
+      double rtn1 = ceil(1.99999);
+      double rtn2 = ceil(2.0);
+      rtn0 is 2.0
+      rtn1 is 2.0
+      rtn0 is 2.0
+?< https://www.tutorialspoint.com/c_standard_library/c_function_ceil.htm >?
+#
+#
+|fabs|
+|math|absolute|abs|
+double fabs(double x)
+    returns absolute value of x
+    turns neg. values pos, pos stay pos
+    ~ included in <math.h>
+    example:
+      double rtn0 = fabs(-10);
+      double rtn1 = fabs( 10);
+      rtn0 is 10.0
+      rtn1 is 10.0
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fabs.htm >?
+#
+#
+|floor|
+|math|round|round_down|
+double floor(double x)
+    returns biggest integer value < x
+    ~ included in <math.h>
+    example:
+      double rtn0 = ceil(1.1);
+      double rtn1 = ceil(1.99999);
+      double rtn2 = ceil(2.0);
+      rtn0 is 1.0
+      rtn1 is 1.0
+      rtn0 is 2.0
+?< https://www.tutorialspoint.com/c_standard_library/c_function_floor.htm >?
+#
+#
+|fmod|
+|math|mod|
+double fmod(double x, double y)
+    returns remainder of x/y
+    ~ included in <math.h>
+    example:
+      double remainder = fmod(9.2, 2);
+      remainder is 1.20
+?< https://www.tutorialspoint.com/c_standard_library/c_function_fmod.htm >?
+#
+

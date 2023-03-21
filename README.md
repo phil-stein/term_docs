@@ -131,7 +131,8 @@ the same applies to `` ! ~ ? ``  `` \! \~ \? ``  ``a = a \!= b \? c : d; -> a = 
 in the makefile in the root directory at the top there is a variable called NAME `NAME = doc.exe` <br>
 change this and call `make clean` and `make` in the root directory
 
-## todo 
+## todo
+  - [ ] multiple search keywords, doc file read
   - [ ] search structure definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
@@ -141,7 +142,7 @@ change this and call `make clean` and `make` in the root directory
     - [x] stdlib.h
     - [x] string.h
     - [x] stdio.h
-    - [ ] math.h
+    - [x] math.h
     - [ ] assert.h
     - [ ] stdarg.h
     - [ ] time.h

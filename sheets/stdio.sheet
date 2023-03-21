@@ -28,6 +28,7 @@ defines & types for stdio.h
 #
 |printf_format|
 |print|printf|fprintf|sprintf|vsprintf|vfprintf|vprintf|
+|scanf|fscanf|sscanf|
   the formatting used by printf and other functions
 
   format, per referenced variable:
@@ -98,7 +99,7 @@ defines & types for stdio.h
 #
 #
 |fclose|
-|file|stdio|
+|file|close|stdio|
 int fclose(FILE* stream)   
   closes file-stream stream
   ! returns EOF on fail, 0 on succsess
@@ -177,7 +178,7 @@ int fgetpos(FILE* stream, fpos_t* pos)
 #
 #
 |fopen|
-|file|stdio|
+|file|open|stdio|
 FILE* fopen(const char* path, const char* mode)   
   opens file under path, mode specifies what for
   mode: "r"reading, file has to exist
@@ -197,7 +198,7 @@ FILE* fopen(const char* path, const char* mode)
 #
 #
 |fread|
-|file|stdio|
+|file|read|stdio|
 size_t fread(void* arr, size_t size, size_t count, FILE* stream)   
   read data from stream into array arr
   arr:   array to be written to
@@ -214,7 +215,7 @@ size_t fread(void* arr, size_t size, size_t count, FILE* stream)
 #
 #
 |freopen|
-|file|stdio|
+|file|open|stdio|
 FILE* freopen(const char* path, const char* mode, FILE* stream)   
   opens new file under path, mode specifies what for
   closes given file stream
@@ -267,7 +268,7 @@ long int ftell(FILE* stream)
 #
 #
 |fwrite|
-|file|stdio|
+|file|write|stdio|
 size_t fwrite(const void* arr, size_t size, size_t count, FILE* stream)   
   write to stream from buffer
   arr:   array to be written from
@@ -361,7 +362,7 @@ int setvbuf(FILE* stream, char* buffer, int mode, size_t size)
 #
 #
 |tmpfile|
-|file|stdio|
+|file|open|stdio|
 FILE* tmpfile()   
   creates temporary file thats deleted when the stream is closed
   ~ file created/opened in "wb+" mode, see fopen()
@@ -390,7 +391,7 @@ char* tmpnam(char* str)
 #
 #
 |fprintf|
-|file|print|stdio|
+|file|print|write|stdio|
 int fprintf(FILE* stream, char* format, ...)   
   print/write formatted string to file
   ! returns number of chars written, neg on error
@@ -416,7 +417,7 @@ int printf(char* format, ...)
 #
 #
 |sprintf|
-|print|stdio|
+|print|write|stdio|
 int sprintf(char* str, char* format, ...) 
   print/write formatted string to str
   ! returns number of chars written, neg on error
@@ -470,7 +471,7 @@ int vprintf(char* format, va_list arg)
 #
 #
 |vsprintf|
-|print|stdio|
+|print|write|stdio|
 int vsprintf(char* str, char* format, va_list arg) 
   print/write formatted string to str, using va_list
   ! returns number of chars written, neg on error
@@ -491,7 +492,7 @@ int vsprintf(char* str, char* format, va_list arg)
 #
 #
 |fscanf|
-|scan|stdio|
+|scan|read|stdio|
 int fscanf(FILE* stream, char* format, ...) 
   reads formatted input from stream
   ! returns number of matching chars read, 0 if no matches
@@ -510,7 +511,7 @@ int fscanf(FILE* stream, char* format, ...)
 #
 #
 |scanf|
-|scan|stdio|
+|scan|read|stdio|
 int fscanf(char* format, ...) 
   reads formatted input from stdin
   ! returns number of matching chars read, 0 if no matches
@@ -528,7 +529,7 @@ int fscanf(char* format, ...)
 #
 #
 |sscanf|
-|scan|stdio|
+|scan|read|stdio|
 int sscanf(const char* str, const char* format, ...) 
   reads formatted input from str
   ! returns number of matching chars read, 0 if no matches
@@ -545,7 +546,7 @@ int sscanf(const char* str, const char* format, ...)
 #
 #
 |fgetc|
-|file|stdio|
+|file|read|stdio|
 int fgetc(FILE* stream)
   get the next char from stream
   ! returns char as int or EOF on end of file or error
@@ -559,7 +560,7 @@ int fgetc(FILE* stream)
 #
 #
 |fgets|
-|file|stdio|
+|file|read|stdio|
 char* fgets(char* str, int count, FILE* stream)
   get the next line from stream
   reads either count-1 chars, till next '\n' or EOF
@@ -573,7 +574,7 @@ char* fgets(char* str, int count, FILE* stream)
 #
 #
 |fputc|
-|file|stdio|
+|file|write|stdio|
 int fputc(int c, FILE* stream)
   writes char c to current pos in stream
   ! returns char c as int or EOF on error
@@ -586,7 +587,7 @@ int fputc(int c, FILE* stream)
 #
 #
 |fputs|
-|file|stdio|
+|file|write|stdio|
 int fputs(const char* str, FILE* stream)
   writes string to current pos in stream
   ! returns positive on succsses or EOF on error
@@ -598,7 +599,7 @@ int fputs(const char* str, FILE* stream)
 #
 #
 |getc|
-|file|stdio|
+|file|read|stdio|
 int getc(FILE* stream)
   get the next char from stream
   ! returns char as int or EOF on end of file or error
@@ -610,7 +611,7 @@ int getc(FILE* stream)
 #
 #
 |getchar|
-|file|stdio|
+|file|read|stdio|
 int getchar()
   get the next char from stdin
   ! returns char as int or EOF on end of file or error
@@ -623,7 +624,7 @@ int getchar()
 #
 #
 |gets|
-|file|stdio|
+|file|read|stdio|
 char* gets(char* str)
   get the next line from stdin
   reads either till next '\n' or EOF
@@ -637,7 +638,7 @@ char* gets(char* str)
 #
 #
 |putc|
-|file|stdio|
+|file|write|stdio|
 int putc(int c, FILE* stream)
   writes char c to current pos in stream
   ! returns char c as int or EOF on error
@@ -649,7 +650,7 @@ int putc(int c, FILE* stream)
 #
 #
 |putchar|
-|file|stdio|
+|file|write|stdio|
 int putchar(int c)
   writes char c to stdout
   ! returns char c as int or EOF on error
@@ -661,7 +662,7 @@ int putchar(int c)
 #
 #
 |puts|
-|file|stdio|
+|file|write|stdio|
 int puts(const char* str)
   writes string to stdout
   ! returns positive on succsses or EOF on error

@@ -232,19 +232,34 @@ void doc_color_code_section(char* sec)
     if (!skip_char) { buf[buf_pos++] = sec[i]; }
 
     // -- tags --
-    if (sec[i] == '|' && isspace(sec[i+1]) && in_tag) // end tag
-    { 
-      BUF_DUMP();
-      PF_COLOR(PF_WHITE);
-      in_tag = false;
-      // continue;
-    }
-    else if (sec[i +1] == '|')  // start tag
+    // if (sec[i] == '|' && isspace(sec[i+1]) && in_tag) // end tag
+    // { 
+    //   BUF_DUMP();
+    //   PF_COLOR(PF_WHITE);
+    //   in_tag = false;
+    //   // continue;
+    // }
+    // else if (sec[i +1] == '|')  // start tag
+    // {
+    //   BUF_DUMP();
+    //   PF_STYLE_COL(PF_UNDERLINE, COL_TAG);;
+    //   in_tag = true;
+    //   // continue;
+    // }
+    if (!(sec[i] == '|' && isspace(sec[i+1]) && in_tag) && sec[i +1] == '|')
     {
       BUF_DUMP();
-      PF_STYLE_COL(PF_UNDERLINE, COL_TAG);;
-      in_tag = true;
-      // continue;
+      PF_STYLE_COL(PF_UNDERLINE, COL_TAG);
+      
+      while (!(sec[i] == '|' && isspace(sec[i+1])) && i < len)
+      {
+        if (sec[i] == '\n') { i++; continue; }
+        buf[buf_pos++] = sec[i++];
+      }
+      if (sec[i] != '\n' || sec[i] == '\0') { buf[buf_pos++] = sec[i++]; }
+      
+      BUF_DUMP();
+      PF_COLOR(PF_WHITE);
     }
 
   }
