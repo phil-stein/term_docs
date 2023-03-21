@@ -214,11 +214,122 @@ non-standard:
 
 @TODO: uint_8, etc..., but maybe add them in the sheet for the header that defines them ?
 
+@TODO: 
+#
+|idk_what_these_are_called|comparison|basics|
+  // @TODO: 
+  ...
+  example:
+    a == b -> equal 
+    a \!= b -> not equal
+    a <  b -> less than
+    a <= b -> less than or equal
+    a >  b -> greater than
+    a >= b -> greater than or equal
+#
+|idk_what_these_are_called|boolean|basics|
+  // @TODO: 
+  ...
+  example:
+    a && b -> both are true
+    a || b -> a or b is true
+#
+|idk|bitwise_operator|basics|
+  // @TODO: 
+  bit shift
+  <<
+  >>
+  bit wise or & and
+  |
+  &
+#
+
+@TODO:
+#
+|bit_flag|flag|bitwise_operator|basics|
+  set and check certain bits in a number
+  make number with bit a set
+
+  ~ uses \|bitwise_operator\|
+
+  example:
+  
+  make a number with specific bit set:
+    1 << 0 0001
+    1 << 1 0010
+    1 << 2 0100
+    1 << 3 1000
+    aka. 1<<a == 2^a, 1, 2, 4, 8, ...
+  combine numbers with specific bits set:
+    unsigned int a = 1 << 0;  // 0001 
+    unsigned int b = 1 << 3;  // 1000
+    unsigned int c = a \| b;   // 1001
+  check if bit is set:
+    unsigned int a = 1 << 0;  // 0001 
+    unsigned int b = 1 << 3;  // 1000   
+    unsigned int c = a \| b;   // 1001
+    bool d = a & b;           // false
+    bool e = a & c;           // true, 0001 in common
+  set specific bit 0:
+    unsigned int a = 1 << 0 \| 1 << 3;  // 1001
+    a = a &= \~(1 << 0);                // 1000
+
+  macros:
+    \#define FLAG(a)            (1 << (a))
+    \#define HAS_FLAG(a, b)     ((a) & (b))
+    \#define FLAG_COMBINE(a, b) ((a) \| (b))
+    \#define REMOVE_FLAG(a, b)  ((a) &= ~(b))
+
+  enums:
+    enum example_flag
+    {
+      HAS_A = FLAG(0),
+      HAS_B = FLAG(1),
+      HAS_C = FLAG(2)
+    };
+    example_flag a = HAS_A \| HAS_B \| HAS_C;
+    REMOVE_FLAG(a, HAS_B);
+    if (HAS_FLAG(a, HAS_A)) { printf("has a");}
+    if (HAS_FLAG(a, HAS_B)) { printf("has b");}
+    if (HAS_FLAG(a, HAS_C)) { printf("has c");}
+      -> has a
+      -> has b
+#
+
 macros:
 
 #
-|define|macro|
-    the define macro registeres a piece of code under a name
+|stringify|
+|preprocessor|macro|basics|
+  and \\# to macro arg to stringify it
+  example:
+    \#define TO_STR(arg)  (\\#arg)
+    int var = 0;
+    printf("%s: %d\n", TO_STR(var), var);
+      -> var: 0
+    \#define P_INT(a) printf("%s: %d\n", \\#a, a)
+    P_INT(var);
+      -> var: 0
+#
+|__FILE__|__LINE__|
+|file|line|preprocessor|macro|basics|
+  __FILE__ is a marco that gets set to the 
+  current file name during compilation
+  __LINE__ is a marco that gets set to the 
+  current line during compilation
+
+  example:
+    \#define PRINT_LOCATION() printf("file: \"%s\", line: %d\n", __FILE__, __LINE__)
+    file_a.c:
+    [83] PRINT_LOCATION();
+      -> file: "file_a.c", line: 83
+    file_b.c:
+    [10] PRINT_LOCATION();
+      -> file: "file_b.c", line: 10
+#
+|define|
+|preprocessor|macro|basics|
+    the define preprocessor registeres a piece of code under a name
     ~ use '\' to make multiline macros, no whitespace after '\'
     ~ wrapping args in parenthesis makes it safer 
     example:
@@ -235,7 +346,95 @@ macros:
         -> 100
         -> "[!!!] warning"
 #
-@TODO: if, idef, else, ifndef, elif, etc.
+|undef|
+|undefine|preprocessor|macro|basics|
+  // @TODO:
+#
+|if|
+|endif|preprocessor|macro|basics|
+  check a condition at compile time and include a piece of code or not
+  ! has to be terminated with one of \#endif, \#else or \#elif
+  
+  example:
+    \#if 0 == 0
+    printf("0 == 0");
+    \#endif
+    \#if 0 == 1
+    printf("0 == 1");
+    \#endif
+      -> 0 == 0
+#
+|else|
+|endif|preprocessor|macro|basics|
+  used with the \\#if, \\#elif, \\#ifdef preprocessors
+  
+  example:
+    \#if 0 == 0
+    printf("0 == 0");
+    \#else
+    printf("0 != 0");
+    \#endif
+      -> 0 == 0
+#
+|elif|
+|else|endif|preprocessor|macro|basics|
+  used with the \\#if, \\#else, \\#ifdef preprocessors
+  
+  example:
+    \#if 0 == 0
+    printf("0 == 0");
+    \#elif 0 == 1
+    printf("0 == 1");
+    \#endif
+      -> 0 == 0
+#
+|ifdef|
+|endif|preprocessor|macro|basics|
+  // @TODO:
+#
+|ifndef|
+|endif|preprocessor|macro|basics|
+  // @TODO:
+#
+|if|
+|flow_control|basics|
+  execute a piece of code based on a condition
+
+  example:
+    if (0 == 0)  { printf("0 == 0"); }
+    if (true)    { printf("true"); }
+    if (false)   { printf("false"); }
+    bool boolean = true;
+    if (boolean) { printf("boolean"); }
+    boolean = false;
+    if (boolean) { printf("boolean"); }
+      -> 0 == 0
+      -> true
+      -> boolean
+#
+|else|
+|flow_control|basics|
+  // @TODO:
+#
+|else_if|
+|else|if|flow_control|basics|
+  // @TODO:
+#
+|while|
+|flow_control|loop|basics|
+  // @TODO:
+#
+|do_while|
+|while|flow_control|basics|
+  // @TODO:
+#
+|for|
+|flow_control|loop|basics|
+  // @TODO:
+#
+
+compiler stuff, should prob get its own sheet:
+
 #
 |c-version|c|version|c89|c99|c11|c18|compiler|macro|
     c was originally made in 1972 by Dennis Ritchie, 
@@ -287,8 +486,7 @@ macros:
       ?< gcc: https://gcc.gnu.org/onlinedocs/gcc/Standards.html >?
       ?< clang: https://clang.llvm.org/docs/CommandGuide/clang.html >?
       ?< msvc: https://docs.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-by-category?view=msvc-170 >?
-      ?<c: https://en.wikipedia.org/wiki/C_(programming_language) >?
-           
+      ?<c: https://en.wikipedia.org/wiki/C_(programming_language) >?           
 #
 
 

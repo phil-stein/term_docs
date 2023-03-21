@@ -1,0 +1,28 @@
+#
+|assert|
+|debug|
+\#define assert(condition)   
+    if condition is false, debug info is printed to 
+    stderr, and the program is ended, abort()
+    condition: int / bool 
+               >=1 / true does nothing
+               <=0 / false stopps program
+    ~ included in <assert.h>
+    example: 
+      int* block = malloc(10 * sizeof(int));
+      assert(block != NULL);
+        -> if malloc fails it returns NULL
+           in that case assert stopps the 
+           program and prints a message
+
+      // define your own assert
+      \#define ASSERT(c) { if(!c) { printf("[ERROR] %s\n -> file: \"%s\", line: %d\n", __FILE__, __LINE__); abort(); } }
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_assert.htm >?
+#
+
+
+
+
+
+

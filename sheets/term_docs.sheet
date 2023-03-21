@@ -3,12 +3,12 @@
 
 #
 |doc|
-|doc_help|
+|docs|doc_help|term_docs|
 |-help|-h|
 
 documentation:
   enter 'doc [word]' into the terminal to search documentation
-  when searching '[word]' is matched against the tags, surrounded by \| on both sides 
+  when searching '[word]' is matched against the tags, like the ones above, doc, -help, etc.,
   in the .sheet documentation
 
 definition search:
@@ -56,12 +56,15 @@ or
 
     if ()       if()
     else if ()  else if()
-    else 
+    else {} 
     for ()      for()
     while ()    while()
     switch ()   switch()
     
-    break; continue;
+    return; return val; break; continue;
+    
+    if else for while switch
+    return break continue
 
 
     // comment
@@ -79,19 +82,45 @@ or
     \#define MACRO
     \#ifdef  MACRO
     \#ifndef MACRO
-    \\# escaped hashtag    
+    \\# escaped hashtag   
+    \#multiline preprocessor  \
+     still preprocessor      \
+     still preprocessor      \
+     still preprocessor      
+    no longer preprocessor
     
     ~ info
     ~ info ~ not info
-    \~ info
+    \~ not an info
     ! warning
     ! warning ! not warning   \!!!
-    \! warning
+    \! not a warning
     ? link
     ? link ? not link
-    \? link
-
-    hello! this is a test ? whats going on !? buga buga 
+    \? not a link
+    \| not a tag
+   
+    ~ info with escaped \! \? \~ \| \\#
+    ! warn with escaped \! \? \~ \| \\#
+    \# prepr. with escaped \! \? \~ \| \\#
+    // comment with escaped \! \? \~ \| \\#
+    /* comment with escaped \! \? \~ \| \\# */
 
     example:
+
+    changing $red$color$$ hello
+    $black$black$$ <- black text
+    $red$red$$
+    $green$green$$
+    $yellow$yellow$$
+    $blue$blue$$
+    $purple$purple$$
+    $cyan$cyan$$
+    $red$red $green$green $yellow$yellow $blue$blue $purple$purple $cyan$cyan $$
+    $RED$red $GREEN$green $YELLOW$yellow $BLUE$blue $PURPLE$purple $CYAN$cyan $$
+    
+    changing $italic$mode italic $red$color$white$ hello $$ normal
+    $dim$mode dim,$$ $italic$$dim$ italic dim$$
+
+
 #

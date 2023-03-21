@@ -1,4 +1,5 @@
 #include "app/style.h"
+#include "app/doc.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,12 +7,14 @@
 
 #define KEY_MAX 32
 
-const char key_types[][KEY_MAX] = { "unsigned", "const", "void", "char", "short", "int", "long", "float", "double", "struct", "enum", "typedef", "size_t", "FILE"};
+const char key_types[][KEY_MAX] = { "unsigned", "const", "void", "char", "short", "int", "long", "float", "double", "bool", "struct", "enum", "typedef", "size_t", "FILE"};
 const u32  key_types_len = sizeof(key_types) / sizeof(key_types[0]);   
 
-// @TODO: break & conmtinue dont get highlighted because they dont have () at the end
-const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "switch", "break", "continue" };
+const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "switch" };
 const u32  key_flow_ctrl_len = sizeof(key_flow_ctrl) / sizeof(key_flow_ctrl[0]);
+// @TODO: break & conmtinue dont get highlighted because they dont have () at the end
+const char key_flow_ctrl_cmd[][KEY_MAX] = { "return", "break", "continue" };
+const u32  key_flow_ctrl_cmd_len = sizeof(key_flow_ctrl_cmd) / sizeof(key_flow_ctrl_cmd[0]);
 
 const char key_values[][KEY_MAX] = { "NULL", "true", "false" };
 const u32  key_values_len = sizeof(key_values) / sizeof(key_values[0]);
@@ -24,13 +27,16 @@ const u32  key_comment_len = sizeof(key_comment) / sizeof(key_comment[0]);
 // check if char is valid as an ending for a type name
 #define TYPE_END(c)      (isspace(c) || (c) == '*' || !isalnum(c))
 
+// give char idx into txt c and bool ptr as return 
+#define FLOW_CTRL_CMD_END_RETURN(c, b) { u32 _c = c; while(txt[_c] != '\n' && txt[_c] != '\0') \
+                                       { if (txt[_c] == ';') {(*b) = true; break;} _c++; } }
+#define FLOW_CTRL_CMD_END(c)  ((c) == ';')
+
 // eisther if[(] or if[ ] or else[ if] or [else]
 #define FLOW_CTRL_END(c) (txt[c] == '(' ||                                \
                          (isspace(txt[c]) && txt[(c) +1] == '(')  ||      \
                          (isspace(txt[c]) && txt[(c) +1] == 'i'   &&      \
-                          txt[(c) +2] == 'f' && isspace(txt[c]))  ||      \
-                         (txt[(c) -4] == 'e' && txt[(c) -3] == 'l' &&     \
-                         txt[(c) -2] == 's' && txt[(c) -1] == 'e'))
+                          txt[(c) +2] == 'f' && isspace(txt[c])) )
 
 // check if char is valid as an ending for a value name
 #define VALUE_END(c)      (!isalnum(c))
@@ -79,11 +85,30 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       if (equal && TYPE_END(txt[i +len]))
       {
         DUMP_COLORED(len, COL_TYPE); 
-        return;;
+        return;
       }
     }
 
     // -- flow control --
+    for (u32 s = 0; s < key_flow_ctrl_cmd_len; ++s) // string
+    {
+      // @UNSURE: could use strcmp()
+      bool equal = false;
+      u32 len = strlen(key_flow_ctrl_cmd[s]);
+      u32 c;
+      for (c = 0; c < len; ++c)             // char
+      {
+        equal = txt[i +c] == key_flow_ctrl_cmd[s][c];
+        if (!equal) { break; }
+      }
+      bool return_end = false;
+      FLOW_CTRL_CMD_END_RETURN(i+len, &return_end);
+      if (equal && (return_end || FLOW_CTRL_CMD_END(i +len)))
+      {
+        DUMP_COLORED(len, COL_TYPE);
+        return;
+      }
+    }
     for (u32 s = 0; s < key_flow_ctrl_len; ++s) // string
     {
       // @UNSURE: could use strcmp()
@@ -95,10 +120,15 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
         equal = txt[i +c] == key_flow_ctrl[s][c];
         if (!equal) { break; }
       }
-      if (equal && FLOW_CTRL_END(i +len))
+      bool else_end = false;
+      u32 _c = i +len; 
+      while(isspace(txt[_c]) && txt[_c] != '\0')
+      { if (txt[_c+1] == '{') { else_end = true; break;} _c++; } 
+      
+    if (equal && (else_end || FLOW_CTRL_END(i +len)))
       {
         DUMP_COLORED(len, COL_TYPE);
-        break;
+        return;
       }
     }
     
@@ -117,7 +147,7 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       if (equal && VALUE_END(txt[i +len]))
       {
         DUMP_COLORED(len, COL_VALUE); 
-        return;;
+        return;
       }
     }
 
@@ -137,9 +167,7 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   }
  
   // -- values --
-  if (isdigit(txt[i]) && !isalpha(txt[i -1]))  // && 
-      // (!isalpha(txt[i +1]) || txt[i +1] == 'f')) //  && 
-      // !in_tag)                                      // numbers
+  if (isdigit(txt[i]) && !isalpha(txt[i -1]))  
   {
     BUF_DUMP();
     PF_COLOR(COL_VALUE);
@@ -181,7 +209,11 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     while (txt[i] != '\n') 
     { 
       style_highlight_c_comment(txt, buf, &buf_pos, &i);
-      buf[buf_pos++] = txt[i++]; 
+      // buf[buf_pos++] = txt[i++]; 
+      bool skip_char_tmp = false;
+      doc_color_code_escape_chars(txt, buf, &buf_pos, &i, &skip_char_tmp);
+      if (!skip_char_tmp) { buf[buf_pos++] = txt[i++]; }
+      else { i++; }
     }
     BUF_DUMP();
     PF_COLOR(PF_WHITE);
@@ -194,21 +226,37 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     while (txt[i -2] != '*' || txt[i -1] != '/') 
     {
       style_highlight_c_comment(txt, buf, &buf_pos, &i);
-      buf[buf_pos++] = txt[i++]; 
+      // buf[buf_pos++] = txt[i++]; 
+      bool skip_char_tmp = false;
+      doc_color_code_escape_chars(txt, buf, &buf_pos, &i, &skip_char_tmp);
+      if (!skip_char_tmp) { buf[buf_pos++] = txt[i++]; }
+      else { i++; }
     }
     BUF_DUMP();
     PF_COLOR(PF_WHITE);
   } 
 
   // -- macros --
-  if (txt[i] == '\\' && txt[i +1] == '#')     // skipp escaped #
-  { buf_pos--; i++; buf[buf_pos++] = txt[i++]; BUF_DUMP();}
-  else if (txt[i] == '#')  
+  if (txt[i] == '#')  
   {
-    PF_COLOR(COL_TYPE);
+    // PF_COLOR(COL_TYPE);
     BUF_DUMP();
-    while (txt[i] != '\n' && txt[i] != '\0') { buf[buf_pos++] = txt[i++]; }
     PF_COLOR(COL_MACRO);
+    while (txt[i] != '\n' && txt[i] != '\0')
+    { 
+      bool skip_char_tmp = false;
+      doc_color_code_escape_chars(txt, buf, &buf_pos, &i, &skip_char_tmp);
+      if (!skip_char_tmp) { buf[buf_pos++] = txt[i++]; }
+      else { i++; }
+      // if (txt[i] == '\n') { PF("%%NL%%"); }
+      if (txt[i-1] == '\\' && txt[i] == '\n') // multiline
+      {
+        PF("%%\\NL%%");
+        buf[buf_pos++] = txt[i++];  // add '\n'
+        i++;                        // skip '\'
+        continue;
+      }
+    }
     BUF_DUMP();
     PF_COLOR(PF_WHITE);
   }

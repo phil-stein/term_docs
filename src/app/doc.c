@@ -135,6 +135,25 @@ void doc_print_section(char* sec, const char* keyword, const char* file)
   PF_COLOR(PF_WHITE);
 }
 
+  
+#define BUF_DUMP()        \
+    buf[buf_pos] = '\0';  \
+    PF("%s", buf);        \
+    buf_pos = 0;
+
+#define BUF_DUMP_OFFSET(offset) \
+    buf[buf_pos] = '\0';        \
+    PF("%s", buf +(offset));    \
+    buf_pos = 0;
+
+#define DUMP_COLORED(n, col)                              \
+    { BUF_DUMP();                                         \
+    PF_COLOR(col);                                        \
+    int j = 0;                                            \
+    while (j < (n)) { buf[buf_pos++] = sec[i++]; j++; }   \
+    BUF_DUMP();                                           \
+    PF_COLOR(PF_WHITE); }
+
 void doc_color_code_section(char* sec)
 {
   core_data_t* core_data = core_data_get();
@@ -149,32 +168,13 @@ void doc_color_code_section(char* sec)
   int  len = strlen(sec);
   char buf[512];
   int  buf_pos = 0;
-  bool in_tag = false;
-  
-  #define BUF_DUMP()        \
-      buf[buf_pos] = '\0';  \
-      PF("%s", buf);        \
-      buf_pos = 0;
- 
-  #define BUF_DUMP_OFFSET(offset) \
-      buf[buf_pos] = '\0';        \
-      PF("%s", buf +(offset));    \
-      buf_pos = 0;
-  
-  #define DUMP_COLORED(n, col)                              \
-      { BUF_DUMP();                                         \
-      PF_COLOR(col);                                        \
-      int j = 0;                                            \
-      while (j < (n)) { buf[buf_pos++] = sec[i++]; j++; }   \
-      BUF_DUMP();                                           \
-      PF_COLOR(PF_WHITE); }
+  // bool in_tag = false;
 
   for (int i = 0; i < len -1; ++i)
   {    
     // highlight all c syntax
     style_highlight_c(sec, buf, &buf_pos, &i);
     
-
     bool skip_char = false;
 
     // -- warnings --
@@ -186,7 +186,13 @@ void doc_color_code_section(char* sec)
       BUF_DUMP();
       PF_STYLE(PF_ITALIC, COL_WARNING);
       buf[buf_pos++] = sec[i++];
-      while (sec[i] != '\n' && sec[i] != '!') { buf[buf_pos++] = sec[i++]; }
+      while (sec[i] != '\n' && sec[i] != '!') 
+      { 
+        bool skip_char_tmp = false;
+        doc_color_code_escape_chars(sec, buf, &buf_pos, &i, &skip_char_tmp);
+        if (!skip_char_tmp) { buf[buf_pos++] = sec[i++]; }
+        else { i++; }
+      }
       if (sec[i] == '!') { i++; }
       BUF_DUMP();
       PF_COLOR(PF_WHITE);
@@ -202,7 +208,13 @@ void doc_color_code_section(char* sec)
       BUF_DUMP();
       PF_STYLE(PF_ITALIC, COL_INFO);
       buf[buf_pos++] = sec[i++];
-      while (sec[i] != '\n' && sec[i] != '~') { buf[buf_pos++] = sec[i++]; }
+      while (sec[i] != '\n' && sec[i] != '~') 
+      {
+        bool skip_char_tmp = false;
+        doc_color_code_escape_chars(sec, buf, &buf_pos, &i, &skip_char_tmp);
+        if (!skip_char_tmp) { buf[buf_pos++] = sec[i++]; }
+        else { i++; }
+      }
       if (sec[i] == '~') { i++; }
       BUF_DUMP();
       PF_COLOR(PF_WHITE);
@@ -235,33 +247,17 @@ void doc_color_code_section(char* sec)
     { DUMP_COLORED(8, COL_EXAMPLE); }
 
     // -- escaped --
-    if (sec[i] == '\\' && sec[i +1] == '#')
-    {
-      BUF_DUMP();
-      // i++;
-      // buf_pos--;
-      skip_char = true;
-    }
+    doc_color_code_escape_chars(sec, buf, &buf_pos, &i, &skip_char);
+
+    // -- color code --
+    doc_color_code_color_codes(sec, len, buf, &buf_pos, &i, &skip_char);
+
 
     // -- copy from sec --
     if (!skip_char) { buf[buf_pos++] = sec[i]; }
 
-    // -- tags --
-    // if (sec[i] == '|' && isspace(sec[i+1]) && in_tag) // end tag
-    // { 
-    //   BUF_DUMP();
-    //   PF_COLOR(PF_WHITE);
-    //   in_tag = false;
-    //   // continue;
-    // }
-    // else if (sec[i +1] == '|')  // start tag
-    // {
-    //   BUF_DUMP();
-    //   PF_STYLE_COL(PF_UNDERLINE, COL_TAG);;
-    //   in_tag = true;
-    //   // continue;
-    // }
-    if (!(sec[i] == '|' && isspace(sec[i+1]) && in_tag) && sec[i +1] == '|')
+    // -- tags -- 
+    if (!(sec[i] == '|' && isspace(sec[i+1])) && sec[i +1] == '|')
     {
       BUF_DUMP();
       PF_STYLE(PF_UNDERLINE, COL_TAG);
@@ -283,10 +279,148 @@ void doc_color_code_section(char* sec)
   PF("\n");
   PF("\n");   // twice bc. cutting off in for (len -1)
 
-  #undef BUF_DUMP
-  #undef DUMP_TYPE
-
 }
+
+void doc_color_code_escape_chars(char* sec, char* buf, int* buf_pos_ptr, int* i_ptr, bool* skip_char_ptr)
+{
+  #define buf_pos   (*buf_pos_ptr)
+  #define i         (*i_ptr)
+  #define skip_char (*skip_char_ptr)
+  
+  if (sec[i] == '\\' && sec[i +1] == '\\' && sec[i+2] == '#')
+  {
+    buf[buf_pos++] = sec[i +2]; // put # in buf
+    BUF_DUMP();                 // output buf
+    skip_char = true;           // ignore '\\'
+    i+=2;                       // set i after #
+  }
+  else if (sec[i] == '\\' && sec[i+1] == '#')
+  {
+    BUF_DUMP();
+    skip_char = true;
+  }
+  else if (sec[i] == '\\' && ( sec[i+1] == '|' || sec[i+1] == '~' || 
+                               sec[i+1] == '!' || sec[i+1] == '?'))
+  {
+    buf[buf_pos++] = sec[i +1]; // put | in buf
+    BUF_DUMP();                 // output buf
+    skip_char = true;           // ignore '\'
+    i++;                        // set i after |
+  }
+  
+  #undef buf_pos
+  #undef i     
+  #undef skip_char
+}
+u32 cur_pf_color = PF_WHITE; 
+u32 cur_pf_style = PF_NORMAL;
+void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_ptr, int* i_ptr, bool* skip_char_ptr)
+{
+  #define buf_pos   (*buf_pos_ptr)
+  #define i         (*i_ptr)
+  #define skip_char (*skip_char_ptr)
+  if (sec[i] == '$' && sec[i+1] == '$')                             // reset to normal
+  { BUF_DUMP(); PF_STYLE(PF_NORMAL, PF_WHITE); cur_pf_style = PF_NORMAL; cur_pf_color = PF_WHITE; skip_char = true; i++; }
+  if (i+6 < sec_len    &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'w' || sec[i+1] == 'W') && 
+      (sec[i+2] == 'h' || sec[i+2] == 'H') && 
+      (sec[i+3] == 'i' || sec[i+3] == 'I') && 
+      (sec[i+4] == 't' || sec[i+4] == 'T') && 
+      (sec[i+5] == 'e' || sec[i+5] == 'E') && 
+       sec[i+6] == '$' )   // set color to white
+  { BUF_DUMP(); PF_STYLE(cur_pf_style, PF_WHITE); cur_pf_color = PF_WHITE; skip_char = true; i += 6; }
+  if (i+4 < sec_len    &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'r' || sec[i+1] == 'R') &&                         
+      (sec[i+2] == 'e' || sec[i+2] == 'E') && 
+      (sec[i+3] == 'd' || sec[i+3] == 'D') && 
+       sec[i+4] == '$')    // set color to red
+  { BUF_DUMP(); PF_STYLE(cur_pf_style, PF_RED); cur_pf_color = PF_RED; skip_char = true; i += 4; }
+  if (i+6 < sec_len    &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'b' || sec[i+1] == 'B') && 
+      (sec[i+2] == 'l' || sec[i+2] == 'L') && 
+      (sec[i+3] == 'a' || sec[i+3] == 'A') && 
+      (sec[i+4] == 'c' || sec[i+4] == 'C') && 
+      (sec[i+5] == 'k' || sec[i+5] == 'K') && 
+       sec[i+6] == '$' )   // set color to black
+  { BUF_DUMP(); PF_STYLE(cur_pf_style, PF_BLACK);  cur_pf_color = PF_BLACK; skip_char = true; i += 6; }
+  if (i+6 < sec_len    &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'g' || sec[i+1] == 'G') && 
+      (sec[i+2] == 'r' || sec[i+2] == 'R') && 
+      (sec[i+3] == 'e' || sec[i+3] == 'E') && 
+      (sec[i+4] == 'e' || sec[i+4] == 'E') && 
+      (sec[i+5] == 'n' || sec[i+5] == 'N') && 
+       sec[i+6] == '$' )   // set color to green
+  { BUF_DUMP(); PF_STYLE(cur_pf_style, PF_GREEN);  cur_pf_color = PF_GREEN; skip_char = true; i += 6; }
+  if (i+7 < sec_len    &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'y' || sec[i+1] == 'Y') && 
+      (sec[i+2] == 'e' || sec[i+2] == 'E') && 
+      (sec[i+3] == 'l' || sec[i+3] == 'L') && 
+      (sec[i+4] == 'l' || sec[i+4] == 'L') && 
+      (sec[i+5] == 'o' || sec[i+5] == 'O') && 
+      (sec[i+6] == 'w' || sec[i+6] == 'W') && 
+       sec[i+7] == '$' )   // set color to yellow
+  { BUF_DUMP(); PF_STYLE(cur_pf_style, PF_YELLOW); cur_pf_color = PF_YELLOW;  skip_char = true; i += 7; }
+  if (i+5 < sec_len    &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'b' || sec[i+1] == 'B') && 
+      (sec[i+2] == 'l' || sec[i+2] == 'L') && 
+      (sec[i+3] == 'u' || sec[i+3] == 'U') && 
+      (sec[i+4] == 'e' || sec[i+4] == 'E') && 
+       sec[i+5] == '$' )   // set color to blue
+  { BUF_DUMP(); PF_STYLE(cur_pf_style, PF_BLUE); cur_pf_color = PF_BLUE;  skip_char = true; i += 5; }
+  if (i+7 < sec_len   &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'p' || sec[i+1] == 'P') && 
+      (sec[i+2] == 'u' || sec[i+2] == 'U') && 
+      (sec[i+3] == 'r' || sec[i+3] == 'R') && 
+      (sec[i+4] == 'p' || sec[i+4] == 'P') && 
+      (sec[i+5] == 'l' || sec[i+5] == 'L') && 
+      (sec[i+6] == 'e' || sec[i+6] == 'E') && 
+       sec[i+7] == '$' )   // set color to purple
+  { BUF_DUMP(); PF_STYLE(cur_pf_style, PF_PURPLE); cur_pf_color = PF_PURPLE; skip_char = true; i += 7; }
+  if (i+5 < sec_len    &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'c' || sec[i+1] == 'C') && 
+      (sec[i+2] == 'y' || sec[i+2] == 'Y') && 
+      (sec[i+3] == 'a' || sec[i+3] == 'A') && 
+      (sec[i+4] == 'n' || sec[i+4] == 'N') && 
+       sec[i+5] == '$' )   // set color to cyan
+  { BUF_DUMP(); PF_STYLE(cur_pf_style, PF_CYAN); cur_pf_color = PF_CYAN; skip_char = true; i += 5; }
+
+  // -- modes -- 
+
+  if (i+7 < sec_len   &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'i' || sec[i+1] == 'I') && 
+      (sec[i+2] == 't' || sec[i+2] == 'T') && 
+      (sec[i+3] == 'a' || sec[i+3] == 'A') && 
+      (sec[i+4] == 'l' || sec[i+4] == 'L') && 
+      (sec[i+5] == 'i' || sec[i+5] == 'I') && 
+      (sec[i+6] == 'c' || sec[i+6] == 'C') && 
+       sec[i+7] == '$' )
+  { BUF_DUMP(); PF_STYLE(PF_ITALIC, cur_pf_color); cur_pf_style = PF_ITALIC;  skip_char = true; i += 7; }
+  if (i+4 < sec_len   &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 'd' || sec[i+1] == 'D') && 
+      (sec[i+2] == 'i' || sec[i+2] == 'I') && 
+      (sec[i+3] == 'm' || sec[i+3] == 'M') && 
+       sec[i+4] == '$' )
+  { BUF_DUMP(); PF_STYLE(PF_DIM, cur_pf_color); cur_pf_style = PF_DIM;  skip_char = true; i += 4; }
+
+  #undef buf_pos
+  #undef i     
+  #undef skip_char
+}
+
+#undef BUF_DUMP
+#undef BUF_DUMP_OFFSET
+#undef DUMP_COLORED
+#undef DUMP_TYPE
 
 // old highlight system
     // if (isspace(sec[i -1]) && sec[i -1] != '|') //  && !in_tag)  // !isalnum(sec[i -1])

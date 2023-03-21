@@ -124,7 +124,7 @@ void* malloc(size_t size)
 '?' link <br>
 
 to include a '#' symbol in your documentation you need to escape it ``\\#``, or escape once for macros ``\#define`` <br>
-the same applies to `` ! ~ ? ``  `` \! \~ \? ``  ``a = a \!= b \? c : d; -> a = a != b ? c : d;`` 
+the same applies to `` ! ~ ? |``  `` \! \~ \? \|``  ``a = a \!= b \? c : d; -> a = a != b ? c : d;`` 
 
 
 ### custom executable name
@@ -138,7 +138,8 @@ change this and call `make clean` and `make` in the root directory
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
   - [ ] load keys for style.c from file, for custamization
   - [ ] add way to highlight in .sheet
-    - **hello**, __hello__, $red$ hello $, etc.
+    - **hello**, $red$ hello $, etc.
+  - [x] escape chars in info, warning, macro, comment
   - [ ] standard c documentation
     - [ ] basics e.g. types, macros, flow control, etc. `WIP`
     - [x] ctype.h
@@ -146,8 +147,8 @@ change this and call `make clean` and `make` in the root directory
     - [x] string.h
     - [x] stdio.h
     - [x] math.h
-    - [ ] assert.h
-    - [ ] stdarg.h
+    - [x] assert.h
+    - [x] stdarg.h
     - [ ] time.h
     - [ ] float.h
     - [ ] erno.h 
