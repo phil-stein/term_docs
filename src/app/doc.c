@@ -2,6 +2,7 @@
 #include "app/file_io.h"
 #include "app/style.h"
 #include "app/core_data.h"
+#include "global/global.h"
 
 #include <ctype.h>
 
@@ -62,6 +63,7 @@ bool doc_search_section(const char* path, const char* file, const char* keyword)
   // @TODO: see if better way to do this
   bool found_one = false;
   bool found = false;
+  u32 found_count = 0;
   int start;
   for (start = 1; txt[start] != '\0'; start++)
   {
@@ -94,29 +96,42 @@ bool doc_search_section(const char* path, const char* file, const char* keyword)
       start = end +1;
       found_one = true;
       found = false;
+      found_count++;
     }
   }
   FREE(txt);
-  
+
+  // print ending line
+  if (found_count > 0)
+  {
+    int w, h; io_util_get_console_size_win(&w, &h);
+    w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
+    
+    PF_COLOR(PF_PURPLE);
+    int i = 0;
+    while( i < w -1) { _PF("-"); i++; }
+    
+    PF("\n");
+    PF_COLOR(PF_WHITE);
+  }
+
   return found_one;
 }
 
 void doc_print_section(char* sec, const char* keyword, const char* file)
 {
+  int w, h; io_util_get_console_size_win(&w, &h);
+  w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
+
   PF_COLOR(PF_PURPLE);
-  const int lne = 50;
-  int i = strlen(keyword) + strlen(file) +1;
-  PF("%s|%s ", file, keyword);
-  while (i < lne) { PF("-"); i++; }
+  PF("%s|%s ", file, keyword); 
+  int i = strlen(keyword) + strlen(file) +2;
+  while( i < w -1) { _PF("-"); i++; }
   PF("\n");
   
   PF_COLOR(PF_WHITE);
   doc_color_code_section(sec);
  
-  PF_COLOR(PF_PURPLE);
-  i = 0;
-  while (i < lne) { PF("-"); i++; }
-  PF("\n");
   PF_COLOR(PF_WHITE);
 }
 
@@ -169,7 +184,7 @@ void doc_color_code_section(char* sec)
       // if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
       // else { BUF_DUMP(); }
       BUF_DUMP();
-      PF_STYLE_COL(PF_ITALIC, COL_WARNING);
+      PF_STYLE(PF_ITALIC, COL_WARNING);
       buf[buf_pos++] = sec[i++];
       while (sec[i] != '\n' && sec[i] != '!') { buf[buf_pos++] = sec[i++]; }
       if (sec[i] == '!') { i++; }
@@ -185,7 +200,7 @@ void doc_color_code_section(char* sec)
       // if (sec[i -1] == '\\') { buf_pos -= 2; BUF_DUMP(); i++; } 
       // else { BUF_DUMP(); }
       BUF_DUMP();
-      PF_STYLE_COL(PF_ITALIC, COL_INFO);
+      PF_STYLE(PF_ITALIC, COL_INFO);
       buf[buf_pos++] = sec[i++];
       while (sec[i] != '\n' && sec[i] != '~') { buf[buf_pos++] = sec[i++]; }
       if (sec[i] == '~') { i++; }
@@ -204,8 +219,8 @@ void doc_color_code_section(char* sec)
       buf[buf_pos++] = sec[i++];
       while (sec[i] != '\n' && sec[i] != '?') { buf[buf_pos++] = sec[i++]; }
       if (sec[i] == '?') { i++; }
-      PF_STYLE(PF_DIM);
-      PF_STYLE_COL(PF_ITALIC, COL_LINK);
+      PF_STYLE(PF_DIM, COL_LINK);
+      PF_STYLE(PF_ITALIC, COL_LINK);
       // i++; PF(" ");
       BUF_DUMP();
       PF_COLOR(PF_WHITE);
@@ -249,7 +264,7 @@ void doc_color_code_section(char* sec)
     if (!(sec[i] == '|' && isspace(sec[i+1]) && in_tag) && sec[i +1] == '|')
     {
       BUF_DUMP();
-      PF_STYLE_COL(PF_UNDERLINE, COL_TAG);
+      PF_STYLE(PF_UNDERLINE, COL_TAG);
       
       while (!(sec[i] == '|' && isspace(sec[i+1])) && i < len)
       {

@@ -3,6 +3,12 @@
 #include "app/style.h"
 #include "app/file_io.h"
 #include "app/core_data.h"
+
+// order is important, io_util & str_util before global
+#define IO_UTIL_IMPLEMENTATION       // only define once
+#include "global/io_util.h"          // only need to include here, normally included via global.h
+#define STR_UTIL_IMPLEMENTATION      // only define once
+#include "global/str_util.h"         // only need to include here, normally included via global.h
 #include "global/global.h"
 
 #define STB_DS_IMPLEMENTATION   // only define once
@@ -144,14 +150,12 @@ int main(int argc, char** argv)
     const int lne = 50;
     if (arrlen(results) > 0)  // draw top line
     {
-      PF_COLOR(PF_PURPLE);
-      PF_STYLE(PF_ITALIC);
+      PF_STYLE(PF_ITALIC, PF_PURPLE);
       u32 i = strlen(keyword) +2;
       PF("[%s]", keyword);
       while (i < lne) { PF("-"); i++; }
       PF("\n");
-      PF_COLOR(PF_WHITE);
-      PF_STYLE(PF_NORMAL);
+      PF_STYLE(PF_NORMAL, PF_WHITE);
       PF("\n");
     }
     for (u32 i = 0; i < arrlen(results); ++i)

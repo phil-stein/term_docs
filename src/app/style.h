@@ -5,6 +5,8 @@
 
 #define BORDER_CHAR '|'
 
+#define MAX_LINE_WIDTH 90
+
 #define COL_TAG     PF_CYAN 
 #define COL_WARNING PF_RED  
 #define COL_EXAMPLE PF_CYAN 

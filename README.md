@@ -152,6 +152,7 @@ change this and call `make clean` and `make` in the root directory
     - [ ] locale.h
     - [ ] signal.h
     - [ ] setjmp.h
+  - [ ] more documentation
     - [ ] make
     - [ ] gcc
     - [ ] vim cheatsheet

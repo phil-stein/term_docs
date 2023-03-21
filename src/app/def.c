@@ -185,8 +185,7 @@ void def_print_result(search_result_t* r)
     
   }
 
-  PF_COLOR(PF_WHITE);
-  PF_STYLE(PF_NORMAL);
+  PF_STYLE(PF_NORMAL, PF_WHITE);
   BUF_DUMP();
   
 

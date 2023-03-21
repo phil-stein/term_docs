@@ -174,8 +174,8 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   {
     BUF_DUMP();
     while (txt[i] != '\n') { buf[buf_pos++] = txt[i++]; }
-    PF_STYLE(PF_ITALIC);
-    PF_STYLE_COL(PF_DIM, COL_COMMENT);
+    PF_STYLE(PF_ITALIC, COL_COMMENT);
+    PF_STYLE(PF_DIM, COL_COMMENT);
     BUF_DUMP();
     PF_COLOR(PF_WHITE);
   }
@@ -183,8 +183,8 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   {
     BUF_DUMP();
     while (txt[i -2] != '*' || txt[i -1] != '/') { buf[buf_pos++] = txt[i++]; }
-    PF_STYLE(PF_ITALIC);
-    PF_STYLE_COL(PF_DIM, COL_COMMENT);
+    PF_STYLE(PF_ITALIC, COL_COMMENT);
+    PF_STYLE(PF_DIM, COL_COMMENT);
     BUF_DUMP();
     PF_COLOR(PF_WHITE);
   } 

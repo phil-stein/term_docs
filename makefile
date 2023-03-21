@@ -4,7 +4,7 @@
 
 
 # compiler plus flags, -g: debug info, -Wall: all warnings
-CC = @gcc -g -Wall
+CC = @gcc -g -Wall -DGLOBAL_DEBUG
 
 NAME      = doc
 NAME_FULL = $(NAME).exe
