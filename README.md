@@ -136,6 +136,9 @@ change this and call `make clean` and `make` in the root directory
   - [ ] search structure definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
+  - [ ] load keys for style.c from file, for custamization
+  - [ ] add way to highlight in .sheet
+    - **hello**, __hello__, $red$ hello $, etc.
   - [ ] standard c documentation
     - [ ] basics e.g. types, macros, flow control, etc. `WIP`
     - [x] ctype.h
@@ -153,6 +156,8 @@ change this and call `make clean` and `make` in the root directory
     - [ ] signal.h
     - [ ] setjmp.h
   - [ ] more documentation
+    - [ ] term_docs
+      - -help, custom .sheet, etc.
     - [ ] make
     - [ ] gcc
     - [ ] vim cheatsheet

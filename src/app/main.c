@@ -55,27 +55,27 @@ int main(int argc, char** argv)
   u32 cmd_count = 0;
   for (u32 i = 1; i < argc; ++i)
   {
-    // @NOTE: '-h' or '-help' for help
-    if ((argv[i][0] == '-'  && 
-         argv[i][1] == 'h') ||
-        
-        (argv[i][0] == '-'  && 
-         argv[i][1] == 'h'  && 
-         argv[i][2] == 'e'  && 
-         argv[i][3] == 'l'  && 
-         argv[i][4] == 'p') ) 
-    {
-      cmd_count++;
-      PF("enter: '"); 
-      PF_COLOR(PF_CYAN); PF("doc word"); PF_COLOR(PF_WHITE);
-      PF("' to search for all occurences of '"); 
-      PF_COLOR(PF_PURPLE); PF("word"); PF_COLOR(PF_WHITE);
-      PF("' in the sheets.\n");
-      P("you can add sheets or alter them by going to the 'sheets' folder and adding / editing the '.sheet' files.");
-      PF("use: '"); 
-      PF_COLOR(PF_CYAN); PF("-f"); PF_COLOR(PF_WHITE);
-      PF("' to search through '.h' files, @TODO: this\n");
-    }
+    // // @NOTE: '-h' or '-help' for help
+    // if ((argv[i][0] == '-'  && 
+    //      argv[i][1] == 'h') ||
+    //     
+    //     (argv[i][0] == '-'  && 
+    //      argv[i][1] == 'h'  && 
+    //      argv[i][2] == 'e'  && 
+    //      argv[i][3] == 'l'  && 
+    //      argv[i][4] == 'p') ) 
+    // {
+    //   cmd_count++;
+    //   PF("enter: '"); 
+    //   PF_COLOR(PF_CYAN); PF("doc word"); PF_COLOR(PF_WHITE);
+    //   PF("' to search for all occurences of '"); 
+    //   PF_COLOR(PF_PURPLE); PF("word"); PF_COLOR(PF_WHITE);
+    //   PF("' in the sheets.\n");
+    //   P("you can add sheets or alter them by going to the 'sheets' folder and adding / editing the '.sheet' files.");
+    //   PF("use: '"); 
+    //   PF_COLOR(PF_CYAN); PF("-f"); PF_COLOR(PF_WHITE);
+    //   PF("' to search through '.h' files, @TODO: this\n");
+    // }
     
     // @NOTE: '-c' or '-color' to disable color and styles
     if ((argv[i][0] == '-'  && 
@@ -147,30 +147,30 @@ int main(int argc, char** argv)
     // }
 
     // @NOTE: draw bottom / top lines and results
-    const int lne = 50;
     if (arrlen(results) > 0)  // draw top line
     {
+      int w, h; io_util_get_console_size_win(&w, &h);
+      w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
+      
       PF_STYLE(PF_ITALIC, PF_PURPLE);
-      u32 i = strlen(keyword) +2;
       PF("[%s]", keyword);
-      while (i < lne) { PF("-"); i++; }
+      u32 i = strlen(keyword) +2;
+      while( i < w -1) { _PF("-"); i++; }
+      PF_STYLE(PF_NORMAL, PF_WHITE);
+      PF("\n\n");
+
+      for (u32 i = 0; i < arrlen(results); ++i)
+      {
+        search_result_t* r = &results[i];
+        def_print_result(r);
+      }
+
+      PF("\n");
+      PF_STYLE(PF_ITALIC, PF_PURPLE);
+      i = 0;
+      while( i < w -1) { _PF("-"); i++; }
       PF("\n");
       PF_STYLE(PF_NORMAL, PF_WHITE);
-      PF("\n");
-    }
-    for (u32 i = 0; i < arrlen(results); ++i)
-    {
-      search_result_t* r = &results[i];
-      def_print_result(r);
-    }
-    if (arrlen(results) > 0)  // draw bottom line
-    {
-      PF("\n");
-      PF_COLOR(PF_PURPLE);
-      u32 i = 0;
-      while (i < lne) { PF("-"); i++; }
-      PF("\n");
-      PF_COLOR(PF_WHITE);
     }
   }
   else

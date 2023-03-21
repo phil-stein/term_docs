@@ -2,6 +2,41 @@
 @NOTE: testing ground no actual docs here
 
 #
+|doc|
+|doc_help|
+|-help|-h|
+
+documentation:
+  enter 'doc [word]' into the terminal to search documentation
+  when searching '[word]' is matched against the tags, surrounded by \| on both sides 
+  in the .sheet documentation
+
+definition search:
+  enter 'doc [dir] [func_name]' to search all .h files in [dir] for [func_names]'s definition
+
+
+  doc word word ... -> .sheet docs 
+
+  -f/-function, -s/-struct
+  doc -f dir name   -> func definition
+  doc -s dir name   -> struct definition
+or
+  -d/-definition, -s/-search
+  doc -d dir name   -> func/struct/enum definition
+  doc -s dir name   -> func/struct/enum occurance
+
+incomplete search:
+  
+  doc start...      -> start, start_01, etc.
+or
+  -f/-fuzzy
+  doc -f start      -> start, start_01, etc.
+or
+  doc ~start        -> start, start_01, a_start, a_start_01, etc.
+
+#
+
+#
 |test|wip|
     ! not actual documentation just a test
 
@@ -25,12 +60,17 @@
     for ()      for()
     while ()    while()
     switch ()   switch()
+    
+    break; continue;
+
 
     // comment
+    // comment highlights @DOC: @TODO: @BUGG: @TMP: @OPTIMIZATION:
     /*
      | multi
      | line
      | comment
+     | comment highlights @DOC: @TODO: @BUGG: @TMP: @OPTIMIZATION:
     */
 
     \#if     condition

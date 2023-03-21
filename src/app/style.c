@@ -16,6 +16,8 @@ const u32  key_flow_ctrl_len = sizeof(key_flow_ctrl) / sizeof(key_flow_ctrl[0]);
 const char key_values[][KEY_MAX] = { "NULL", "true", "false" };
 const u32  key_values_len = sizeof(key_values) / sizeof(key_values[0]);
 
+const char key_comment[][KEY_MAX] = { "@DOC:", "@TODO:", "@TMP:", "@BUGG:", "@OPTIMIZATION:" };
+const u32  key_comment_len = sizeof(key_comment) / sizeof(key_comment[0]);
 
 // check if char is valid as an ending for a type name
 #define TYPE_START(c)    (isspace(c) || (c) == ',' || (c) == ';' || (c) == '(')
@@ -33,33 +35,34 @@ const u32  key_values_len = sizeof(key_values) / sizeof(key_values[0]);
 // check if char is valid as an ending for a value name
 #define VALUE_END(c)      (!isalnum(c))
 
+#define buf_pos (*buf_pos_ptr)
+#define i       (*i_ptr)
+
+#define BUF_DUMP()        \
+    buf[buf_pos] = '\0';  \
+    PF("%s", buf);        \
+    buf_pos = 0;
+
+#define BUF_DUMP_OFFSET(offset) \
+    buf[buf_pos] = '\0';        \
+    PF("%s", buf +(offset));    \
+    buf_pos = 0;
+
+#define DUMP_COLORED(n, col)                              \
+    { BUF_DUMP();                                         \
+    PF_COLOR(col);                                        \
+    int j = 0;                                            \
+    while (j < (n)) { buf[buf_pos++] = txt[i++]; j++; }   \
+    BUF_DUMP();                                           \
+    PF_COLOR(PF_WHITE); }
+
 
 void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr) 
 {
-  #define buf_pos (*buf_pos_ptr)
-  #define i       (*i_ptr)
-  
-  #define BUF_DUMP()        \
-      buf[buf_pos] = '\0';  \
-      PF("%s", buf);        \
-      buf_pos = 0;
- 
-  #define BUF_DUMP_OFFSET(offset) \
-      buf[buf_pos] = '\0';        \
-      PF("%s", buf +(offset));    \
-      buf_pos = 0;
-  
-  #define DUMP_COLORED(n, col)                              \
-      { BUF_DUMP();                                         \
-      PF_COLOR(col);                                        \
-      int j = 0;                                            \
-      while (j < (n)) { buf[buf_pos++] = txt[i++]; j++; }   \
-      BUF_DUMP();                                           \
-      PF_COLOR(PF_WHITE); }
+  // buf_pos & i are macros for _ptr equivalent
 
-    // PF("%c", txt[i]);
-
-  if (TYPE_START(txt[i -1])) //  && txt[i -1] != '|') //  && !in_tag)  
+  // -- types --
+  if (i == 0 || TYPE_START(txt[i -1])) //  && txt[i -1] != '|') //  && !in_tag)  
   {
     // -- types --
     for (u32 s = 0; s < key_types_len; ++s) // string
@@ -173,18 +176,26 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   if (txt[i] == '/' && txt[i +1] == '/')
   {
     BUF_DUMP();
-    while (txt[i] != '\n') { buf[buf_pos++] = txt[i++]; }
     PF_STYLE(PF_ITALIC, COL_COMMENT);
     PF_STYLE(PF_DIM, COL_COMMENT);
+    while (txt[i] != '\n') 
+    { 
+      style_highlight_c_comment(txt, buf, &buf_pos, &i);
+      buf[buf_pos++] = txt[i++]; 
+    }
     BUF_DUMP();
     PF_COLOR(PF_WHITE);
   }
   if (txt[i] == '/' && txt[i +1] == '*')
   {
     BUF_DUMP();
-    while (txt[i -2] != '*' || txt[i -1] != '/') { buf[buf_pos++] = txt[i++]; }
     PF_STYLE(PF_ITALIC, COL_COMMENT);
     PF_STYLE(PF_DIM, COL_COMMENT);
+    while (txt[i -2] != '*' || txt[i -1] != '/') 
+    {
+      style_highlight_c_comment(txt, buf, &buf_pos, &i);
+      buf[buf_pos++] = txt[i++]; 
+    }
     BUF_DUMP();
     PF_COLOR(PF_WHITE);
   } 
@@ -203,6 +214,38 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   }
 }
 
+void style_highlight_c_comment(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr) 
+{
+  // buf_pos & i are macros for _ptr equivalent
+  
+  // starts with whitespace
+  if (i <= 0 || !isspace(txt[i -1])) { return; }
+
+  for (u32 s = 0; s < key_comment_len; ++s) // string
+  {
+    // @UNSURE: could use strncmp()
+    bool equal = false;
+    u32 len = strlen(key_comment[s]);
+    u32 c;
+    for (c = 0; c < len; ++c)             // char
+    {
+      equal = txt[i +c] == key_comment[s][c];
+      if (!equal) { break; }
+    }
+    if (equal && isspace(txt[i +len]))
+    {
+      BUF_DUMP(); 
+      PF_STYLE(PF_ITALIC, COL_COMMENT_HIGHLIGHT);
+      
+      while (c > 0) { buf[buf_pos++] = txt[i++]; c--; }   \
+      
+        BUF_DUMP(); 
+      PF_STYLE(PF_ITALIC, COL_COMMENT);
+      PF_STYLE(PF_DIM, COL_COMMENT);
+      return;;
+    }
+  }
+}
 
 /*
 
