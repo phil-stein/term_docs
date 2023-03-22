@@ -254,6 +254,7 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       // if (txt[i] == '\n')  { PF("%%NL%%"); }
       if (txt[i] == '\\' && txt[i+1] == '\n') // multiline, macros, comments, has to be done here
       {
+        maybe try this again
         ERR("multiline macros");
         PF("%%\\NL%%");
         buf[buf_pos++] = txt[i++];  // add '\'

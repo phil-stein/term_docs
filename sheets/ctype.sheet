@@ -1,6 +1,6 @@
 #
 |isdigit|
-|ctype|digit|number|
+|ctype|ctype.h|digit|number|
 int isdigit(int c)   
     returns true if c is a digit / number
     ~ included in <ctype.h>
@@ -11,7 +11,7 @@ int isdigit(int c)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_isdigit.htm >?
 #
 |isalpha|
-|ctype|alpha|letter|
+|ctype|ctype.h|alpha|letter|
 int isalpha(int c)   
     returns true if c is a letter
     ~ included in <ctype.h>
@@ -22,7 +22,7 @@ int isalpha(int c)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_isalpha.htm >?
 #
 |isalnum|
-|ctype|alpha|letter|number|
+|ctype|ctype.h|alpha|letter|number|
 int isalnum(int c)   
     returns true if c is a letter 
     or a number
@@ -34,7 +34,7 @@ int isalnum(int c)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_isalnum.htm >?
 #
 |isspace|
-|ctype|space|whitespace|
+|ctype|ctype.h|space|whitespace|
 int isspace(int c)   
     returns true if c is whitespace
     ~ included in <ctype.h>

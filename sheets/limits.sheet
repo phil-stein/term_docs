@@ -1,5 +1,5 @@
 #
-|limits|
+|limits|limits.h|
 macros and types for limits.h
 
 $GREEN$macros$$:

@@ -3,7 +3,7 @@ memory functions:
 
 #
 |memchr|
-|memory|search|
+|memory|search|string|string.h|
 void* memchr(const void* str, int c, size_t n)
     search the first occurance of char 'c' in string 'str'
     n bytes of 'str' to be searched, starting at 0
@@ -18,7 +18,7 @@ void* memchr(const void* str, int c, size_t n)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_memchr.htm >?
 #
 |memcmp|
-|memory|compare|
+|memory|compare|string|string.h|
 int memcmp(const void* str0, const char* str1, size_t n)
     compares the first n bytes of str0 and str1
     n bytes of 'str0' and 'str1' to be compared
@@ -37,7 +37,7 @@ int memcmp(const void* str0, const char* str1, size_t n)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_memcmp.htm >?
 #
 |memcpy|
-|memory|copy|
+|memory|copy|string|string.h|
 void* memcpy(void* dest, const void* src, size_t n)
     copy data from one array (pointer) to another one
     n size in bytes
@@ -56,7 +56,7 @@ void* memcpy(void* dest, const void* src, size_t n)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_memcpy.htm >?
 #
 |memmove|
-|memory|move|
+|memory|move|string|string.h|
 void* memmove(void* str0, const char* str1, size_t n)
     copies n bytes from 'str1' to 'str0'
     n bytes of 'str0' and 'str1' to be moved
@@ -71,7 +71,7 @@ void* memmove(void* str0, const char* str1, size_t n)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_memmove.htm >?
 #
 |memset|
-|memory|copy|set|
+|memory|copy|set|string|string.h|
 void* memset(void* str, int c, size_t n)
     copies 'c' 'n' times into 'str'
     returns 'str'
@@ -89,7 +89,7 @@ string functions:
 
 #
 |strcat|
-|string|cat|concatenate|add|append|
+|string|cat|concatenate|add|append|string.h|
 char* strcat(char* str0, const char* str1)
     appends / concatenates 'str1' to the end of 'str0'
     returns 'str0'
@@ -105,7 +105,7 @@ char* strcat(char* str0, const char* str1)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strcat.htm >?
 #
 |strncat|
-|string|cat|concatenate|add|append|
+|string|cat|concatenate|add|append|string.h|
 char* strncat(char* str0, const char* str1, size_t n)
     appends / concatenates 'n' char from 'str1' to the end of 'str0'
     returns 'str0'
@@ -121,7 +121,7 @@ char* strncat(char* str0, const char* str1, size_t n)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strncat.htm >?
 #
 |strchr|
-|string|search|
+|string|search|string.h|
 char* strchr(const char* str, int c)
     search the first occurance of char 'c' in string 'str'
     returns pointer to found char
@@ -135,7 +135,7 @@ char* strchr(const char* str, int c)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strchr.htm >?
 #
 |strcmp|
-|string|compare|
+|string|compare|string.h|
 int strcmp(const char* str0, const char* str1)
     compares  'str0' and 'str1'
     returns 0  if memory matches
@@ -152,7 +152,7 @@ int strcmp(const char* str0, const char* str1)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strcmp.htm >?
 #
 |strncmp|
-|string|compare|
+|string|compare|string.h|
 int strncmp(const char* str0, const char* str1, size_t n)
     compares at most the first 'n' bytes of 'str0' and 'str1'
     returns 0  if memory matches
@@ -169,7 +169,7 @@ int strncmp(const char* str0, const char* str1, size_t n)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strncmp.htm >?
 #
 |strcoll|
-|string|compare|
+|string|compare|string.h|
 int strcoll(const char* str0, const char* str1)
     compares 'str0' and 'str1' based on 'LC_COLLATE'
     returns 0  if strings match
@@ -186,7 +186,7 @@ int strcoll(const char* str0, const char* str1)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strcoll.htm >?
 #
 |strcpy|
-|string|copy|
+|string|copy|string.h|
 char* strcpy(char* str0, const char* str1)
     copy 'str1' to 'str0'
     returns pointer to 'str0'
@@ -204,7 +204,7 @@ char* strcpy(char* str0, const char* str1)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strcpy.htm >?
 #
 |strncpy|
-|string|copy|
+|string|copy|string.h|
 char* strncpy(char* str0, const char* str1, size_t n)
     copy max 'n' chars from 'str1' to 'str0'
     returns pointer to 'str0'
@@ -222,7 +222,7 @@ char* strncpy(char* str0, const char* str1, size_t n)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strncpy.htm >?
 #
 |strcspn|
-|string|compare|count|
+|string|compare|count|string.h|
 size_t strcspn(const char* str0, const char* str1)
     counts the uninterrupted length of chars in 'str0' 
     not contained in 'str1'
@@ -237,7 +237,7 @@ size_t strcspn(const char* str0, const char* str1)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strcspn.htm >?
 #
 |strerror|
-|string|error|ernro|
+|string|error|ernro|string.h|
 char* strerror(int errnum) 
     searches an internal array for the error number errnum and 
     returns a pointer to an error message string
@@ -251,7 +251,7 @@ char* strerror(int errnum)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strerror.htm >?
 #
 |strlen|
-|string|length|count|
+|string|length|count|string.h|
 size_t strlen(const char* str)
     counts the length of chars in 'str' 
     returns number of chars
@@ -264,7 +264,7 @@ size_t strlen(const char* str)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strlen.htm >?
 #
 |strpbrk|
-|string|search|compare|
+|string|search|compare|string.h|
 char* strpbrk(const char* str0, const char* str1)
     finds the first char in thst is common between 'str0' and 'str1'  
     ! returns NULL if no match is found
@@ -278,7 +278,7 @@ char* strpbrk(const char* str0, const char* str1)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strpbrk.htm >?
 #
 |strrchr|
-|string|search|
+|string|search|string.h|
 char* strrchr(const char* str, int n)
     finds first occorance of 'c' in 'str'
     returns first occorance of 'c' in 'str'
@@ -292,7 +292,7 @@ char* strrchr(const char* str, int n)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strrchr.htm >?
 #
 |strspn|
-|string|length|count|
+|string|length|count|string.h|
 size_t strspn(const char* str0, const char* str1)
     counts the uninterrupted length of chars in 'str0'
     purely consisting of chars in 'str1'
@@ -307,7 +307,7 @@ size_t strspn(const char* str0, const char* str1)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strspn.htm >?
 #
 |strstr|
-|string|search|
+|string|search|string.h|
 char* strstr(const char* str0, const char* str1)
     finds the first occurance of 'str1' in 'str0'
     returns pointer to 'str1' occurance in 'str0'
@@ -322,7 +322,7 @@ char* strstr(const char* str0, const char* str1)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strstr.htm >?
 #
 |strtok|
-|string|seperate|sort|
+|string|seperate|sort|string.h|
 char* strtok(const char* str0, const char* str1)
     breaks 'str0' into tokens seperated by 'str1'
     returns first token
@@ -347,7 +347,7 @@ char* strtok(const char* str0, const char* str1)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm >?
 #
 |strxfrm|
-|string|replace|
+|string|replace|string.h|
 size_t strxfrm(const char* str0, const char* str1, size_t n)
     replaces the first 'n' chars in 'str1' with current locale
     and puts them into 'str0'

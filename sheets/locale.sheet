@@ -1,0 +1,12 @@
+#
+|locale|locale.h|
+// @TODO:
+macros and types for locale.h
+
+$GREEN$types$$:
+
+$GREEN$macros$$:
+
+?< https://www.tutorialspoint.com/c_standard_library/locale_h.htm >?
+
+

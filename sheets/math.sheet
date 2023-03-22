@@ -3,13 +3,13 @@ math functions:
 
 #
 |HUGE_VAL|
-|math|
+|math|math.h|
     HUGE_VAL is returned by math.h functions if 
     return value is too big for double
 #
 #
 |acos|
-|math|arc_cosine|arc|cosine|
+|math|math.h|arc_cosine|arc|cosine|
 double acos(double x)
     x: value between -1 to +1
     ~ return is between 0 to pi radians
@@ -23,7 +23,7 @@ double acos(double x)
 #
 #
 |asin|
-|math|arc_sine|arc|sine|
+|math|math.h|arc_sine|arc|sine|
 double asin(double x)
     x: value between -1 to +1
     ~ return is between -pi/2 to pi/2 radians
@@ -37,7 +37,7 @@ double asin(double x)
 #
 #
 |atan|
-|math|arc_tangent|arc|tangent|
+|math|math.h|arc_tangent|arc|tangent|
 double atan(double x)
     x: value between -1 to +1
     ~ return is between -pi/2 to pi/2 radians
@@ -51,7 +51,7 @@ double atan(double x)
 #
 #
 |atan2|
-|math|atan|arc_tangent|arc|tangent|
+|math|math.h|atan|arc_tangent|arc|tangent|
 double atan2(double y, double x)
     x: value between -1 to +1
     ~ return is between -pi to pi radians
@@ -65,7 +65,7 @@ double atan2(double y, double x)
 #
 #
 |cos|
-|math|cosine|
+|math|math.h|cosine|
 double cos(double x)
     x: radian angle value
     ~ included in <math.h>
@@ -78,7 +78,7 @@ double cos(double x)
 #
 #
 |cosh|
-|math|hyperbolic_cosine|hyperbolic|cosine|
+|math|math.h|hyperbolic_cosine|hyperbolic|cosine|
 double cosh(double x)
     x: value
     ~ included in <math.h>
@@ -89,7 +89,7 @@ double cosh(double x)
 #
 #
 |sin|
-|math|sine|
+|math|math.h|sine|
 double sin(double x)
     x: radian angle value
     ~ included in <math.h>
@@ -102,7 +102,7 @@ double sin(double x)
 #
 #
 |sinh|
-|math|hyperbolic_sine|hyperbolic|sine|
+|math|math.h|hyperbolic_sine|hyperbolic|sine|
 double sinh(double x)
     ~ returns degrees
     ~ included in <math.h>
@@ -113,7 +113,7 @@ double sinh(double x)
 #
 #
 |tanh|
-|math|hyperbolic_tangent|hyperbolic|tangent|
+|math|math.h|hyperbolic_tangent|hyperbolic|tangent|
 double tanh(double x)
     ~ returns degrees
     ~ included in <math.h>
@@ -124,7 +124,7 @@ double tanh(double x)
 #
 #
 |exp|
-|math|exponential|exponential_value|power|power_of|
+|math|math.h|exponential|exponential_value|power|power_of|
 double exp(double x)
     returns e raised to the x'th power
     ~ included in <math.h>
@@ -135,7 +135,7 @@ double exp(double x)
 #
 #
 |frexp|
-|math|fraction|exponential|exponential_value|power|power_of|
+|math|math.h|fraction|exponential|exponential_value|power|power_of|
 double frexp(double x, int* exponent)
     x:        value 
     exponent: gets set to the exponent
@@ -151,7 +151,7 @@ double frexp(double x, int* exponent)
 #
 #
 |ldexp|
-|math|exponential|exponential_value|power|power_of|
+|math|math.h|exponential|exponential_value|power|power_of|
 double ldexp(double x, int exponent)
     returns x * 2^exponent 
     ~ included in <math.h>
@@ -162,7 +162,7 @@ double ldexp(double x, int exponent)
 #
 #
 |log|
-|math|logarithm|
+|math|math.h|logarithm|
 double log(double x)
     returns natural base-e logarithm of x
     ~ included in <math.h>
@@ -173,7 +173,7 @@ double log(double x)
 #
 #
 |log10|
-|math|log|logarithm|
+|math|math.h|log|logarithm|
 double log10(double x)
     returns natural base-10 logarithm of x
     ~ included in <math.h>
@@ -184,7 +184,7 @@ double log10(double x)
 #
 #
 |modf|
-|math|mod|
+|math|math.h|mod|
 double modf(double x, double* integer)
     integer: gets set to the integer component of x
     returns the fraction component of x
@@ -197,7 +197,7 @@ double modf(double x, double* integer)
 #
 #
 |pow|
-|math|power|power_of|
+|math|math.h|power|power_of|
 double pow(double x, double y)
     returns x^y
     ~ included in <math.h>
@@ -208,7 +208,7 @@ double pow(double x, double y)
 #
 #
 |sqrt|
-|math|squareroot|square_root|
+|math|math.h|squareroot|square_root|
 double sqrt(double x)
     returns squareroot of x
     ~ included in <math.h>
@@ -219,7 +219,7 @@ double sqrt(double x)
 #
 #
 |ceil|
-|math|round|round_up|
+|math|math.h|round|round_up|
 double ceil(double x)
     returns smallest integer value >= x
     ~ included in <math.h>
@@ -234,7 +234,7 @@ double ceil(double x)
 #
 #
 |fabs|
-|math|absolute|abs|
+|math|math.h|absolute|abs|
 double fabs(double x)
     returns absolute value of x
     turns neg. values pos, pos stay pos
@@ -248,7 +248,7 @@ double fabs(double x)
 #
 #
 |floor|
-|math|round|round_down|
+|math|math.h|round|round_down|
 double floor(double x)
     returns biggest integer value < x
     ~ included in <math.h>
@@ -263,7 +263,7 @@ double floor(double x)
 #
 #
 |fmod|
-|math|mod|
+|math|math.h|mod|
 double fmod(double x, double y)
     returns remainder of x/y
     ~ included in <math.h>

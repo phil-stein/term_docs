@@ -1,6 +1,6 @@
 #
 |malloc|
-|allocate|memory|dynamic memory|
+|allocate|memory|dynamic memory|stdlib|stdlib.h|
 void* malloc(size_t size)   
     allocate the specified amount of memory.
     ! needs to be freed using [free]
@@ -14,7 +14,7 @@ void* malloc(size_t size)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm >?
 #
 |calloc|
-|allocate|memory|dynamic memory|
+|allocate|memory|dynamic memory|stdlib|stdlib.h|
 void* calloc(size_t items, size_t size)   
     allocate the specified amount of memory.
     sets memory to 0.
@@ -28,7 +28,7 @@ void* calloc(size_t items, size_t size)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_calloc.html >?
 #
 |realloc|
-|reallocate|allocate|memory|dynamic memory|
+|reallocate|allocate|memory|dynamic memory|stdlib|stdlib.h|
 void* realloc(void* ptr, size_t size)   
     allocate the specified amount of memory.
     if ptr already allocated, allocates
@@ -45,7 +45,7 @@ void* realloc(void* ptr, size_t size)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_realloc.htm >?
 #
 |free|
-|deallocate|memory|dynamic memory|
+|deallocate|memory|dynamic memory|stdlib|stdlib.h|
 void free(void* mem)   
     free a previously allocated bit of memory
     ! mem may not be NULL
@@ -58,7 +58,7 @@ void free(void* mem)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_free.htm >?
 #
 |atof|
-|convert|
+|convert|stdlib|stdlib.h|
 double atof(const char* str)   
     convert string to double
     ! returns 0.0 if invalid str
@@ -69,7 +69,7 @@ double atof(const char* str)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atof.htm >?
 #
 |atoi|
-|convert|
+|convert|stdlib|stdlib.h|
 int atoi(const char* str)   
     convert string to int
     ! returns 0 if invalid str
@@ -80,7 +80,7 @@ int atoi(const char* str)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atoi.htm >?
 #
 |atol|
-|convert|
+|convert|stdlib|stdlib.h|
 long int atol(const char* str)   
     convert string to long int
     ! returns 0 if invalid str
@@ -91,7 +91,7 @@ long int atol(const char* str)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atol.htm >?
 #
 |strtod|
-|convert|
+|convert|stdlib|stdlib.h|
 double strtod(const char* str, char** endptr)   
     convert string to double
     endptr will be set to the next char after num
@@ -104,7 +104,7 @@ double strtod(const char* str, char** endptr)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strtod.htm >?
 #
 |strtol|
-|convert|
+|convert|stdlib|stdlib.h|
 long int strtol(const char* str, char** endptri, int base)   
     convert string to long int
     endptr will be set to the next char after num
@@ -119,7 +119,7 @@ long int strtol(const char* str, char** endptri, int base)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strtol.htm >?
 #
 |strtoul|
-|convert|
+|convert|stdlib|stdlib.h|
 unsigned long int strtoul(const char* str, char** endptr)   
     convert string to unsigned long int
     endptr will be set to the next char after num
@@ -133,7 +133,7 @@ unsigned long int strtoul(const char* str, char** endptr)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strtoul.htm >?
 #
 |abort|
-|exit|quit|
+|exit|quit|stdlib|stdlib.h|
 void abort()   
     exits program directly from the place it was called
     ~ included in <stdlib.h>
@@ -143,7 +143,7 @@ void abort()
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_abort.htm >?
 #
 |exit|
-|quit|
+|quit|stdlib|stdlib.h|
 void exit(int code)   
     exits program directly from the place it was called
     outputs the error code 'code' to the terminal
@@ -157,7 +157,7 @@ void exit(int code)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm >?
 #
 |atexit|
-|exit|quit|
+|exit|quit|stdlib|stdlib.h|
 void atexit(void (*func)(void))   
     registers function pointer to be called right 
     before program termination
@@ -169,7 +169,7 @@ void atexit(void (*func)(void))
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm >?
 #
 |system|
-|command|command line|
+|command|command line|stdlib|stdlib.h|
 int exit(const char* command)   
     gives command to the os's terminal
     ! available commands depend on current os

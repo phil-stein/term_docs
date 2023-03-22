@@ -1,5 +1,5 @@
 #
-|errno|
+|errno|errno.h|
 |debug|
 extern int errno;
     errno gets set to an error code 
@@ -16,7 +16,7 @@ extern int errno;
 ?< https://www.tutorialspoint.com/c_standard_library/c_macro_errno.htm >?
 #
 |EDOM|
-|errno|debug|
+|errno|errno.h|debug|
 \#define EDOM some_value
     errno gets set to EDOM when an input argument
     to a mathematical function is outside the domain
@@ -37,7 +37,7 @@ extern int errno;
 #
 #
 |ERANGE|
-|errno|debug|
+|errno|errno.h|debug|
 \#define ERANGE some_value
     errno gets set to EDOM when an input argument
     to a mathematical function is outside the range

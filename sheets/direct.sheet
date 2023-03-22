@@ -1,7 +1,7 @@
 
 #
 |_getcwd|
-|dirent|cwd|getcwd|working-directory|
+|dirent|dirent.h|cwd|getcwd|working-directory|
 char* _getcwd(char* buffer, int max_len)
     get the current working directory
     returns poointer to buffer
@@ -13,7 +13,7 @@ char* _getcwd(char* buffer, int max_len)
       _getcwd(cwd, 256);
 #
 |GetModuleFileName|
-|winbase|win32|executable|
+|dirent|dirent.h|winbase|win32|executable|
 WINAPI DWORD GetModuleFileName(HMODULE hModule, LPWSTR lpFilename, DWORD nSize)
 __stdcall unsigned GetModuleFileName(void* module, char* buffer, unsigned size)
     writes the filepath of an executable into 'buffer', not exceeding 'size'

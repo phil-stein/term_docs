@@ -1,6 +1,6 @@
 #
 |va_list|
-|variadic|arguments|stdarg|
+|variadic|arguments|stdarg|stdarg.h|
     type that can hold a list of arguments passed to a 
     variadic argument function, i.e. func(...)
     ~ included in <stdarg.h>
@@ -21,7 +21,7 @@
 ?< https://www.tutorialspoint.com/c_standard_library/stdarg_h.htm >?
 #
 |va_start|
-|variadic|arguments|stdarg|
+|variadic|arguments|stdarg|stdarg.h|
 void va_start(va_list list, int num_args)
     initialize a va_arg type to be used with va_arg() 
     to get variadic arguments of the stack
@@ -44,7 +44,7 @@ void va_start(va_list list, int num_args)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_va_start.htm >?
 #
 |va_arg|
-|variadic|arguments|stdarg|
+|variadic|arguments|stdarg|stdarg.h|
 type va_arg(va_list list, type)
     get variadic argument of the stack
     ~ actually a macro not func
@@ -67,7 +67,7 @@ type va_arg(va_list list, type)
 #
 #
 |va_end|
-|variadic|arguments|stdarg|
+|variadic|arguments|stdarg|stdarg.h|
 void va_end(va_list list)
     after a call to va_start(), va_end needs to be
     called for the function to abled to return
