@@ -7,7 +7,7 @@
 
 #define KEY_MAX 32
 
-const char key_types[][KEY_MAX] = { "unsigned", "const", "void", "char", "short", "int", "long", "float", "double", "bool", "struct", "enum", "typedef", "size_t", "FILE"};
+const char key_types[][KEY_MAX] = { "unsigned", "const", "void", "char", "short", "int", "long", "float", "double", "bool", "extern", "struct", "enum", "typedef", "size_t", "FILE"};
 const u32  key_types_len = sizeof(key_types) / sizeof(key_types[0]);   
 
 const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "switch" };
@@ -256,8 +256,8 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       {
         ERR("multiline macros");
         PF("%%\\NL%%");
-        buf[buf_pos++] = sec[i++];  // add '\'
-        buf[buf_pos++] = sec[i++];  // add '\n'
+        buf[buf_pos++] = txt[i++];  // add '\'
+        buf[buf_pos++] = txt[i++];  // add '\n'
         BUF_DUMP();
       }
     }

@@ -1,7 +1,6 @@
 #
 |float|
-|clock_t|time_t|tm|
-macros and types for time.h
+macros and types for float.h
 
 $GREEN$components$$:
   S: sign (+/-)

@@ -151,8 +151,8 @@ change this and call `make clean` and `make` in the root directory
     - [x] stdarg.h
     - [x] time.h
     - [x] float.h
-    - [ ] erno.h 
-    - [ ] limits.h
+    - [x] erno.h 
+    - [x] limits.h
     - [ ] locale.h
     - [ ] signal.h
     - [ ] setjmp.h
