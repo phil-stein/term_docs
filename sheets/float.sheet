@@ -1,0 +1,51 @@
+#
+|float|
+|clock_t|time_t|tm|
+macros and types for time.h
+
+$GREEN$components$$:
+  S: sign (+/-)
+  b: base, 2: binary, 10: decimal, 16: hex 
+  e: exponent
+  p: precision, num of base-b digits
+  floating-point = (S) p * (b^e)
+
+$GREEN$macros$$:
+  FLT_ROUNDS:      defines rounding mode for floats
+                   -1: unknown
+                    0: toward zero
+                    1: to nearest
+                    2: toward pos. infinity
+                    3: toward neg. infinity
+  FLT_RADIX:       base/radix of floats
+  FLT_MANT_DIG:    num. digit in FLT_RADIX 
+  DBL_MANT_DIG:    num. digit in FLT_RADIX 
+  LDBL_MANT_DIG:   num. digit in FLT_RADIX 
+  FLT_DIG:         max. decimal digits without rounding 
+  DBL_DIG:         max. decimal digits without rounding     
+  LDBL_DIG:        max. decimal digits without rounding 
+  FLT_MIN_EXP:     min. neg. integer for exp. 
+  DBL_MIN_EXP:     min. neg. integer for exp.
+  LDBL_MIN_EXP:    min. neg. integer for exp.
+  FLT_MIN_10_EXP:  min. neg. integer for exp. base 10  
+  DBL_MIN_10_EXP:  min. neg. integer for exp. base 10  
+  LDBL_MIN_10_EXP: min. neg. integer for exp. base 10  
+  FLT_MAX_EXP:     max. integer for exp.   
+  DBL_MAX_EXP:     max. integer for exp. 
+  LDBL_MAX_EXP:    max. integer for exp.     
+  FLT_MAX_10_EXP:  max. integer for exp. base 10   
+  DBL_MAX_10_EXP:  max. integer for exp. base 10 
+  LDBL_MAX_10_EXP: max. integer for exp. base 10     
+  FLT_MAX:         max. value for float 
+  DBL_MAX:         max. value for float 
+  LDBL_MAX:        max. value for float
+  FLT_MIN:         min. value for float 
+  DBL_MIN:         min. value for float 
+  LDBL_MIN:        min. value for float
+  FLT_EPSILON:     least sig. digit representable 
+  DBL_EPSILON:     least sig. digit representable 
+  LDBL_EPSILON:    least sig. digit representable
+
+?< https://www.tutorialspoint.com/c_standard_library/float_h.htm >?
+
+
