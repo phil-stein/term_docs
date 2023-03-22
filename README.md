@@ -150,7 +150,7 @@ change this and call `make clean` and `make` in the root directory
     - [x] assert.h
     - [x] stdarg.h
     - [x] time.h
-    - [ ] float.h
+    - [x] float.h
     - [ ] erno.h 
     - [ ] limits.h
     - [ ] locale.h

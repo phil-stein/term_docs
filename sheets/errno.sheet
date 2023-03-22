@@ -1,0 +1,62 @@
+#
+|errno|
+|debug|
+extern int errno;
+    errno gets set to an error code 
+    by sys calls and some library functions
+    ~ included in <errno.h>
+    example: 
+      extern int errno;
+      int main()
+      {
+        ...
+        printf("error: %d\n", errno);
+        printf("error: %s\n", strerror(errno));
+      }
+?< https://www.tutorialspoint.com/c_standard_library/c_macro_errno.htm >?
+#
+|EDOM|
+|errno|debug|
+\#define EDOM some_value
+    errno gets set to EDOM when an input argument
+    to a mathematical function is outside the domain
+    the function is defined for
+    ~ included in <errno.h>
+    example: 
+      extern int errno;
+      int main()
+      {
+        sqrt(-1);
+        if (errno == EDOM)
+        {
+          printf("error: %d\n", errno);
+          printf("error: %s\n", strerror(errno));
+        }
+      }
+?< https://www.tutorialspoint.com/c_standard_library/c_macro_edom.htm >?
+#
+#
+|ERANGE|
+|errno|debug|
+\#define ERANGE some_value
+    errno gets set to EDOM when an input argument
+    to a mathematical function is outside the range
+    the function is defined for
+    ~ included in <errno.h>
+    example: 
+      extern int errno;
+      int main()
+      {
+        log(2.0);
+        if (errno == ERANGE)
+        {
+          printf("error: %d\n", errno);
+          printf("error: %s\n", strerror(errno));
+        }
+      }
+?< https://www.tutorialspoint.com/c_standard_library/c_macro_erange.htm >?
+#
+
+
+
+
