@@ -297,7 +297,7 @@ void doc_color_code_escape_chars(char* sec, char* buf, int* buf_pos_ptr, int* i_
   else if (sec[i] == '\\' && sec[i+1] == '#')
   {
     BUF_DUMP();
-    skip_char = true;
+    skip_char = true; // skip '\'
   }
   else if (sec[i] == '\\' && ( sec[i+1] == '|' || sec[i+1] == '~' || 
                                sec[i+1] == '!' || sec[i+1] == '?'))

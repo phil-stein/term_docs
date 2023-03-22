@@ -149,7 +149,7 @@ change this and call `make clean` and `make` in the root directory
     - [x] math.h
     - [x] assert.h
     - [x] stdarg.h
-    - [ ] time.h
+    - [x] time.h
     - [ ] float.h
     - [ ] erno.h 
     - [ ] limits.h

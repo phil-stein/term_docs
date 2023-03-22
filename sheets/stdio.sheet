@@ -24,6 +24,8 @@ defines & types for stdio.h
                on write filled to next \n
   _IONBF       setvbuf() no buffering
                buffer and size args are ignored
+
+?< https://www.tutorialspoint.com/c_standard_library/stdio_h.htm >?
 #
 #
 |printf_format|

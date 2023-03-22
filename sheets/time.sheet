@@ -1,0 +1,189 @@
+#
+|time|
+|clock_t|time_t|tm|
+macros and types for time.h
+
+$GREEN$types$$:
+  clock_t: stores processor time
+  time_t:  stores calender time
+  tm:      stores time and date
+           struct tm 
+           {
+             int tm_sec;   // seconds,  range 0 to 59        
+             int tm_min;   // minutes, range 0 to 59         
+             int tm_hour;  // hours, range 0 to 23           
+             int tm_mday;  // day of the month, range 1 to 31
+             int tm_mon;   // month, range 0 to 11           
+             int tm_year;  // The number of years since 1900 
+             int tm_wday;  // day of the week, range 0 to 6  
+             int tm_yday;  // day in the year, range 0 to 365
+             int tm_isdst; // daylight saving time           
+           };
+
+$GREEN$macros$$:
+  CLOCKS_PER_SEC: processor clocks per second
+
+?< https://www.tutorialspoint.com/c_standard_library/time_h.htm >?
+#
+|asctime|
+|time|
+char* asctime(const struct tm* timeptr)
+  returns string representing the time & day
+  defined in timeptr
+  ~ included in <time.h>
+
+  example:
+    struct tm t;
+    t.tm_sec    = 15;
+    t.tm_min    = 34;
+    t.tm_hour   = 10;
+    t.tm_mday   = 21;
+    t.tm_mon    = 2;
+    t.tm_year   = 23;
+    t.tm_wday   = 2;
+    printf("%s", asctime(&t));
+    -> Tue Mar 10:34:15 2023
+?< https://www.tutorialspoint.com/c_standard_library/c_function_asctime.htm >?
+#
+|clock|
+|time|
+clock_t clock()
+  returns clock ticks since the program was launched
+  ~ clock() / CLOCKS_PER_SEC = seconds elapsed
+  ~ included in <time.h>
+
+  example:
+    clock_t c = clock();
+    printf("elapsed clock ticks: %ld\n", c);
+    printf("elapsed seconds:     %f\n", (double)c / CLOCKS_PER_SEC);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_clock.htm >?
+#
+|ctime|
+|time|
+char* ctime(const time_t* timer)
+  returns string representing localtime, based on timer
+  ~ included in <time.h>
+
+  example:
+    time_t t;
+    time(&t); // get current time
+    printf("current time: %s", ctime(&t));
+    -> current time: Tue Mar 22 00:00:00 2023
+?< https://www.tutorialspoint.com/c_standard_library/c_function_ctime.htm >?
+#
+|difftime|
+|time|
+double difftime(time_t time0, time_t time1)
+  returns difference in seconds between time0 and time1
+  ~ included in <time.h>
+
+  example:
+    time_t t0, t1;
+    time(&t0); // get current time
+    sleep(2);
+    time(&t1); // get current time
+    printf("elapsed time: %f", difftime(t0, t1));
+    -> elapsed time: 2.0
+?< https://www.tutorialspoint.com/c_standard_library/c_function_difftime.htm >?
+#
+|gmtime|
+|time|
+struct tm* gmtime(const time_t* timer)
+  returns tm pointer, filled with data in timer
+  according to UTC ot GMT timezone
+  ~ included in <time.h>
+
+  example:
+    time_t t;
+    time(&t); // get current time
+    struct tm* = gmtime(&t);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_gmtime.htm >?
+#
+|localtime|
+|time|
+struct tm* localtime(const time_t* timer)
+  returns tm pointer, filled with data in timer
+  according to local timezone
+  ~ included in <time.h>
+
+  example:
+    time_t t;
+    time(&t); // get current time
+    struct tm* = localtime(&t);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_localtime.htm >?
+#
+|mktime|
+|time|
+time_t mktime(struct tm* time_ptr)
+  returns time_t, filled with data in time_ptr
+  according to local timezone
+  ~ included in <time.h>
+
+  example:
+    time_t t;
+    time(&t); // get current time
+    struct tm* = gmtime(&t);
+    time_t local = mktime(tm);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_mktime.htm >?
+#
+|strftime|
+|time|
+size_t strftime(char* str, size_t max_size, const char* format, const struct tm* time_ptr)
+  fills str with a string representation 
+  of the time defined in time_prt
+  str:      destrination to be written to
+  max_size: max chars to write to str
+  format:   informs how to write the data in
+            time_ptr to str
+            %a abrv. day name   \| Mon
+            %A day name         \| Monday
+            %b abrv. month name \| Mar
+            %B month name       \| March
+            %c date & time      \| Sun Feb 20 02:30:32 2023
+            %d day of the month \| 20
+            %H hour in 24h      \| 18
+            %I hour in 12h      \| 06
+            %p AM or PM         \| PM
+            %j day of the year  \| 322
+            %m month as number  \| 03
+            %M minute of hour   \| 45
+            %S second in min    \| 60
+            %U week number      \| 42 // sun is first day
+            %W week number      \| 42 // mon is first day
+            %w week day number  \| 3  // sun is 0
+            %x date             \| 08/19/12
+            %X time             \| 02:30:03
+            %y year, decade     \| 23
+            %Y year             \| 2023
+            %Z timezone         \| CDT
+
+  ! returns chars written, 0 if error
+  ~ included in <time.h>
+
+  example:
+    time_t t;
+    time(&t); // cur time
+    // time, cur timezone
+    struct tm* lt = localtime(&t); 
+    char buf[64];
+    strftime(buf, 64, "%X %a %b %Y", lt);
+    printf("%s\n", buf);
+    -> 02:30:03 Mon Mar 2023
+
+?< https://www.tutorialspoint.com/c_standard_library/c_function_strftime.htm >?
+#
+|time|
+|time|
+time_t time(time_t* secs)
+  sets secs to seconds passed since 00:00:00 UTC, Jan 01 1970
+  returns same thing
+  ! secs might be set to NULL
+  ! return val only valid if secs \!= NULL
+  ~ included in <time.h>
+
+  example:
+    time_t t;
+    time(&t); // get current time
+    printf("secs: %ld", t);
+?< https://www.tutorialspoint.com/c_standard_library/c_function_time.htm >?
+#

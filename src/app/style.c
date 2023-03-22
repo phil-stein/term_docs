@@ -248,13 +248,17 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       doc_color_code_escape_chars(txt, buf, &buf_pos, &i, &skip_char_tmp);
       if (!skip_char_tmp) { buf[buf_pos++] = txt[i++]; }
       else { i++; }
-      // if (txt[i] == '\n') { PF("%%NL%%"); }
-      if (txt[i-1] == '\\' && txt[i] == '\n') // multiline
+      // static bool a = false;
+      // if (txt[i] == '\\')  { PF("%%\\%%"); a = true; }
+      // if (a && isspace(txt[i])) { PF("%%%c%%", txt[i]); }
+      // if (txt[i] == '\n')  { PF("%%NL%%"); }
+      if (txt[i] == '\\' && txt[i+1] == '\n') // multiline, macros, comments, has to be done here
       {
+        ERR("multiline macros");
         PF("%%\\NL%%");
-        buf[buf_pos++] = txt[i++];  // add '\n'
-        i++;                        // skip '\'
-        continue;
+        buf[buf_pos++] = sec[i++];  // add '\'
+        buf[buf_pos++] = sec[i++];  // add '\n'
+        BUF_DUMP();
       }
     }
     BUF_DUMP();
