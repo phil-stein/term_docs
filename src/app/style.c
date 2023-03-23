@@ -167,7 +167,8 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   }
  
   // -- values --
-  if (isdigit(txt[i]) && !isalpha(txt[i -1]))  
+  // if (isdigit(txt[i]) && !isalpha(txt[i -1]))  
+  if (isdigit(txt[i]) && (isspace(txt[i -1]) || txt[i -1] == '+' || txt[i -1] == '-') && !isalpha(txt[i -1]))  
   {
     BUF_DUMP();
     PF_COLOR(COL_VALUE);
@@ -252,15 +253,15 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       // if (txt[i] == '\\')  { PF("%%\\%%"); a = true; }
       // if (a && isspace(txt[i])) { PF("%%%c%%", txt[i]); }
       // if (txt[i] == '\n')  { PF("%%NL%%"); }
-      if (txt[i] == '\\' && txt[i+1] == '\n') // multiline, macros, comments, has to be done here
-      {
-        maybe try this again
-        ERR("multiline macros");
-        PF("%%\\NL%%");
-        buf[buf_pos++] = txt[i++];  // add '\'
-        buf[buf_pos++] = txt[i++];  // add '\n'
-        BUF_DUMP();
-      }
+      // if (txt[i] == '\\' && txt[i+1] == '\n') // multiline, macros, comments, has to be done here
+      // {
+      //   // @TODO: maybe try this again
+      //   ERR("multiline macros");
+      //   PF("%%\\NL%%");
+      //   buf[buf_pos++] = txt[i++];  // add '\'
+      //   buf[buf_pos++] = txt[i++];  // add '\n'
+      //   BUF_DUMP();
+      // }
     }
     BUF_DUMP();
     PF_COLOR(PF_WHITE);

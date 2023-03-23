@@ -58,7 +58,8 @@ bool doc_search_section(const char* path, const char* file, const char* keyword)
 {
   // const char* path = "sheets/c.sheet";
   if (!check_file_exists(path)) { return false; }
-  char* txt = read_text_file(path);
+  int txt_len = 0;
+  char* txt = read_text_file_len(path, &txt_len);
 
   // @TODO: see if better way to do this
   bool found_one = false;
@@ -90,6 +91,11 @@ bool doc_search_section(const char* path, const char* file, const char* keyword)
       start++;          // skip '#'
       char end_char = txt[end];
       txt[end] = '\0';  // shorten txt to section
+      
+      // P_INT(txt_len);
+      // P_INT(end - start);
+      // P_INT(start);
+      // P_INT(end);
 
       doc_print_section(txt + start, keyword, file);
       txt[end] = end_char;
@@ -165,9 +171,9 @@ void doc_color_code_section(char* sec)
   }
 
   // @NOTE: syntax highlighting
-  int  len = strlen(sec);
-  char buf[512];
-  int  buf_pos = 0;
+  int   len = strlen(sec);
+  char* buf = malloc(len + 12 * sizeof(char));  // need to malloc in case long sec
+  int   buf_pos = 0;
   // bool in_tag = false;
 
   for (int i = 0; i < len -1; ++i)
@@ -278,6 +284,7 @@ void doc_color_code_section(char* sec)
   PF("%s", buf);
   PF("\n");
   PF("\n");   // twice bc. cutting off in for (len -1)
+  free(buf);
 
 }
 

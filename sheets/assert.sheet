@@ -9,7 +9,7 @@
     ~ included in <assert.h>
     example: 
       int* block = malloc(10 * sizeof(int));
-      assert(block != NULL);
+      assert(block \!= NULL);
         -> if malloc fails it returns NULL
            in that case assert stopps the 
            program and prints a message

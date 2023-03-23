@@ -153,7 +153,7 @@ change this and call `make clean` and `make` in the root directory
     - [x] float.h
     - [x] erno.h 
     - [x] limits.h
-    - [ ] locale.h
+    - [x] locale.h  
     - [ ] signal.h
     - [ ] setjmp.h
   - [ ] more documentation
@@ -161,6 +161,12 @@ change this and call `make clean` and `make` in the root directory
       - -help, custom .sheet, etc.
     - [ ] make
     - [ ] gcc
+    - [ ] opengl 
+      - [ ] every func in debug_opengl.h
+      - [ ] macros in glad.h
+    - [ ] glfw
+      - [ ] everything in window.c
+      - [ ] everything in input.c
     - [ ] vim cheatsheet
     - [ ] my stuff ?
       - [ ] global.h

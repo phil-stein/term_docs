@@ -1,12 +1,84 @@
 #
 |locale|locale.h|
-// @TODO:
+|lconv|
+|LC_ALL|LC_COLLATE|LC_CTYPE|LC_MONETARY|LC_NUMERIC|LC_TIME|
 macros and types for locale.h
 
 $GREEN$types$$:
+lconv: typedef struct {
+         char *decimal_point;
+         char *thousands_sep;
+         char *grouping;  
+         char *int_curr_symbol;
+         char *currency_symbol;
+         char *mon_decimal_point;
+         char *mon_thousands_sep;
+         char *mon_grouping;
+         char *positive_sign;
+         char *negative_sign;
+         char int_frac_digits;
+         char frac_digits;
+         char p_cs_precedes;
+         char p_sep_by_space;
+         char n_cs_precedes;
+         char n_sep_by_space;
+         char p_sign_posn;
+         char n_sign_posn;
+       } lconv;
 
 $GREEN$macros$$:
+LC_ALL:      sets everything
+LC_COLLATE:  affects strcoll() & strxfrm()
+LC_CTYPE:    affects all char functions
+LC_MONETARY: affects mon. info in localeconv()
+LC_NUMERIC:  affects info in localeconv()
+             and decimal-point formatting
+LC_TIME:     affects strftime() function
+
 
 ?< https://www.tutorialspoint.com/c_standard_library/locale_h.htm >?
+#
+|setlocale|
+|locale|locale.h|
+char* setlocale(int category, const char* locale)
+  category: one of the macros LC_ defined in locale.h
+            see \|locale.h\| for more info
+  locale:   if NULL or "" locale names will be set to
+            the name of the macro given in category
+  returns the new name of the locale, NULL on error
+  ~ included in <locale.h>
+
+  example:
+    time_t currtime;
+    char buffer[80];
+    time( &currtime );
+    struct tm* timer = localtime( &currtime );
+
+    printf("Locale is: %s\n", setlocale(LC_ALL, "en_GB"));
+    strftime(buffer,80,"%c", timer );
+    printf("Date is: %s\n", buffer);
 
 
+    printf("Locale is: %s\n", setlocale(LC_ALL, "de_DE"));
+    strftime(buffer,80,"%c", timer );
+    printf("Date is: %s\n", buffer);
+    -> Locale is: en_GB
+    -> Date is: Fri 05 Dec 2014 10:35:02 UTC
+    -> Locale is: de_DE
+    -> Date is: Fr 05 Dez 2014 10:35:02 UTC
+?<https://www.tutorialspoint.com/c_standard_library/c_function_setlocale.htm >?
+#
+|localeconv|
+|locale|locale.h|
+struct lconv* localeconv()
+  returns lconv struct pointer, 
+  which describes the current locale 
+  ~ included in <locale.h>
+
+  example:
+    struct lconv* lc = localeconv();
+    printf("Local Currency Symbol: %s\n",lc->currency_symbol);
+    printf("International Currency Symbol: %s\n",lc->int_curr_symbol);
+
+?<https://www.tutorialspoint.com/c_standard_library/c_function_localeconv.htm >?
+#
