@@ -154,7 +154,7 @@ change this and call `make clean` and `make` in the root directory
     - [x] erno.h 
     - [x] limits.h
     - [x] locale.h  
-    - [ ] signal.h
+    - [x] signal.h
     - [ ] setjmp.h
   - [ ] more documentation
     - [ ] term_docs
@@ -162,7 +162,7 @@ change this and call `make clean` and `make` in the root directory
     - [ ] make
     - [ ] gcc
     - [ ] opengl 
-      - [ ] every func in debug_opengl.h
+      - [ ] every func in debug_opengl.h `WIP`
       - [ ] macros in glad.h
     - [ ] glfw
       - [ ] everything in window.c

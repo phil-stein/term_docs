@@ -1,0 +1,56 @@
+#
+|signal|signal.h|
+|sig_atomic_t|
+|SIG_DFL|SIG_ERR|SIG_IGN|
+|SIGABRT|SIGFPE|SIGILL|SIGINT|SIGSEGV|SIGTERM|
+macros and types for signal.h
+
+$GREEN$types$$:
+sig_atomic_t: int type, that can be accessed 
+              even while multithreading
+
+$GREEN$macros$$:
+SIG_DFL: default signal handler 
+SIG_ERR: for error signal
+SIG_IGN: signal ignore
+SIGABRT: abnormal program termination
+SIGFPE:  floating-point error
+SIGILL:  illegal operation
+SIGINT:  interrupt signal, f.e. for ctrl+c
+SIGSEGV: invalid acces, like segment violation
+SIGTERM: termination request
+
+?< https://www.tutorialspoint.com/c_standard_library/signal_h.htm >?
+#
+|signal|
+|signal|signal.h|
+void (*signal(int sig, void (*func)(int)))(int)
+  sig:  signal num. the func gets set to
+        use one of the SIG... macros see \|signal.h\|
+  func: can be custom function or one of the 
+        SIG_... functions see \|signal.h\|
+  returns the previously set value
+  ~ included in <signal.h>
+
+  example:
+    void handler(int sig) { printf("float error\n"); }
+    signal(SIGFPE, handler);
+    float a = 2.0f / 0.0f;
+
+?<https://www.tutorialspoint.com/c_standard_library/c_function_sinal.htm >?
+#
+#
+|raise|
+|signal|signal.h|
+int raise(int sig)
+  sig:  signal num. to raise 
+        use one of the SIG... macros see \|signal.h\|
+  returns 0 on success, non-zero on error 
+  ~ included in <signal.h>
+
+  example:
+    void handler(int sig) { printf("float error\n"); }
+    signal(SIGFPE, handler);
+    raise(SIGFPE);
+?<https://www.tutorialspoint.com/c_standard_library/c_function_raise.htm >?
+#
