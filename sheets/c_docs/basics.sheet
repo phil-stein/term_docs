@@ -212,10 +212,41 @@ non-standard:
      if (\!ptr) { printf("ptr = null"); }
 #
 
+#
+|!|invert|not|
+|operator|boolean_operators|boolean|basics|
+  \! inverts any boolean value
+
+  example:
+    bool a = true;
+    bool b = \!a;    // b is now false
+    a = \!a;         // a is now false
+    a = \!a;         // a is now true
+    int c = 0;
+    c = \!c;         // c is now 1
+    
+    if (\!a) 
+    { printf("a didnt change value, but was evaluated as false"); }
+    
+    a = true; b = true;
+    if (\!(a && b)) { printf("wont execute"); }
+
+    bool func() { return true; }
+
+    if ( func()) { printf("func()"); }
+    if (\!func()) { printf("!func()"); }
+    
+    // a is true so this evals. as \!(true) -> false
+    bool d = \!(a \? true : false); 
+
+    -> func()
+#
+
 @TODO: 
 #
 |idk_what_these_are_called|comparison|basics|
-|boolean_operators|boolean|basics|
+|operator|boolean_operators|boolean|basics|
+|==|!=|<|<=|>|>=|&&|
   // @TODO: 
   ...
   example:
@@ -227,15 +258,17 @@ non-standard:
     a >= b -> greater than or equal
     
     a && b -> both are true
-    a || b -> a or b is true
+    a \|\| b -> a or b is true
 #
-|bitwise_operator|basics|
+|operator|bitwise_operator|basics|
+|<<|>>|&|
   bit shift
     <<
     >>
-  bit wise or & and
-    |
+  bit wise or, and & not
+    \|
     &
+    \~
   example:
     a = 0b001; // a is now 001
     a >> 1;    // a is now 010
@@ -552,6 +585,29 @@ macros:
     -> 1 else
     -> 2 else if
     -> c == 2
+#
+|idk|
+|flow_control|basics|
+  single line statement evaluating to a value
+  that works like a if / if else / else chain
+  
+  $GREEN$structure$$:
+    condition ? if true : if false
+    can be chained
+    condition_a ? if true : condition_b ? if true : ...
+
+  example:
+    // eval to bool
+    bool a = 0 == 0 ? true : false; // 0 is 0 so a is true
+    if (a ? false : true) {}
+    
+    // eval to other value
+    int num  = 3;
+    int num2 = num == 0 ? 0 : num == 1 ? 1 : 
+               num == 2 ? 2 : num == 3 : 3;    // num2 is also 3
+
+    float speed = 10.0f;
+    pow(2, speed > 8.0f ? 4 : 6);
 #
 |while|while_loop|
 |flow_control|loop|basics|

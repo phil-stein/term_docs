@@ -150,8 +150,11 @@ change this and call `make clean` and `make` in the root directory
         - [ ] important macros
           - __FILE__, __LINE__, __WIN32__, etc. 
       - [x] flow control
-      - [ ] bitwise operators
-      - [ ] boolean operators
+      - [ ] operators
+        - [ ] add, sub, mul, div, mod, etc.
+        - [ ] +a & a+ ?, ++a, a++ 
+        - [ ] bitwise operators
+        - [ ] boolean/comparison operators
       - [ ] 0b, 0c, 0x aka. number literals
       - [ ] ! to invert bool
       - [ ] inlining

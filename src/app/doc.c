@@ -17,7 +17,11 @@ void doc_search_dir(const char* dir_path, const char* keyword, int* n)
   struct dirent* dp;
   DIR* dir = opendir(dir_path);
   // unable to open directory stream
-  if (!dir) { return; }
+  if (!dir) 
+  { 
+    return; 
+  }
+  
 
   // recursively read the directory and its sub-directories
   while ((dp = readdir(dir)) != NULL)
@@ -33,19 +37,25 @@ void doc_search_dir(const char* dir_path, const char* keyword, int* n)
           dp->d_name[dp->d_namlen -2] == 'e' &&
           dp->d_name[dp->d_namlen -1] == 't' )
       {
+
         char buf[300];
-        SPRINTF(300, buf, "%s%s", dir_path, dp->d_name);
+        // add slash if missing
+        char* slash = dir_path[strlen(dir_path) -1] == '/'  ? "" :
+                      dir_path[strlen(dir_path) -1] == '\\' ? "" : "\\";
+        SPRINTF(300, buf, "%s%s%s", dir_path, slash, dp->d_name);
         if (doc_search_section(buf, dp->d_name, keyword)) 
         { 
           *n += 1;
         }
       }
+      
 
       // construct new path from our base path
       strcpy(path, dir_path);
+      path[strlen(path) -1] = '\0';
       strcat(path, "\\");
       strcat(path, dp->d_name);
-
+      
       doc_search_dir(path, keyword, n); // search recursively
     }
   }
