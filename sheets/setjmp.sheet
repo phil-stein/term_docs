@@ -1,0 +1,42 @@
+#
+|setjmp|setjmp.h|
+|jmp_buf|
+|
+macros and types for signal.h
+
+$GREEN$types$$:
+jmp_buf: array type used to hold info for setjmp() & longjmp()
+
+?< https://www.tutorialspoint.com/c_standard_library/setjmp_h.htm >?
+#
+|setjmp|
+|setjmp|setjmp.h|
+|unsure|
+int setjmp(jump_buf env) 
+\#define setjmp(env) 
+  copies the current environment into env
+  returns 0 when longjmp() hasnt been called
+  returns 2nd arg of longjmp() otherwise
+  ~ actually a macro
+  ~ included in <setjmp.h>
+
+  example:
+    jmp_buf env;
+    setjmp(env);
+?<https://www.tutorialspoint.com/c_standard_library/c_function_setjmp.htm >?
+#
+|longjmp|
+|setjmp|setjmp.h|
+|unsure|
+void longjmp(jump_buf env, int value) 
+  restores environment to most recent call of setjmp()
+  ~ included in <setjmp.h>
+
+  example:
+    jmp_buf env;
+    setjmp(env);
+    longjmp(env, "hello");
+?<https://www.tutorialspoint.com/c_standard_library/c_function_longjmp.htm >?
+#
+
+

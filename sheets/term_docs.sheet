@@ -56,14 +56,15 @@ or
 
     if ()       if()
     else if ()  else if()
-    else {} 
+    else{}      else {} 
     for ()      for()
     while ()    while()
+    do{}        do {}
     switch ()   switch()
     
     return; return val; break; continue;
     
-    if else for while switch
+    if else for while do switch
     return break continue
 
 
@@ -121,6 +122,10 @@ or
     
     changing $italic$mode italic $red$color$white$ hello $$ normal
     $dim$mode dim,$$ $italic$$dim$ italic dim$$
+
+    $~$set info style$$ normal again
+    $!$set warn style$$ normal again
+    $?$set link style$$ normal again
 
 
 #

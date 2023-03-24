@@ -212,11 +212,10 @@ non-standard:
      if (\!ptr) { printf("ptr = null"); }
 #
 
-@TODO: uint_8, etc..., but maybe add them in the sheet for the header that defines them ?
-
 @TODO: 
 #
 |idk_what_these_are_called|comparison|basics|
+|boolean_operators|boolean|basics|
   // @TODO: 
   ...
   example:
@@ -226,25 +225,21 @@ non-standard:
     a <= b -> less than or equal
     a >  b -> greater than
     a >= b -> greater than or equal
-#
-|idk_what_these_are_called|boolean|basics|
-  // @TODO: 
-  ...
-  example:
+    
     a && b -> both are true
     a || b -> a or b is true
 #
-|idk|bitwise_operator|basics|
-  // @TODO: 
+|bitwise_operator|basics|
   bit shift
-  <<
-  >>
+    <<
+    >>
   bit wise or & and
-  |
-  &
-#
-
-@TODO:
+    |
+    &
+  example:
+    a = 0b001; // a is now 001
+    a >> 1;    // a is now 010
+    a << 1;    // a is now 001
 #
 |bit_flag|flag|bitwise_operator|basics|
   set and check certain bits in a number
@@ -327,28 +322,123 @@ macros:
     [10] PRINT_LOCATION();
       -> file: "file_b.c", line: 10
 #
+|compiler|_MSC_VER|__MINGW64__|
+|c++|__cplusplus|
+|macro|preprocessor|basics|
+  compiler defining macros
+  ~ see \|c-version\| for checking/setting the c version
+// @TODO: gcc, clang
+  _MSC_VER:    msvc, microsofts c/c++ compiler
+  __MINGW64__: 64 bit version of mingw
+
+  __cplusplus: actually compiling c++ code
+               c++ compilers can compile c
+               but you need to define extern "C"
+  example:
+    in .h file
+    \#ifdef __cplusplus
+    extern "C" {
+    \#endif
+    void func();
+    \#ifdef __cplusplus
+    } // extern "C"
+    \#endif
+#
+|_WIN32|_WIN64|__linux|__linux__|__APPLE__|__ANDROID__|
+|windows|linux|apple|macos|android|operating_system|os|
+|macro|preprocessor|basics|
+  os specific macros
+
+// @UNSURE: win32 just mean 32 bit application or os
+  _WIN32:      is defined when on a windows 32 bit operating system
+  _WIN64:      is defined when on a windows 64 bit operating system
+  __linux
+  __linux__:   is defined when on a linux operating system
+  __APPLE__:   is defined when on a apple / macos operating system
+  __ANDROID__: is defined when on a android operating system
+
+  example:
+    \#ifdef _WIN32
+      printf("running on windows");
+    \#elif  defined(__linux__)
+      printf("running on linux");
+    \#endid
+#
+|__VA_ARGS__|
+|variadic_arguments|variadic|preprocessor|macro|basics|
+  the macro __VA_ARGS__ is used when creating variadic macros
+  which means macros that variable amount of arguments
+  it is the arguments themself, and should only directly be
+  passed to a variadic function
+
+  example:
+    \#define PF(...)    printf(__VA_ARGS__)
+    PF("hello\n");
+    PF("int: %d\n", 12);
+    PF("%s %s %s\n" "multiple", "args", "given");
+    -> hello
+    -> int: 12
+    -> multiple args given
+#
+|defined|
+|preprocessor|macro|basics|
+  turns a macro into a suitable condition for \\#if, \\#elif
+
+  example:
+    \#define A
+    \#if    defined(A)
+      printf("A");
+    \#elif  defined(B)
+      printf("B");
+    \#elif !defined(B)
+      printf("not B");
+    \#endif
+    -> A
+    -> not B
+#
 |define|
 |preprocessor|macro|basics|
-    the define preprocessor registeres a piece of code under a name
+    the define preprocessor registeres 
+    a piece of code under a name
+    alternatively a macro can also just 
+    be defined to check if its defined using \\#ifdef
     ~ use '\' to make multiline macros, no whitespace after '\'
     ~ wrapping args in parenthesis makes it safer 
     example:
-      \#define NAME 34 * 67
+      \#define HELLO
+      \#define NAME   "karl"
+      \#define NUMBER 34 * 67
       \#define ADD(a, b) ((a) + (b))
       \#define WARNING()      \
         printf("[!!!]");      \
         printf(" warning\n")
 
-      printf("%d\n", NAME);
+      printf("%s\n", NAME);
+      printf("%d\n", NUMBER);
       printf("%d\n", ADD(30, 70));
       WARNING();
+      \#ifdef HELLO
+        printf("hello is defined\n");
+      \#endif
+        -> karl
         -> 2278 
         -> 100
-        -> "[!!!] warning"
+        -> [!!!] warning
+        -> hello is defined
 #
 |undef|
 |undefine|preprocessor|macro|basics|
-  // @TODO:
+  the undef preprocessor undefines a previously defined macro
+  example:
+    \#define A
+    \#ifdef A
+      printf("A");
+    \#endif
+    \#undef A
+    \#ifdef A
+      printf("A again");
+    \#endif
+    -> A
 #
 |if|
 |endif|preprocessor|macro|basics|
@@ -379,7 +469,7 @@ macros:
 |elif|
 |else|endif|preprocessor|macro|basics|
   used with the \\#if, \\#else, \\#ifdef preprocessors
-  
+
   example:
     \#if 0 == 0
     printf("0 == 0");
@@ -390,11 +480,33 @@ macros:
 #
 |ifdef|
 |endif|preprocessor|macro|basics|
-  // @TODO:
+  the ifdef preprocessor ex/includes a part of code
+  depending on if the given macro is defined
+
+  example:
+    \#ifdef A
+      printf("A0");
+    \#endif
+    \#define A
+    \#ifdef A
+      printf("A1");
+    \#endif
+    -> A1
 #
 |ifndef|
 |endif|preprocessor|macro|basics|
-  // @TODO:
+  the ifndef preprocessor ex/includes a part of code
+  depending on if the given macro is not defined
+
+  example:
+    \#ifndef A
+      printf("A0");
+    \#endif
+    \#define A
+    \#ifndef A
+      printf("A1");
+    \#endif
+    -> A0
 #
 |if|
 |flow_control|basics|
@@ -412,25 +524,122 @@ macros:
       -> true
       -> boolean
 #
-|else|
+|else|else_if|
 |flow_control|basics|
-  // @TODO:
+  after a if or else if statement this executes
+  a block of code if the previous statement didnt
+  else if executes the block of code under those 
+  circumstances as well as checking the given condition
+
+  example:
+    if (0 == 0) { printf("0 if");   }
+    else        { printf("0 else"); }
+    
+    if (0 == 1) { printf("1 if");   }
+    else        { printf("1 else"); }
+
+    if (0 == 1)    { printf("2 if");      }
+    else if (0==0) { printf("2 else if"); }
+    else           { printf("2 else");    }
+    
+    int c = 2;
+    if (c == 0)      { printf("c == 0"); }
+    else if (c == 1) { printf("c == 1"); }
+    else if (c == 2) { printf("c == 2"); }
+    else if (c == 3) { printf("c == 3"); }
+    else             { printf("c == ?"); }
+    -> 0 if
+    -> 1 else
+    -> 2 else if
+    -> c == 2
 #
-|else_if|
-|else|if|flow_control|basics|
-  // @TODO:
-#
-|while|
+|while|while_loop|
 |flow_control|loop|basics|
-  // @TODO:
+|break|continue|
+  repeatedly executes a block of code
+  while the given condition is true
+  ~ use the break command to exit the loop
+  ~ use continue to skip the rest of the current loops run
+  ~ and continue at the start of the lopo
+  ! if the condition never turns false
+  ! the program will be stuck in the loop
+
+  example:
+    // for loop using while loop
+    int count = 10;
+    while (count <= 0) { printf("%d, ", count); count--; }
+    -> 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
+
+    // search string text for '%'
+    bool found = false;
+    int  pos   = 0;
+    while (found = false && pos < text_length)
+    { if (text[pos] == '%') { found = true; } pos++; }
+    if (found) { printf("found %% at %d\n", pos); }
+    -> found % at XXX
+
+    // infinite loop, with break
+    int end = 222;
+    int pos = 0;
+    while (true)
+    { 
+      if (pos >= end) { break;} 
+      pos++;
+    }
+    printf("pos: %d\n", pos);
+    -> pos: 221
+
 #
-|do_while|
-|while|flow_control|basics|
-  // @TODO:
+|do_while|do|while|do_while_loop|
+|flow_control|basics|
+  same as while loop, only that this loop executes the block
+  once before checking the condition, assuring it always gets 
+  executed least once
+  see \|while\| for more explanation
+
+  example:
+    int a = 0;
+    do
+    {
+      a++;
+    }
+    while (false);
+    printf("a: %d\n", a);
+    -> a: 1
 #
-|for|
+|for|for_loop|
 |flow_control|loop|basics|
-  // @TODO:
+  the for loop executes a block of code 
+  as long as the middle condition is true
+  it also initializes a local variable
+  and allows you to execute a line of code 
+  at the end of each loop
+  this loop cant do anything the while loop cant do
+  but its purpose is often easier to understand
+  thanks to the for loops's structure
+  ~ its common to call the for loops variable i
+  ~ for iterator, j, k, follow if you have a nested loop
+
+  $GREEN$structure$$:
+    for (INITIALIZE_VAR; CONDITION; EXECUTES_AT_END_OF_LOOP)
+    { BLOCK_OF_CODE }
+    ~ equivalent to:
+    INITIALIZE_VAR
+    while (CONDITION)
+    {
+      BLOCK_OF_CODE
+      EXECUTES_AT_END_OF_LOOP
+    }
+  example: 
+    for (int i = 0; i < 10; ++i)
+    { printf("%d, ", i); }
+    -> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+    
+    int arr[3] = { 4, 5, 6 };
+    int arr_len = 3;
+    for (int i = 0; i < arr_len; ++i)
+    { printf("%d, ", arr[i]); }
+    -> 4, 5, 6,
 #
 
 compiler stuff, should prob get its own sheet:

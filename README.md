@@ -132,30 +132,30 @@ in the makefile in the root directory at the top there is a variable called NAME
 change this and call `make clean` and `make` in the root directory
 
 ## todo
-  - [ ] multiple search keywords, doc file read
+  - [ ] multiple search keywords, i.e. doc file read
   - [ ] search structure definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
   - [ ] load keys for style.c from file, for custamization
-  - [ ] add way to highlight in .sheet
+  - [ ] add way to invoke tag from section
+    - i.e. searching 'printf' section printf invokes 'printf_format' and that gets displayed too
+  - [x] add way to highlight in .sheet
     - **hello**, $red$ hello $, etc.
   - [x] escape chars in info, warning, macro, comment
   - [ ] standard c documentation
-    - [ ] basics e.g. types, macros, flow control, etc. `WIP`
-    - [x] ctype.h
-    - [x] stdlib.h
-    - [x] string.h
-    - [x] stdio.h
-    - [x] math.h
-    - [x] assert.h
-    - [x] stdarg.h
-    - [x] time.h
-    - [x] float.h
-    - [x] erno.h 
-    - [x] limits.h
-    - [x] locale.h  
-    - [x] signal.h
-    - [ ] setjmp.h
+    - [ ] basics
+      - [x] types
+      - [x] macros
+        - [x] usage
+        - [ ] important macros
+          - __FILE__, __LINE__, __WIN32__, etc. 
+      - [x] flow control
+      - [ ] bitwise operators
+      - [ ] boolean operators
+      - [ ] 0b, 0c, 0x aka. number literals
+      - [ ] ! to invert bool
+      - [ ] inlining
+      - [x] variadic arguments, macros done
   - [ ] more documentation
     - [ ] term_docs
       - -help, custom .sheet, etc.

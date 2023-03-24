@@ -10,7 +10,7 @@
 const char key_types[][KEY_MAX] = { "unsigned", "const", "void", "char", "short", "int", "long", "float", "double", "bool", "extern", "struct", "enum", "typedef", "size_t", "FILE"};
 const u32  key_types_len = sizeof(key_types) / sizeof(key_types[0]);   
 
-const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "switch" };
+const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "do", "switch" };
 const u32  key_flow_ctrl_len = sizeof(key_flow_ctrl) / sizeof(key_flow_ctrl[0]);
 // @TODO: break & conmtinue dont get highlighted because they dont have () at the end
 const char key_flow_ctrl_cmd[][KEY_MAX] = { "return", "break", "continue" };
@@ -121,9 +121,10 @@ void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
         if (!equal) { break; }
       }
       bool else_end = false;
-      u32 _c = i +len; 
+      u32 _c = i +len;
+      else_end = txt[i +len] == '{';
       while(isspace(txt[_c]) && txt[_c] != '\0')
-      { if (txt[_c+1] == '{') { else_end = true; break;} _c++; } 
+      { if (txt[_c +1] == '{') { else_end = true; break;} _c++; }
       
     if (equal && (else_end || FLOW_CTRL_END(i +len)))
       {

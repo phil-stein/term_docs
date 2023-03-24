@@ -10,7 +10,10 @@
 #define COL_TAG               PF_CYAN 
 #define COL_WARNING           PF_RED  
 #define COL_EXAMPLE           PF_CYAN 
+
 #define COL_INFO              PF_PURPLE 
+#define STYLE_INFO            PF_ITALIC 
+
 #define COL_LINK              PF_BLUE 
 
 #define COL_COMMENT           PF_WHITE
