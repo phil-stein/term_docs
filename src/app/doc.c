@@ -185,11 +185,13 @@ void doc_color_code_section(char* sec)
   char* buf = malloc(len + 12 * sizeof(char));  // need to malloc in case long sec
   int   buf_pos = 0;
   // bool in_tag = false;
+  bool syntax = true; // true: highligh c syntax, false: dont
 
   for (int i = 0; i < len -1; ++i)
   {    
     // highlight all c syntax
-    style_highlight_c(sec, buf, &buf_pos, &i);
+    if (syntax)
+    { style_highlight_c(sec, buf, &buf_pos, &i); }
     
     bool skip_char = false;
 
@@ -266,7 +268,7 @@ void doc_color_code_section(char* sec)
     doc_color_code_escape_chars(sec, buf, &buf_pos, &i, &skip_char);
 
     // -- color code --
-    doc_color_code_color_codes(sec, len, buf, &buf_pos, &i, &skip_char);
+    doc_color_code_color_codes(sec, len, buf, &buf_pos, &i, &skip_char, &syntax);
 
 
     // -- copy from sec --
@@ -331,13 +333,13 @@ void doc_color_code_escape_chars(char* sec, char* buf, int* buf_pos_ptr, int* i_
 }
 u32 cur_pf_color = PF_WHITE; 
 u32 cur_pf_style = PF_NORMAL;
-void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_ptr, int* i_ptr, bool* skip_char_ptr)
+void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_ptr, int* i_ptr, bool* skip_char_ptr, bool* syntax)
 {
   #define buf_pos   (*buf_pos_ptr)
   #define i         (*i_ptr)
   #define skip_char (*skip_char_ptr)
   if (sec[i] == '$' && sec[i+1] == '$')                             // reset to normal
-  { BUF_DUMP(); PF_STYLE(PF_NORMAL, PF_WHITE); cur_pf_style = PF_NORMAL; cur_pf_color = PF_WHITE; skip_char = true; i++; }
+  { BUF_DUMP(); PF_STYLE(PF_NORMAL, PF_WHITE); cur_pf_style = PF_NORMAL; cur_pf_color = PF_WHITE; (*syntax) = true; skip_char = true; i++; }
   if (i+6 < sec_len    &&
        sec[i]   == '$' && 
       (sec[i+1] == 'w' || sec[i+1] == 'W') && 
@@ -430,12 +432,48 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
   { BUF_DUMP(); PF_STYLE(PF_DIM, cur_pf_color); cur_pf_style = PF_DIM;  skip_char = true; i += 4; }
 
 
-  // -- info / warning --
+  // -- info / warning / tag / link --
   if (i+2 < sec_len    &&
       sec[i]   == '$' && 
       sec[i+1] == '~' &&                         
-      sec[i+2] == '$')    // set color to red
-  { BUF_DUMP(); PF_STYLE(STYLE_INFO, COL_INFO); cur_pf_style = STYLE_INFO; cur_pf_color = COL_INFO; skip_char = true; i += 2; }
+      sec[i+2] == '$')    
+  { 
+    BUF_DUMP(); PF_STYLE(STYLE_INFO, COL_INFO); cur_pf_style = STYLE_INFO; cur_pf_color = COL_INFO; 
+    (*syntax) = false; skip_char = true; i += 2; 
+  }
+  if (i+2 < sec_len    &&
+      sec[i]   == '$' && 
+      sec[i+1] == '!' &&                         
+      sec[i+2] == '$')    
+  { 
+    BUF_DUMP(); PF_STYLE(STYLE_WARNING, COL_WARNING); cur_pf_style = STYLE_WARNING; cur_pf_color = COL_WARNING; 
+    (*syntax) = false; skip_char = true; i += 2; 
+  }
+  if (i+2 < sec_len    &&
+      sec[i]   == '$' && 
+      sec[i+1] == '|' &&                         
+      sec[i+2] == '$')   
+  { 
+    BUF_DUMP(); PF_STYLE(STYLE_TAG, COL_TAG); cur_pf_style = STYLE_TAG; cur_pf_color = COL_TAG; 
+    (*syntax) = false; skip_char = true; i += 2; 
+  }
+  if (i+2 < sec_len    &&
+      sec[i]   == '$' && 
+      sec[i+1] == '?' &&                         
+      sec[i+2] == '$')    
+  { 
+    BUF_DUMP(); PF_STYLE(STYLE_LINK, COL_LINK); cur_pf_style = STYLE_LINK; cur_pf_color = COL_LINK; 
+    (*syntax) = false; skip_char = true; i += 2; 
+  }
+
+  // -- syntax highlighting --
+  if (i+4 < sec_len    &&
+       sec[i]   == '$' && 
+      (sec[i+1] == 's' || sec[i+1] == 'S') &&                         
+      (sec[i+2] == 'y' || sec[i+2] == 'Y') &&                         
+      (sec[i+3] == 'n' || sec[i+3] == 'N') &&                         
+       sec[i+4] == '$')    
+  { BUF_DUMP(); (*syntax) = !(*syntax); skip_char = true; i += 4; }  // $$ resets it
 
   #undef buf_pos
   #undef i     

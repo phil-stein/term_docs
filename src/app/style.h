@@ -8,13 +8,15 @@
 #define MAX_LINE_WIDTH 90
 
 #define COL_TAG               PF_CYAN 
+#define STYLE_TAG             PF_UNDERLINE
 #define COL_WARNING           PF_RED  
-#define COL_EXAMPLE           PF_CYAN 
-
+#define STYLE_WARNING         PF_ITALIC 
 #define COL_INFO              PF_PURPLE 
 #define STYLE_INFO            PF_ITALIC 
-
 #define COL_LINK              PF_BLUE 
+#define STYLE_LINK            PF_ITALIC 
+#define COL_EXAMPLE           PF_CYAN 
+
 
 #define COL_COMMENT           PF_WHITE
 #define COL_COMMENT_HIGHLIGHT PF_PURPLE

@@ -2,6 +2,11 @@
 @NOTE: testing ground no actual docs here
 
 #
+|custom_sheet|custom_sheets|sheet|sheets|
+|doc|docs|doc_help|term_docs|
+|-help|-h|
+  // @TODO:
+#
 |doc|
 |docs|doc_help|term_docs|
 |-help|-h|
@@ -126,6 +131,21 @@ or
     $~$set info style$$ normal again
     $!$set warn style$$ normal again
     $?$set link style$$ normal again
+    $|$set tag style$$ normal again
+    $|$not_tag$|$ $$ $not_tag$ finds this
+
+    c-highlighting:
+      int var = func(float f);  // active
+      if (var == f) { struct }
+      else { func(); }
+      $syn$
+      int var = func(float f);  // inactive
+      if (var == f) { struct }
+      else { func(); }
+      $$
+      int var = func(float f);  // active
+      if (var == f) { struct }
+      else { func(); }
 
 
 #

@@ -328,6 +328,7 @@ operators:
     unsigned int e = c ^ a; // 1000
     unsigned int f = ~c;    // 0111
 
+?< https://www.tutorialspoint.com/cprogramming/c_operators.htm >?
 #
 |bit_flag|flag|bitwise_operator|basics|
   set and check certain bits in a number
@@ -380,6 +381,79 @@ operators:
 #
 
 macros:
+
+#
+|inline|function|
+|always_inline|__forceinline|
+  inlining is a way to define a function where
+  when called, the compiler doesnt tell the cpu
+  to jump to the location in memory where the 
+  instructions for that function are, but rather
+  simply always puts all contents of the function 
+  directly where it is called
+  inline functions forego having to load a part of
+  the programs instructions, that could be anywhere 
+  in the programs machine code, which means the cache
+  of the cpu might have to be completely overwritten
+  rather than loading the next instructions which are
+  automatically loaded in the cache, this is slow. 
+  so instead of jumping between memory, just putting 
+  smaller functions directly where they are called is 
+  faster, but increases the overall size of the executable.
+
+  ~ in short if you have small functions you call a lot
+  $~$  it might be worth inlining them$$
+
+  ~ inlining is actually just forcing it, the compiler 
+  $~$  already inlines to optimize$$
+
+  ~ different compilers have different ways to inline
+  $~$  __forceinline is used by msvc, microsofts c/c++ compiler
+    static inline __atribute  ((always_inline)) by most others$$
+
+
+  example:
+    in file.h
+    \#if defined(_MSC_VER)
+      \#define INLINE __forceinline
+    \#else
+      \#define INLINE static inline __attribute((always_inline))
+    \#endif
+  
+    INLINE int inline_func(int a)
+    {
+      int rtn = a + 20;
+      if (rtn > 50) { rtn -= 12; }
+      return rtn;
+    }
+
+    in file.c
+    \#include "file.h"
+    void func()
+    {
+      int a = inline_func();
+    }
+
+  $GREEN$difference$$:
+    simplified visualization of difference 
+    between normal/inline functions
+
+    INLINE int inline_add(int a, int b) { return a + b; }
+    
+    int normal_add(int a, int b) { return a + b; } 
+    void func()
+    {
+      int a0 = normal_add(1, 2);
+      int a1 = inline_add(1, 2);
+    }
+
+    roughly what the compiler does:
+    void func()
+    {
+      int a0 = normal_add(1, 2);
+      int a1 = a + b;
+    }
+
 
 #
 |stringify|

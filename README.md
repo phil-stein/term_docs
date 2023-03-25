@@ -142,7 +142,8 @@ change this and call `make clean` and `make` in the root directory
   - [x] add way to highlight in .sheet
     - **hello**, $red$ hello $, etc.
     - [ ] enable info, warn, link, tag, style, also number, macro, etc. ?
-    - [ ] also use this to dis-/enable c-syntax highlighting
+    - [x] also use this to dis-/enable c-syntax highlighting
+    - [ ] rest of styles, underline, strikethrough, etc.
   - [x] escape chars in info, warning, macro, comment
   - [ ] standard c documentation
     - [ ] basics
@@ -164,8 +165,10 @@ change this and call `make clean` and `make` in the root directory
       - [ ] inlining
       - [x] variadic arguments, macros done
   - [ ] more documentation
-    - [ ] term_docs
-      - -help, custom .sheet, etc.
+    - [ ] docs
+      - [ ] -help, 
+      - [ ] custom .sheet
+      - [ ] custom name
     - [ ] make
     - [ ] gcc
     - [ ] opengl 
