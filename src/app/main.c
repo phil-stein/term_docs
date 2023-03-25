@@ -18,6 +18,13 @@
 #include <direct.h>
 #include <dirent/dirent.h>
 
+typedef enum
+{
+  SEARCH_DOCUMENTATION    = FLAG(0),
+  SEARCH_DEFINITION    = FLAG(1),
+  SEARCH_SEARCH = FLAG(2),
+}search_mode_t;
+
 
 int main(int argc, char** argv)
 {
@@ -37,7 +44,7 @@ int main(int argc, char** argv)
     { dirs_walk_back--; if (dirs_walk_back <= 0) { break; } }
     core_data->sheets_path[i] = '\0';
   }
-  strcat(core_data->sheets_path, "sheets/");
+  strcat(core_data->sheets_path, "sheets\\");
   // P_STR(core_data->sheets_path);
 
   if (argc < 2)
@@ -51,30 +58,11 @@ int main(int argc, char** argv)
  
   // ---- commands ----
 
+  search_mode_t mode = SEARCH_DOCUMENTATION;  // search docs by default
   u32 cmd_count = 0;
   for (u32 i = 1; i < argc; ++i)
   {
-    // // @NOTE: '-h' or '-help' for help
-    // if ((argv[i][0] == '-'  && 
-    //      argv[i][1] == 'h') ||
-    //     
-    //     (argv[i][0] == '-'  && 
-    //      argv[i][1] == 'h'  && 
-    //      argv[i][2] == 'e'  && 
-    //      argv[i][3] == 'l'  && 
-    //      argv[i][4] == 'p') ) 
-    // {
-    //   cmd_count++;
-    //   PF("enter: '"); 
-    //   PF_COLOR(PF_CYAN); PF("doc word"); PF_COLOR(PF_WHITE);
-    //   PF("' to search for all occurences of '"); 
-    //   PF_COLOR(PF_PURPLE); PF("word"); PF_COLOR(PF_WHITE);
-    //   PF("' in the sheets.\n");
-    //   P("you can add sheets or alter them by going to the 'sheets' folder and adding / editing the '.sheet' files.");
-    //   PF("use: '"); 
-    //   PF_COLOR(PF_CYAN); PF("-f"); PF_COLOR(PF_WHITE);
-    //   PF("' to search through '.h' files, @TODO: this\n");
-    // }
+    // // @NOTE: '-h' or '-help' for help is in term_docs.sheet
     
     // @NOTE: '-c' or '-color' to disable color and styles
     if ((argv[i][0] == '-'  && 
@@ -90,30 +78,38 @@ int main(int argc, char** argv)
       cmd_count++;
       core_data->style_act = false;
     }
+    
+    // -- modes --
 
-    // if (argv[i][0] == '-' && 
-    //     argv[i][1] == 'f')
-    // { 
-    //   cmd_count++;
-    //   search_mode = true; 
-    //   if (argc < 4)
-    //   {
-    //     PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  
-    //     PF(" structure for search: '"); 
-    //     PF_COLOR(PF_CYAN); PF("doc [directory] [keyword] -f"); PF_COLOR(PF_WHITE); PF("'\n");
-    //     exit(1);
-    //   }
-    // }
+    if (argv[i][0] == '-' && 
+        argv[i][1] == 'd')      // -d: definnition
+    {
+      cmd_count++;
+      mode = SEARCH_DEFINITION;
+    }
   }
   if (argc -cmd_count <= 1) { exit(1); } // @NOTE: no actual stuff just '-abc' type stuff
   
-  bool search_mode = argc - cmd_count == 3; // 2(3) arguments == search_mode
+  // bool search_mode = argc - cmd_count == 3; // 2(3) arguments == search_mode
 
   // ---- keywords ----
 
   int n = 0;  // counts found matches for keyword
-  if (search_mode)
+  
+  if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
   {
+    doc_search_dir(core_data->sheets_path, argv[1], &n);
+  }
+  else if (HAS_FLAG(mode, SEARCH_DEFINITION))
+  {
+    if (argc - cmd_count < 2) // need dir and keyword
+    {
+      PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  
+      PF(" structure for definition search: '"); 
+      PF_COLOR(PF_CYAN); PF("doc [directory] [keyword] -f"); PF_COLOR(PF_WHITE); PF("'\n");
+      exit(1);
+    }
+    
     char* dir_name = argv[1];
     char* keyword  = argv[2];
     // P_STR(argv[0]);
@@ -171,20 +167,16 @@ int main(int argc, char** argv)
       PF("\n");
       PF_STYLE(PF_NORMAL, PF_WHITE);
     }
-  }
-  else
-  {
-    doc_search_dir(core_data->sheets_path, argv[1], &n);
-  }
+  } 
 
   if (n <= 0)
   { 
     PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  
     PF(" could not find keyword '"); 
-    PF_COLOR(PF_PURPLE); PF("%s", search_mode ? argv[2] : argv[1]); PF_COLOR(PF_WHITE); 
+    PF_COLOR(PF_PURPLE); PF("%s", HAS_FLAG(mode, SEARCH_DOCUMENTATION) ? argv[1] : argv[3]); PF_COLOR(PF_WHITE); 
     
-    if (search_mode) { PF("' in header files.\n"); }
-    else             { PF("' in sheets.\n"); }
+    if (HAS_FLAG(mode, SEARCH_DEFINITION)) { PF("' in header files.\n"); }
+    else                                   { PF("' in sheets.\n"); }
   }
   
   PF_COLOR(PF_WHITE);

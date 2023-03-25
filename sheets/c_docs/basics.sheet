@@ -212,12 +212,75 @@ non-standard:
      if (\!ptr) { printf("ptr = null"); }
 #
 
-#
-|!|invert|not|
-|operator|boolean_operators|boolean|basics|
-  \! inverts any boolean value
+operators:
 
+#
+|basics|operator|boolean|
+|comparison|realtional_operator|realtional_operators|
+|equal|not_equal|less|less_than_or_equal|greater|greater_than_or_equal|
+|==|!=|<|<=|>|>=|
+|logical_operator|logical_operators|
+|and|or|invert|not|
+|&&|!|
+  
+  all the below operators perform some action
+  but dont change values on their own, but can be
+  used to set values, explicitly
+  they get evaluated as a boolen value true/false
+  and can therefore be used to, set values, for 
+  if, for, while, etc. statements
+  ~ using parenthesis any of these statements can 
+  $~$  directly be used like a boolean value$$
+
+  $GREEN$relational operators$$:
+    a == b -> equal 
+    a \!= b -> not equal
+    a <  b -> less than
+    a <= b -> less than or equal
+    a >  b -> greater than
+    a >= b -> greater than or equal
+    
+  $GREEN$logical operators$$:
+    a && b -> logical and
+    a \|\| b -> logical or
+    \!a     -> logical not
+              inverts any boolean value
+              be that a variable or a 
+              statement that gets evaluated
+              as a boolean, sucha as the ones above
+  
   example:
+    // -- relational operators --
+    int a = 5;
+    int b = 8;
+    bool c;
+    c = a == b; // false
+    c = a == a; // true
+    c = a \!= b; // true
+    c = a \!= a; // false
+    c = a <  b; // true
+    c = a <= b; // false
+    c = a >  b; // false
+    c = a >= b; // true
+
+    // -- logical operators --
+    bool a = true;
+    bool b = false;
+    c = a && b; // false
+    c = c && b; // true
+    c = c \|\| b; // false
+    c = a \|\| b; // true
+
+    // -- combinig --
+    bool a = (1 > 0) \|\| (0 > -1); // true
+    bool b = false;
+    bool c = (a \|\| b) && (a \!= b \|\| b == false);
+    if ( (a \|\| b) && (a \!= b \|\| b == false) ) {}
+    for (into = 0; (a \|\| b) && (a \!= b \|\| b == false); ++i) {}
+    while ( (a \|\| b) && (a \!= b \|\| b == false) ) {}
+    c = (a \|\| b) && (a \!= b \|\| b == false) ? true : (!a == false && b) ? true : false;
+
+    // -- logical not \! --
     bool a = true;
     bool b = \!a;    // b is now false
     a = \!a;         // a is now false
@@ -241,38 +304,30 @@ non-standard:
 
     -> func()
 #
-
-@TODO: 
-#
-|idk_what_these_are_called|comparison|basics|
-|operator|boolean_operators|boolean|basics|
-|==|!=|<|<=|>|>=|&&|
-  // @TODO: 
-  ...
-  example:
-    a == b -> equal 
-    a \!= b -> not equal
-    a <  b -> less than
-    a <= b -> less than or equal
-    a >  b -> greater than
-    a >= b -> greater than or equal
-    
-    a && b -> both are true
-    a \|\| b -> a or b is true
-#
 |operator|bitwise_operator|basics|
+|bit_shift|shift|bitwise_or|or|bitwise_and|and|
 |<<|>>|&|
   bit shift
-    <<
-    >>
+    <<: left sides bits are moved left by number on right side
+    >>: left sides bits are moved right by number on right side
   bit wise or, and & not
-    \|
-    &
-    \~
+    &: binary and
+    \|: binary or
+    ^: binary xor
+    \~: binary not
+
   example:
-    a = 0b001; // a is now 001
-    a >> 1;    // a is now 010
-    a << 1;    // a is now 001
+    unsigned int a = 0b001; // a is now 001
+    a >> 1;                 // a is now 010
+    a << 1;                 // a is now 001
+    
+    unsigned int a = 0b0001;
+    unsigned int b = 0b1000;
+    unsigned int c = a \| b; // 1001
+    unsigned int d = c & a; // 0001
+    unsigned int e = c ^ a; // 1000
+    unsigned int f = ~c;    // 0111
+
 #
 |bit_flag|flag|bitwise_operator|basics|
   set and check certain bits in a number
@@ -339,12 +394,40 @@ macros:
     P_INT(var);
       -> var: 0
 #
-|__FILE__|__LINE__|
-|file|line|preprocessor|macro|basics|
-  __FILE__ is a marco that gets set to the 
-  current file name during compilation
-  __LINE__ is a marco that gets set to the 
-  current line during compilation
+|__FILE__|__LINE__|__DATE__|__TIME__|
+|__func__|__FUNCTION__|__STDC__|__STDC_HOSTED__|__STDC_VERSION__|
+|file|line|date|time|function|function_name|c-version|
+|preprocessor|macro|basics|
+  
+  __FILE__:         is a marco that gets set to the 
+                    current file name during compilation
+  
+  __LINE__:         is a marco that gets set to the 
+                    current line during compilation
+
+  __DATE__:         is a mqacro that gets set to the date 
+                    on which the source was compiled to .o
+                    format is MM DD YYYY
+
+  __TIME__:         is a macro that gets set to the time
+                    at which the source was compiled to .o
+
+  __func__:         in C99+ this expands to the current
+                    functions name
+
+  __FUNCTION__:     expands to current function name
+                    only available in some compilers
+                    use __func__ instead is using C99+
+
+  __STDC__:         if set to 1 this means the compiler
+                    conforms to ISO C standards
+                    this should usually be the case
+  
+  __STDC_HOSTED__:  idk, but should generally be 1 
+
+  __STDC_VERSION__: gets set to the current c version
+                    i.e. C89, C99, etc., 
+                    see \|c-version\| for more info
 
   example:
     \#define PRINT_LOCATION() printf("file: \"%s\", line: %d\n", __FILE__, __LINE__)
@@ -354,19 +437,44 @@ macros:
     file_b.c:
     [10] PRINT_LOCATION();
       -> file: "file_b.c", line: 10
+    
+    printf("compiled on: %s", __DATE__);
+    printf("compiled at: %s", __TIME__);
+    -> compiled on: Mar 24 2023
+    -> comnpiled at: 21:04:56
+    
+    printf("__func__: %s", __func__);
+    printf("__FUNCTION__: %s", __FUNCTION__);
+    -> __func__: func_name
+    -> __FUNCTION__: func_name
+
+    printf("__STDC__: %d", __STDC__);
+    printf("__STDC_HOSTED__: %d", __STDC_HOSTED__);
+    printf("__STDC_VERSION__: %d", __STDC_VERSION__);
+    -> __STDC__: 1
+    -> __STDC_HOSTED__: 1 
+    -> __STDC_VERSION__: 199901
 #
-|compiler|_MSC_VER|__MINGW64__|
+|compiler|
+|__GNUC__|__MINGW32__|__MINGW64__|__clang__|_MSC_VER|__EMSCRIPTEN__|
 |c++|__cplusplus|
 |macro|preprocessor|basics|
   compiler defining macros
   ~ see \|c-version\| for checking/setting the c version
-// @TODO: gcc, clang
-  _MSC_VER:    msvc, microsofts c/c++ compiler
-  __MINGW64__: 64 bit version of mingw
+  ~ when __MINGW32/64__ is def. __GNUC__ should also be
+
+  __GNUC__:       gcc compiler
+  __MINGW32__:    32 bit version of mingw
+  __MINGW64__:    64 bit version of mingw
+  __clang__:      clang compiler
+  _MSC_VER:       msvc, microsofts c/c++ compiler
+  __EMSCRIPTEN__: llvm to js or web-asm compiler
 
   __cplusplus: actually compiling c++ code
                c++ compilers can compile c
                but you need to define extern "C"
+  __OBJC__:    defined when compiling using 
+               objective-c compiler
   example:
     in .h file
     \#ifdef __cplusplus
@@ -376,18 +484,19 @@ macros:
     \#ifdef __cplusplus
     } // extern "C"
     \#endif
+
+?< https://dev.to/tenry/predefined-c-c-macros-43id >?
 #
 |_WIN32|_WIN64|__linux|__linux__|__APPLE__|__ANDROID__|
-|windows|linux|apple|macos|android|operating_system|os|
+|windows|linux|apple|macos|ios|android|operating_system|os|
 |macro|preprocessor|basics|
   os specific macros
 
-// @UNSURE: win32 just mean 32 bit application or os
-  _WIN32:      is defined when on a windows 32 bit operating system
+  _WIN32:      is defined when on a windows 32/64 bit operating system
   _WIN64:      is defined when on a windows 64 bit operating system
   __linux
   __linux__:   is defined when on a linux operating system
-  __APPLE__:   is defined when on a apple / macos operating system
+  __APPLE__:   is defined when on a apple/macos/ios operating system
   __ANDROID__: is defined when on a android operating system
 
   example:
@@ -396,6 +505,8 @@ macros:
     \#elif  defined(__linux__)
       printf("running on linux");
     \#endid
+
+?< https://dev.to/tenry/predefined-c-c-macros-43id >?
 #
 |__VA_ARGS__|
 |variadic_arguments|variadic|preprocessor|macro|basics|

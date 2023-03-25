@@ -434,7 +434,7 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
   if (i+2 < sec_len    &&
       sec[i]   == '$' && 
       sec[i+1] == '~' &&                         
-      sec[i+4] == '$')    // set color to red
+      sec[i+2] == '$')    // set color to red
   { BUF_DUMP(); PF_STYLE(STYLE_INFO, COL_INFO); cur_pf_style = STYLE_INFO; cur_pf_color = COL_INFO; skip_char = true; i += 2; }
 
   #undef buf_pos

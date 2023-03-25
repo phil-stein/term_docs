@@ -141,22 +141,26 @@ change this and call `make clean` and `make` in the root directory
     - i.e. searching 'printf' section printf invokes 'printf_format' and that gets displayed too
   - [x] add way to highlight in .sheet
     - **hello**, $red$ hello $, etc.
+    - [ ] enable info, warn, link, tag, style, also number, macro, etc. ?
+    - [ ] also use this to dis-/enable c-syntax highlighting
   - [x] escape chars in info, warning, macro, comment
   - [ ] standard c documentation
     - [ ] basics
       - [x] types
+        - [ ] unions 
       - [x] macros
         - [x] usage
-        - [ ] important macros
+        - [x] important macros
           - __FILE__, __LINE__, __WIN32__, etc. 
       - [x] flow control
       - [ ] operators
+        - [ ] add way to use | in tags, for ||, |
         - [ ] add, sub, mul, div, mod, etc.
         - [ ] +a & a+ ?, ++a, a++ 
-        - [ ] bitwise operators
-        - [ ] boolean/comparison operators
+        - [x] bitwise operators
+        - [x] boolean/comparison operators
       - [ ] 0b, 0c, 0x aka. number literals
-      - [ ] ! to invert bool
+      - [x] ! to invert bool
       - [ ] inlining
       - [x] variadic arguments, macros done
   - [ ] more documentation
