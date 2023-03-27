@@ -228,7 +228,6 @@ actual types:
     int i = 0x1A;     // base 16, hexadecimal
 #
 
-
 non-standard:
 
 #
@@ -260,6 +259,44 @@ non-standard:
 
 operators:
 
+
+#
+|basics|operator|operators|
+|+|-|/|*|%|++|--|
+|add|addtition|sub|subtract|div|divide|mul|multiply|mod|modulo|
+  basic mathematic operators
+  +:  addition
+  -:  subtraction
+  /:  division
+  *:  multiplication
+  %:  modulo, remainder of integer division
+  ++: add 1, same as x = x+1
+  --: sub 1, same as x = x+-1
+
+  ~ integer divisons dont produce and get rounded
+  ~ ++/-- can be applied before or after the variable
+  $~$  before in-/decrements variable and then executes other logic$$
+  $~$  after executes logic and then in-/decrements, see example$$
+
+  example:
+    a = 1 + 1;       // a = 2
+    a = 1 - 1;       // a = 0
+    a = 2.0f / 1.0f; // a = 0.5f
+    a = 2 * 2;       // a = 4
+    a = 5 % 2;       // a = 1, 5 / 2 = 2 remaineder 1
+    a = 1;
+    a++;             // a = 2
+    a--;             // a = 1
+
+    int arr[3] = { 0, 1, 2 }; // arr[0] == 0, arr[1] == 1, etc.
+    int i = 0;
+    int a = arr[i++];
+    printf("a: %d, i: %d\n", a, i);
+    -> a: 0, i: 1 // accessed arr with i = 0, then incremented
+    i = 0;
+    int a = arr[++i];
+    printf("a: %d, i: %d\n", a, i);
+    -> a: 1, i: 1 // incremented i to i == 1, then accessed arr
 #
 |basics|operator|boolean|
 |comparison|realtional_operator|realtional_operators|
