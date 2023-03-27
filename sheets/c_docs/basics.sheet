@@ -53,6 +53,35 @@ data structures:
       struct data_t* ptr = &var;
       float b = ptr->b;   // access variable in struct-pointer
 #
+|union|data|type|
+  unions are declared like structs, with multiple
+  variables, but their size is only the size of the 
+  biggest variable.
+  meaning all variables in a union share the same memory
+
+  example:
+    union a
+    {
+      char   c; // size 1 byte
+      short  s; // size 2 bytes
+      int    i; // size 4 bytes
+      double d; // size 8 bytes
+    };
+    printf("sizeof(a): %d", sizeof(a));
+    -> sizeof(a): 8
+    because d is the biggest variable at 8 bytes
+
+    union b
+    {
+      unsigned int i;
+      float f;
+    };
+    union b var;
+    var.i = 10;
+    var.f now has 10u as its value
+    which prob. will not read as a proper float value
+    and definitely not as 10.0f
+#
 |typedef|typedef|syntax|
     add a second name for a symbol
     example:
@@ -182,6 +211,23 @@ actual types:
       double  val = 12.345;
       double* ptr = &val;
 #
+
+#
+|literal|literals|number|numbers|string|
+  literals are values types directly into the code
+
+  example:
+    float f = 10.0f;    // float literal
+    char  c = 'c';      // char literal
+    char* s = "hello";  // string literal
+    
+    // integer literals
+    int i = 10;       // normal, decimal imnteger
+    int i = 0b101     // base 2,  binary
+    int i = 010;      // base 8,  octal
+    int i = 0x1A;     // base 16, hexadecimal
+#
+
 
 non-standard:
 
@@ -334,7 +380,8 @@ operators:
   set and check certain bits in a number
   make number with bit a set
 
-  ~ uses \|bitwise_operator\|
+  see $|$\|bitwise_operator\|$$ for explanation
+  of <<, >>, &, \| operators
 
   example:
   
