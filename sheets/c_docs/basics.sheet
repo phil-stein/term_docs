@@ -216,16 +216,40 @@ actual types:
 |literal|literals|number|numbers|string|
   literals are values types directly into the code
 
+  ~ multiline string, like mutliline macro, has to be directly 
+  $~$  followed by newline char '\n', aka. nothing after \ char$$
+
   example:
-    float f = 10.0f;    // float literal
-    char  c = 'c';      // char literal
-    char* s = "hello";  // string literal
-    
-    // integer literals
-    int i = 10;       // normal, decimal imnteger
+    int i = 10;       // normal, decimal integer
     int i = 0b101     // base 2,  binary
     int i = 010;      // base 8,  octal
     int i = 0x1A;     // base 16, hexadecimal
+    unsigned int       i = 10u; // unsigned decimal integer
+    long long          i = 10l; // long decimal integer
+    unsigned long long i = 10ul; // unsigned long decimal integer
+
+    float  f = 10.5f;    // float literal
+    float  f = 105E-1L;  // float literal, with exponent
+    float  f = 105E-1;   // float literal, with exponent
+    float  f = 105e-1L;  // float literal, with exponent
+    float  f = 105e-1;   // float literal, with exponent
+    double f = 10.5;     // double literal
+    double f = 105E-1L;  // double literal, with exponent
+    double f = 105E-1;   // double literal, with exponent
+    double f = 105e-1L;  // double literal, with exponent
+    double f = 105e-1;   // double literal, with exponent
+    
+    char   c = 'c';     // char literal
+    char   c = '\n';    // char literal, escaped char
+    char   c = 'u0040'; // char literal, unicode, this is @
+    
+    char*  s = "hello";  // string literal
+    char*  s = "hello"",""world"; // acts as one string "hello, world"
+    \#define STR "middle"
+    char   s = "start "STR" end"  // acts as one string "start middle end"
+    char*  s = "line01 \
+                line02";  // multiline string literal
+  
 #
 
 non-standard:
@@ -261,10 +285,10 @@ operators:
 
 
 #
-|basics|operator|operators|
+|basics|arithmetic_operators|operator|operators|
 |+|-|/|*|%|++|--|
 |add|addtition|sub|subtract|div|divide|mul|multiply|mod|modulo|
-  basic mathematic operators
+  basic mathematic/arithmetic operators
   +:  addition
   -:  subtraction
   /:  division
@@ -412,6 +436,54 @@ operators:
     unsigned int f = ~c;    // 0111
 
 ?< https://www.tutorialspoint.com/cprogramming/c_operators.htm >?
+#
+|operator|bitwise_operator|basics|
+|assign|assignment|assignment_operators|
+|add|addtition|sub|subtract|div|divide|mul|multiply|mod|modulo|
+|bit_shift|shift|bitwise_or|or|bitwise_and|and|
+
+  =:   a = b;   a's value is now b's value
+  
+  $GREEN$arithmetic operators, see $|$\|arithmetic_operators\|$$:
+  +=:  a += b;  is equal to a = a + b
+  -=:  a -= b;  is equal to a = a - b
+  *=:  a *= b;  is equal to a = a * b
+  /=:  a /= b;  is equal to a = a / b
+  %=:  a %= b;  is equal to a = a % b
+  
+  $GREEN$bitwise operators, see $|$\|bitwise_operator\|$$:
+  <<=: a <<= b; is equal to a = a << b
+  >>=: a >>= b; is equal to a = a >> b
+  &=:  a &= b;  is equal to a = a & b
+  \|=:  a \|= b;  is equal to a = a \| b
+  ^=:  a ^= b;  is equal to a = a ^ b
+
+  example: 
+    int a = 10; // assign 10 to a 
+    a += 10;    // a: 20
+    a -= 10;    // a: 10
+    a *= 10;    // a: 100
+    a /= 10;    // a: 10
+    a %= 4;     // a: 2, 10 / 4 = 2, remainder 2
+  
+    // also work on non-literal values:
+    int b = 5;
+    a += b;
+    a += func();
+
+    a = 1;
+    a <<= 1;    // a: 0b0010
+    b = a;
+    b >>= 1;    // b: 0b0001
+    int c = a;  
+    c \|= b;     // c: 0b0011
+    c &= a;     // c: 0b0010
+    c = a \| b;  // c: 0b0011 
+    c ^= a;     // c: 0b0001
+#
+
+misc:
+
 #
 |bit_flag|flag|bitwise_operator|basics|
   set and check certain bits in a number
@@ -809,6 +881,45 @@ macros:
       printf("A1");
     \#endif
     -> A0
+#
+|error|
+|print|preprocessor|macro|basics|
+  the error preprocessor error prints an error to the stderr
+
+  example:
+    \#error "this is an error"
+
+    \#undef MACRO
+    \#ifndef MACRO
+      \#error "MACRO isnt defined"
+    \#endif
+     
+     -> this is an error
+     -> MACRO isnt defined
+#
+|pragma|
+|preprocessor|macro|basics|
+|gcc|ignore_warning|
+  the pragma preprocessor issues commands to the compiler,
+  therefore the commands may vary from compiler to compiler
+
+  example:
+    // this makes gcc ignore the specified in "-W..."
+    // until diagnostic pop is called
+    // in this example were including a header that uses 
+    // pragmas not used by gcc, so we ignore the error
+    // messages this would normally generate
+    // at least when comopiling with "-Wall", 
+    // aka. all warnings
+    \#pragma GCC diagnostic push
+    \#pragma GCC diagnostic ignored "-Wunknown-pragmas"
+    \#include "header_with_non_gcc_pragmas.h"
+    \#pragma GCC diagnostic pop
+#
+
+
+flow control:
+
 #
 |if|
 |flow_control|basics|

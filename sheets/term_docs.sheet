@@ -37,6 +37,9 @@ or
   -f/-fuzzy
   doc -f start      -> start, start_01, etc.
 or
+  -f/-fuzzy
+  doc -d -f start      -> start();, start_01();, etc.
+or
   doc ~start        -> start, start_01, a_start, a_start_01, etc.
 
 #
@@ -53,9 +56,20 @@ or
     double  doubled   adouble
     unsigned, const, struct, enum, typedef
     func(), func(int a, float b), func(int a), func(int,int b), func ()
-    122 12.2 12.2f
-    0x12 0b0101   1230x21 0g324
-    'c' "hello"
+    
+    // correct
+    122 12.2 12.2f 
+    122E-1 122e-1 122E-1L 122e-1L
+    0x12 0xAF3B 0b0101
+    12u 12l 12ul
+    // incorrect
+    1230x21 0g324 123e 123e- 123-3
+    
+    'c' '\n' 'u0040' 
+    "hello"
+    "start""middle""end"
+    "line01 \
+     line02"
     true, false
     NULL
 
@@ -81,7 +95,11 @@ or
      | comment
      | comment highlights @DOC: @TODO: @BUGG: @TMP: @OPTIMIZATION:
     */
-
+    // multiline comment  \
+       comment            \
+       comment
+    not comment
+    
     \#if     condition
     \#elif   condition
     \#else
@@ -124,15 +142,26 @@ or
     $cyan$cyan$$
     $red$red $green$green $yellow$yellow $blue$blue $purple$purple $cyan$cyan $$
     $RED$red $GREEN$green $YELLOW$yellow $BLUE$blue $PURPLE$purple $CYAN$cyan $$
+    $r$red $g$green $y$yellow $b$blue $p$purple $c$cyan $$
+    $R$red $G$green $Y$yellow $B$blue $P$purple $C$cyan $$
     
     changing $italic$mode italic $red$color$white$ hello $$ normal
     $dim$mode dim,$$ $italic$$dim$ italic dim$$
+    $underline$underline$$ normal
+    $/$italic$$ normal $_$underline$$ normal $%$dim$$ \? $$
 
     $~$set info style$$ normal again
     $!$set warn style$$ normal again
     $?$set link style$$ normal again
     $|$set tag style$$ normal again
     $|$not_tag$|$ $$ $not_tag$ finds this
+    
+    ~ info, $cyan$cyan$$ info ~ not info
+    ~ info, $cyan$cyan$$ info 
+    normal text
+    ! warn, $cyan$cyan$$ warn ! not warn
+    ! warn, $cyan$cyan$$ warn 
+    normal text
 
     c-highlighting:
       int var = func(float f);  // active
@@ -147,5 +176,7 @@ or
       if (var == f) { struct }
       else { func(); }
 
+    \#define MACRO 10
+    \#define MACRO "string"
 
 #

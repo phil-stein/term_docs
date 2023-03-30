@@ -124,7 +124,10 @@ void* malloc(size_t size)
 '?' link <br>
 
 to include a '#' symbol in your documentation you need to escape it ``\\#``, or escape once for macros ``\#define`` <br>
-the same applies to `` ! ~ ? |``  `` \! \~ \? \|``  ``a = a \!= b \? c : d; -> a = a != b ? c : d;`` 
+the same applies to `` ! ~ ? |``  `` \! \~ \? \|``  ``a = a \!= b \? c : d; -> a = a != b ? c : d;`` <br>
+
+for more help on custom sheets or general usage use command ``doc -h`` in terminal, <br>
+or ``doc test`` to see all usecases for syntax
 
 
 ### custom executable name
@@ -139,14 +142,9 @@ change this and call `make clean` and `make` in the root directory
   - [ ] load keys for style.c from file, for custamization
   - [ ] add way to invoke tag from section
     - i.e. searching 'printf' section printf invokes 'printf_format' and that gets displayed too
-  - [x] add way to highlight in .sheet
-    - **hello**, $red$ hello $, etc.
-    - [ ] enable info, warn, link, tag, style, also number, macro, etc. ?
-    - [x] also use this to dis-/enable c-syntax highlighting
-    - [ ] rest of styles, underline, strikethrough, etc.
-  - [ ] standard c documentation
+  - [ ] c-syntax in macros, for numbers, strings, etc.
   - [ ] more documentation
-    - [ ] docs
+    - [ ] docs (finish functionality first)
       - [ ] -help, 
       - [ ] custom .sheet
       - [ ] custom name
@@ -154,7 +152,7 @@ change this and call `make clean` and `make` in the root directory
     - [ ] gcc
     - [ ] opengl 
       - [ ] every func in debug_opengl.h `WIP`
-      - [ ] macros in glad.h
+      - [ ] macros in glad.h ( GL_TEXTURE0, etc.)
     - [ ] glfw
       - [ ] everything in window.c
       - [ ] everything in input.c

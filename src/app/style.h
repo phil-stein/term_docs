@@ -37,7 +37,8 @@
 //      // ...
 //      style_highlight_c(txt, buf, &buf_pos, &i)
 //     }
-void style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr); 
+// return is whether to conzinue in that loop
+bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr); 
 
 void style_highlight_c_comment(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr);
 
