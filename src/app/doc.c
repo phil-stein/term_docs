@@ -5,7 +5,6 @@
 #include "global/global.h"
 
 #include <ctype.h>
-
 #include <direct.h>
 #include <dirent/dirent.h>
 
@@ -68,9 +67,9 @@ void doc_search_dir(const char* dir_path, const char* keyword, int* n)
   closedir(dir);
 }
 
+// @TODO: give array of keyword to check if has multiple at once
 bool doc_search_section(const char* path, const char* file, const char* keyword)
 {
-  // const char* path = "sheets/c.sheet";
   if (!check_file_exists(path)) { return false; }
   int txt_len = 0;
   char* txt = read_text_file_len(path, &txt_len);
@@ -105,11 +104,6 @@ bool doc_search_section(const char* path, const char* file, const char* keyword)
       start++;          // skip '#'
       char end_char = txt[end];
       txt[end] = '\0';  // shorten txt to section
-      
-      // P_INT(txt_len);
-      // P_INT(end - start);
-      // P_INT(start);
-      // P_INT(end);
 
       doc_print_section(txt + start, keyword, file);
       txt[end] = end_char;

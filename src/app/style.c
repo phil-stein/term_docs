@@ -13,13 +13,13 @@ const u32  key_types_len = sizeof(key_types) / sizeof(key_types[0]);
 const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "do", "switch" };
 const u32  key_flow_ctrl_len = sizeof(key_flow_ctrl) / sizeof(key_flow_ctrl[0]);
 // @TODO: break & conmtinue dont get highlighted because they dont have () at the end
-const char key_flow_ctrl_cmd[][KEY_MAX] = { "return", "break", "continue" };
+const char key_flow_ctrl_cmd[][KEY_MAX] = { "return", "break", "continue", "case", "default" };
 const u32  key_flow_ctrl_cmd_len = sizeof(key_flow_ctrl_cmd) / sizeof(key_flow_ctrl_cmd[0]);
 
 const char key_values[][KEY_MAX] = { "NULL", "true", "false" };
 const u32  key_values_len = sizeof(key_values) / sizeof(key_values[0]);
 
-const char key_comment[][KEY_MAX] = { "@DOC:", "@TODO:", "@TMP:", "@BUGG:", "@OPTIMIZATION:" };
+const char key_comment[][KEY_MAX] = { "@DOC:", "@TODO:", "@NOTE:", "@TMP:", "@BUGG:", "@OPTIMIZATION:" };
 const u32  key_comment_len = sizeof(key_comment) / sizeof(key_comment[0]);
 
 // check if char is valid as an ending for a type name
@@ -30,6 +30,8 @@ const u32  key_comment_len = sizeof(key_comment) / sizeof(key_comment[0]);
 // give char idx into txt c and bool ptr as return 
 #define FLOW_CTRL_CMD_END_RETURN(c, b) { u32 _c = c; while(txt[_c] != '\n' && txt[_c] != '\0') \
                                        { if (txt[_c] == ';') {(*b) = true; break;} _c++; } }
+#define FLOW_CTRL_CMD_END_CASE(c, b)   { u32 _c = c; while(txt[_c] != '\n' && txt[_c] != '\0') \
+                                       { if (txt[_c] == ':') {(*b) = true; break;} _c++; } }
 #define FLOW_CTRL_CMD_END(c)  ((c) == ';')
 
 // eisther if[(] or if[ ] or else[ if] or [else]
@@ -103,7 +105,10 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       }
       bool return_end = false;
       FLOW_CTRL_CMD_END_RETURN(i+len, &return_end);
-      if (equal && (return_end || FLOW_CTRL_CMD_END(i +len)))
+      bool case_end = false;
+      FLOW_CTRL_CMD_END_CASE(i+len, &case_end);
+      if (equal && (( return_end || case_end) || 
+                      FLOW_CTRL_CMD_END(i +len)))
       {
         DUMP_COLORED(len, COL_TYPE);
         return false;

@@ -143,6 +143,7 @@ change this and call `make clean` and `make` in the root directory
   - [ ] add way to invoke tag from section
     - i.e. searching 'printf' section printf invokes 'printf_format' and that gets displayed too
   - [ ] c-syntax in macros, for numbers, strings, etc.
+  - [ ] make # available in tags as \#
   - [ ] more documentation
     - [ ] docs (finish functionality first)
       - [ ] -help, 

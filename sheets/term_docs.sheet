@@ -81,10 +81,10 @@ or
     do{}        do {}
     switch ()   switch()
     
-    return; return val; break; continue;
+    return; return val; break; continue; case 23: default:
     
     if else for while do switch
-    return break continue
+    return break continue case default
 
 
     // comment

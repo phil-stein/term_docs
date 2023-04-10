@@ -285,6 +285,44 @@ operators:
 
 
 #
+|pointer|address|sizeof|
+|basics|operator|operators|size|
+|*|&|
+  *:      pointer operator, indicates a type is 
+          pointer-type, or dereferences a pointer
+          which lets you access the variable pointed to
+  &:      gets the address of a variable, aka. the pointer
+          to that variable
+  sizeof: gets compiled to the size of the given type in bytes
+
+  example:
+    int  a = 0;
+    int* a_ptr = &a;  // a_ptr holds the address of a
+
+    *a_ptr = 1;  // dereferencig a_ptr to access a 
+    printf("a: %d", a);
+    -> 1
+
+    // @NOTE: the size of variables depend on the os
+    //        32bit os's might have different size 
+    //        variables than 64bit os's
+    printf("size of char: %d", sizeof(char));
+    printf("size of short: %d", sizeof(short));
+    printf("size of int: %d", sizeof(int));
+    printf("size of long int: %d", sizeof(long int));
+    -> size of char: 1
+    -> size of short: 2
+    -> size of int: 4
+    -> size of long int: 8
+    printf("size of float: %d", sizeof(float));
+    printf("size of double: %d", sizeof(double));
+    ->size of float: 4
+    ->size of double: 8
+    // @NOTE: sizeof returns bytes, aka.
+    //        char: 1 byte,  8  bits
+    //        int:  4 bytes, 64 bites
+    //        etc.
+#
 |basics|arithmetic_operators|operator|operators|
 |+|-|/|*|%|++|--|
 |add|addtition|sub|subtract|div|divide|mul|multiply|mod|modulo|
@@ -613,7 +651,7 @@ macros:
 
 #
 |stringify|
-|preprocessor|macro|basics|
+|operator|preprocessor|macro|basics|
   and \\# to macro arg to stringify it
   example:
     \#define TO_STR(arg)  (\\#arg)
@@ -623,6 +661,31 @@ macros:
     \#define P_INT(a) printf("%s: %d\n", \\#a, a)
     P_INT(var);
       -> var: 0
+#
+|token_pasting|
+|operator|preprocessor|macro|basics|
+|combine_macros|token|\#|
+  using the \\#\\# operator in macros
+  you can expand an argument or macro and
+  combine it with other text
+  ~ using this operator prevents tokens 
+  $~$  that are macros to expand $$
+
+  example:
+    \#define TOKEN_PASTING(a, b)  a\\#\\#b
+    TOKEN_PASTING(hello, world);
+    -> helloworld
+    
+    \#define ARRAY(type, name, len) \
+        type name[len];             \
+        int name\\#\\#_len = len;
+    ARRAY(int, arr, 10);
+    -> int arr[10];
+    -> int arr_len = 10;
+
+    \#define PASTE(a, b, c, d) a\\#\\#b\\#\\#c\\#\\#d
+    int PASTE(start, _mid, dle, _end) = 10;
+    -> int start_middle_end = 10;
 #
 |__FILE__|__LINE__|__DATE__|__TIME__|
 |__func__|__FUNCTION__|__STDC__|__STDC_HOSTED__|__STDC_VERSION__|
@@ -966,7 +1029,7 @@ flow control:
     -> 2 else if
     -> c == 2
 #
-|idk|
+|?|operator|
 |flow_control|basics|
   single line statement evaluating to a value
   that works like a if / if else / else chain
@@ -1032,6 +1095,8 @@ flow control:
   once before checking the condition, assuring it always gets 
   executed least once
   see \|while\| for more explanation
+  ~ break exits out of the loop
+  ~ continue jumps to the start of the loop
 
   example:
     int a = 0;
@@ -1055,6 +1120,8 @@ flow control:
   thanks to the for loops's structure
   ~ its common to call the for loops variable i
   ~ for iterator, j, k, follow if you have a nested loop
+  ~ break exits out of the loop
+  ~ continue jumps to the start of the loop
 
   $GREEN$structure$$:
     for (INITIALIZE_VAR; CONDITION; EXECUTES_AT_END_OF_LOOP)
@@ -1076,6 +1143,39 @@ flow control:
     for (int i = 0; i < arr_len; ++i)
     { printf("%d, ", arr[i]); }
     -> 4, 5, 6,
+#
+|switch|case|default|
+|flow_control|loop|basics|
+  the switch statement checks a input variable 
+  agaist multiple cases and executes the code 
+  if cases are met by the variable
+
+  ~ break exits out of the switch statement
+  ~ default case must be last, is optional and
+  $~$  only gets executed if no other case was $$
+  ~ without a break the statement falls through to 
+  $~$  the one below$$
+
+  example: 
+    int c = 1;
+    
+    switch (c)
+    {
+      case 0  :
+        printf("c is 0");
+        break;
+      case 1  :
+      case 11 :
+        printf("c has 1");
+      case 2  :
+      case 22 :
+        printf("c has 2");
+        break;
+
+      default :
+      printf("none of the above");
+    }
+    -> c has 1
 #
 
 compiler stuff, should prob get its own sheet:

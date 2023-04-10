@@ -26,9 +26,18 @@ typedef enum
 }search_mode_t;
 
 
+#define _I    int
+#define A(a, b, c) a##b##c
+
 int main(int argc, char** argv)
 {
   core_data_t* core_data = core_data_get();
+
+  int A(start, _middle_, end) = 10;
+  P_INT(A(start, _middle_, end));
+  
+  int A(_I, _middle_, end) = 10;
+  P_INT(A(_I, _middle_, end));
 
   // -- get executable name --
   // P_STR(_getcwd(NULL, 0));
@@ -60,6 +69,9 @@ int main(int argc, char** argv)
 
   search_mode_t mode = SEARCH_DOCUMENTATION;  // search docs by default
   u32 cmd_count = 0;
+  #define WORD_IDXS_MAX 24
+  int word_idxs[WORD_IDXS_MAX] = { -1 }; // all idxs for words, aka. not commands
+  u32 word_idxs_pos = 0;
   for (u32 i = 1; i < argc; ++i)
   {
     // // @NOTE: '-h' or '-help' for help is in term_docs.sheet
@@ -81,11 +93,18 @@ int main(int argc, char** argv)
     
     // -- modes --
 
-    if (argv[i][0] == '-' && 
-        argv[i][1] == 'd')      // -d: definnition
+    else if (argv[i][0] == '-' && 
+             argv[i][1] == 'd')      // -d: definnition
     {
       cmd_count++;
       mode = SEARCH_DEFINITION;
+    }
+
+    // if none of the commands its a word, i.e. 'malloc', 'function', etc.
+    else
+    { 
+      word_idxs[word_idxs_pos++] = i; 
+      ERR_CHECK(word_idxs_pos < WORD_IDXS_MAX, "more words than the word_idxs arr can hold, max is: %d\n", WORD_IDXS_MAX);
     }
   }
   if (argc -cmd_count <= 1) { exit(1); } // @NOTE: no actual stuff just '-abc' type stuff
@@ -98,7 +117,10 @@ int main(int argc, char** argv)
   
   if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
   {
-    doc_search_dir(core_data->sheets_path, argv[1], &n);
+    for (u32 i = 0; i < word_idxs_pos; ++i)
+    {
+      doc_search_dir(core_data->sheets_path, argv[word_idxs[i]], &n);
+    }
   }
   else if (HAS_FLAG(mode, SEARCH_DEFINITION))
   {
