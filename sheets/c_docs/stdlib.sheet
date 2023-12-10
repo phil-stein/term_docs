@@ -1,4 +1,18 @@
 #
+|std_lib|stdlib.h|
+|EXIT_SUCCESS|EXIT_FAILURE|
+|exit|return|
+  macros used in main() when returning to indicate
+  if program ran successfully or not
+  ~ macros not necessarily these values
+$GREEN$macros$$:
+EXIT_SUCCESS: 0
+EXIT_FAILURE: 1
+
+?< https://en.cppreference.com/w/c/program/EXIT_status >?
+#
+
+#
 |malloc|
 |allocate|memory|dynamic memory|stdlib|stdlib.h|
 void* malloc(size_t size)   
