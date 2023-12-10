@@ -281,6 +281,31 @@ non-standard:
      if (\!ptr) { printf("ptr = null"); }
 #
 
+keywords:
+
+#
+|extern|
+|variable|
+    the extern keyword dictates the following object is defined elsewhere
+    this can be used to access a variable in multiple .c files
+    ~ all function declarations have a 'hidden' extern in front
+    example:
+      $_$in header.h$$
+      extern int var; // declaring var
+      $_$in file_a.c$$
+      \#include "header.h"
+      int a = 0;  // setting value
+      $_$in file_b.c$$
+      \#include "header.h"
+      printf("%d", var);  // accessing
+
+      // same thing
+      $_$in some_header.h$$
+      void func();
+      extern void func();
+
+#
+
 operators:
 
 
