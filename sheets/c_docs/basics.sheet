@@ -1118,12 +1118,13 @@ entry point:
   see $|$EXIT_SUCCESS$$ and $|$EXIT_FAILURE$$
   argc: length of char* in argv
   argv: array of char* containing commandline arguments
+  argv[0] is the name of the program
   ~ mains arguments are optional
   ~ main() is usually put in main.c, but this isnt required
 
   example:
     $_$call in terminal:$$
-    > app apple pineapple pear
+    > app apple pineapple 
     
     int main(int argc, char** argv)
     {
@@ -1132,9 +1133,9 @@ entry point:
       {
         printf("arg nr: %d: %s\n", argv[i]);
       }
-      -> arg nr 0: apple
-      -> arg nr 1: pineapple
-      -> arg nr 2: pear
+      -> arg nr 0: app
+      -> arg nr 1: apple
+      -> arg nr 2: pineapple
       
       // return with error
       if (error_occured)
