@@ -60,9 +60,9 @@ int main(int argc, char** argv)
 
   search_mode_t mode = SEARCH_DOCUMENTATION;  // search docs by default
   u32 cmd_count = 0;
-  #define WORD_IDXS_MAX 24
-  int word_idxs[WORD_IDXS_MAX] = { -1 }; // all idxs for words, aka. not commands
-  u32 word_idxs_pos = 0;
+  #define WORD_ARR_MAX 24
+  char* word_arr[WORD_ARR_MAX] = { NULL }; // all words, aka. not commands, like malloc, git, etc.
+  int   word_arr_pos = 0;
   for (u32 i = 1; i < argc; ++i)
   {
     // // @NOTE: '-h' or '-help' for help is in term_docs.sheet
@@ -94,23 +94,28 @@ int main(int argc, char** argv)
     // if none of the commands its a word, i.e. 'malloc', 'function', etc.
     else
     { 
-      word_idxs[word_idxs_pos++] = i; 
-      ERR_CHECK(word_idxs_pos < WORD_IDXS_MAX, "more words than the word_idxs arr can hold, max is: %d\n", WORD_IDXS_MAX);
+      word_arr[word_arr_pos++] = argv[i]; 
+      ERR_CHECK(word_arr_pos < WORD_ARR_MAX, "more words than the word_arr arr can hold, max is: %d\n", WORD_ARR_MAX);
     }
   }
   if (argc -cmd_count <= 1) { exit(1); } // @NOTE: no actual stuff just '-abc' type stuff
   
-  // bool search_mode = argc - cmd_count == 3; // 2(3) arguments == search_mode
-
   // ---- keywords ----
 
   int n = 0;  // counts found matches for keyword
   
   if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
   {
-    for (u32 i = 0; i < word_idxs_pos; ++i)
-    {
-      doc_search_dir(core_data->sheets_path, argv[word_idxs[i]], &n);
+    // old way searched every keyword individually 
+    // for (u32 i = 0; i < word_arr_pos; ++i)
+    // {
+    //   doc_search_dir(core_data->sheets_path, argv[word_arr[i]], &n);
+    // }
+   
+    for (int i = 0; i < word_arr_pos; ++i)
+    { 
+      P_STR(word_arr[i]); 
+      doc_search_dir(core_data->sheets_path, word_arr, word_arr_pos, &n);
     }
   }
   else if (HAS_FLAG(mode, SEARCH_DEFINITION))
