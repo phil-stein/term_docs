@@ -74,13 +74,6 @@ repos:
     > git pull origin main
 #
 |git|
-|branch|master|main|rename|
-  to rename the master branch use -M
-
-  example: 
-    > git branch -M main
-#
-|git|
 |github|init|remote|origin|
   link a github repo with a github repo
   ! github repo needs to be created 
@@ -97,6 +90,52 @@ repos:
     > git remote add origin
     > git push -u origin
 #
+
+branches:
+#
+|git|
+|branch|master|main|rename|create|
+  git branch shows the current branch name
+  git branch -m <branch-name> 
+  to rename the current branch
+  git branch <branch-name> 
+  to create branch based on the current branch
+  git branch <branch-name> <branch-name> 
+  to create branch based on  branch
+  git branch <branch-name> <commit-hash> 
+  to create branch based on commit
+  ~ -m/-M both work
+
+  example: 
+    > git branch
+    ->* master
+    > git branch -M main
+    > git branch
+    ->* main
+    
+    > git branch new_branch
+    > git checkout new_branch
+
+    > git branch new_branch main
+    > git checkout new_branch
+    
+    > git branch new_branch f71ac24d
+    > git checkout new_branch
+#
+|git|
+|branch|checkout|switch|
+  git checkout <branch-name> or
+  git switch <branch-name>
+  switches the HEAD to the specified branch
+  ! only works if the branch already exist
+  $!$  locally or in the remote (origin)$$
+
+  example: 
+    > git branch new_branch
+    > git checkout new_branch
+    
+#
+
 submodules:
 #
 |git|
