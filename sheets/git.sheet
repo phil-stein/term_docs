@@ -1,3 +1,49 @@
+status:
+#
+|git|
+|log|status|commit|commits|
+|HEAD|head|
+  git log shows recent commits and on which branch
+  the HEAD is currently.
+  ~ press Q, i.e. shift+q to exit the log view
+  
+  example:
+    > git log
+    -> commit <commit-number> (HEAD -> <branch-name>)
+    -> Merge:  <number> 
+    -> Author: <git-account> 
+    -> Date:   <date> 
+    -> 
+    ->    <commit-mesage> 
+    -> 
+    -> commit <commit-number> (HEAD -> <branch-name>)
+    -> Author: <git-account> 
+    -> Date:   <date>      
+    -> 
+    ->    <commit-mesage>
+    -> ...
+    -> : <press Q to exit>
+
+#
+#
+|git|
+|status|
+|merge|merge_conflict|merge-conflict|conflict|
+  git status shows the current branch, 
+  changes not staged for commit, using $|$add$$ 
+  and any current merge conflicts
+
+  example:
+    > git status
+    -> On branch <branch-name>
+    -> Changes not staged for commit:
+    -> ...
+    -> Unmerged paths:
+    -> ...
+      
+#
+
+
 repos:
 #
 |git|
