@@ -89,12 +89,14 @@ or
 
     // comment
     // comment highlights @DOC: @TODO: @BUGG: @TMP: @OPTIMIZATION:
+    not comment
     /*
      | multi
      | line
      | comment
      | comment highlights @DOC: @TODO: @BUGG: @TMP: @OPTIMIZATION:
     */
+    not comment
     // multiline comment  \
        comment            \
        comment
@@ -130,6 +132,7 @@ or
     // comment with escaped \! \? \~ \| \\#
     /* comment with escaped \! \? \~ \| \\# */
 
+    example
     example:
 
     changing $red$color$$ hello
@@ -178,5 +181,6 @@ or
 
     \#define MACRO 10
     \#define MACRO "string"
+    \\#not a macro
 
 #

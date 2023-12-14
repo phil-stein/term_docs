@@ -135,6 +135,7 @@ in the makefile in the root directory at the top there is a variable called NAME
 change this and call `make clean` and `make` in the root directory
 
 ## todo
+  - [ ] bugg: -c syntax highlighting doesnt disable properly
   - [ ] multiple search keywords, i.e. doc file read
   - [ ] search structure definitions in specified dir
   - [ ] search function / structure references

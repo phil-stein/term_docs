@@ -14,6 +14,7 @@ u32 cur_pf_style = PF_NORMAL;
 u32 default_pf_color = PF_WHITE; 
 u32 default_pf_style = PF_NORMAL;
 
+// @TODO: make keword an array and check all keywords are in section
 void doc_search_dir(const char* dir_path, const char* keyword, int* n)
 {
   char path[256];
