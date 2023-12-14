@@ -121,19 +121,29 @@ branches:
     
     > git branch new_branch f71ac24d
     > git checkout new_branch
+
+  ?< https://www.git-tower.com/learn/git/faq/create-branch/ >?
 #
 |git|
 |branch|checkout|switch|
   git checkout <branch-name> or
   git switch <branch-name>
   switches the HEAD to the specified branch
+  git checkout -b <...>
+  git switch -c <...>
+  creates the branch from a remote branch or a commit-hash
   ! only works if the branch already exist
   $!$  locally or in the remote (origin)$$
 
   example: 
     > git branch new_branch
     > git checkout new_branch
-    
+ 
+    > git switch -c new_branch
+    > git switch -c new_branch f71ac24d
+    > git switch -c new_branch origin/new_branch
+   
+    > git switch new_branch
 #
 
 submodules:
