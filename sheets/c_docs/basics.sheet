@@ -281,6 +281,31 @@ non-standard:
      if (\!ptr) { printf("ptr = null"); }
 #
 
+keywords:
+
+#
+|extern|
+|variable|
+    the extern keyword dictates the following object is defined elsewhere
+    this can be used to access a variable in multiple .c files
+    ~ all function declarations have a 'hidden' extern in front
+    example:
+      $_$in header.h$$
+      extern int var; // declaring var
+      $_$in file_a.c$$
+      \#include "header.h"
+      int a = 0;  // setting value
+      $_$in file_b.c$$
+      \#include "header.h"
+      printf("%d", var);  // accessing
+
+      // same thing
+      $_$in some_header.h$$
+      void func();
+      extern void func();
+
+#
+
 operators:
 
 
@@ -1046,7 +1071,8 @@ flow control:
     -> 2 else if
     -> c == 2
 #
-|?|operator|
+|conditional|ternary|
+|operator|
 |flow_control|basics|
   single line statement evaluating to a value
   that works like a if / if else / else chain
@@ -1193,6 +1219,67 @@ flow control:
       printf("none of the above");
     }
     -> c has 1
+#
+
+entry point:
+
+#
+|main|
+|entry|entrypoint|function|
+|commandline|command_line|arguments|
+|command_line_arguments|cmd|terminal|
+|argc|argv|basics|
+  the function main() is the entrypoint of any c program
+  it gets called when the program is started and the 
+  program exits/ends when the function returns
+  it gets passed an array of the commandline arguments
+  see $|$EXIT_SUCCESS$$ and $|$EXIT_FAILURE$$
+  argc: length of char* in argv
+  argv: array of char* containing commandline arguments
+  argv[0] is the name of the program
+  ~ mains arguments are optional
+  ~ main() is usually put in main.c, but this isnt required
+
+  example:
+    $_$call in terminal:$$
+    > app apple pineapple 
+    
+    int main(int argc, char** argv)
+    {
+      // print all commandline arguments
+      for (int i = 0; i < argc; i++)
+      {
+        printf("arg nr: %d: %s\n", argv[i]);
+      }
+      -> arg nr 0: app
+      -> arg nr 1: apple
+      -> arg nr 2: pineapple
+      
+      // return with error
+      if (error_occured)
+      {
+        return 0;
+      }
+
+      // return succefully
+      return 1;
+    }
+    
+    // same thing
+    return 1;
+    return EXIT_SUCCESS;
+
+    // same thing
+    return 0;
+    return EXIT_FAILURE;
+
+    // same thing
+    int main(int argc, char** argv)
+    int main(int argc, char* argv[])
+
+    // ommit the commandline args
+    int main(void)  // preferred because verbose
+    int main()
 #
 
 compiler stuff, should prob get its own sheet:
