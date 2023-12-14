@@ -101,6 +101,58 @@ defines & types for stdio.h
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_printf.htm >?
 #
 #
+|printf_format|print_format|format|color|style|mode|
+|stdio|stdio.h|
+  you can set the color and style or your text output 
+  when printing to the terminal, this is however not 
+  supported by all terminals
+
+  example:
+    typedef enum pf_mode
+    {
+      PF_NORMAL     = 0,
+      PF_BOLD       = 1,    // bright
+      PF_DIM        = 2,
+      PF_ITALIC     = 3,
+      PF_UNDERLINE  = 4,
+      PF_REVERSE    = 5,
+      PF_HIDDEN     = 6
+    }pf_mode;
+    typedef enum pf_fg
+    {
+      PF_BLACK    = 30,
+      PF_RED      = 31,
+      PF_GREEN    = 32,
+      PF_YELLOW   = 33,
+      PF_BLUE     = 34,
+      PF_PURPLE   = 35,
+      PF_CYAN     = 36,
+      PF_WHITE    = 37 
+    }pf_color;
+    typedef enum pf_bg
+    {
+      PF_BG_BLACK    = 40,
+      PF_BG_RED      = 41,
+      PF_BG_GREEN    = 42,
+      PF_BG_YELLOW   = 43,
+      PF_BG_BLUE     = 44,
+      PF_BG_PURPLE   = 45,
+      PF_BG_CYAN     = 46,
+      PF_BG_WHITE    = 47 
+    }pf_bg;
+
+    \#define PF_MODE(style, fg, bg)   printf("\033[%d;%d;%dm", style, fg, bg)
+    \#define PF_STYLE(style, color)   printf("\033[%d;%dm", style, color)
+    \#define PF_COLOR(color)          PF_STYLE(PF_NORMAL, color)
+
+    PF_STYLE(PF_ITALIC, PF_RED);
+    printf("hello\n");
+    -> $R$$/$hello$$ 
+    PF_STYLE(PF_NORMAL, PF_WHITE);
+    printf("hello\n");
+    -> hello
+
+#
 |fclose|
 |file|close|stdio|
 int fclose(FILE* stream)   

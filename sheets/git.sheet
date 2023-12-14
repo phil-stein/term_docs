@@ -1,0 +1,104 @@
+repos:
+#
+|git|
+|init|repo|repository|
+  the init commands creates a repository
+  git init <dir>
+
+  example:
+    > cd proj_name
+    > git init .
+    -> git repo name is proj_name
+#
+|git|
+|add|commit|push|pull|
+  adding and commiting updates the local git repository
+  after committing, pushing updates a remote, i.e. github
+  pulling updates the local files using a remote, i.e. github
+  git add <directory>
+  git commit <flags>
+  git push <remote> <branch>
+  git pull <remote> <branch>
+
+  example:
+    > git add .
+    > git commit -m "commit message, for git log & github"
+    > git push origin main
+
+    > git pull origin main
+#
+|git|
+|branch|master|main|rename|
+  to rename the master branch use -M
+
+  example: 
+    > git branch -M main
+#
+|git|
+|github|init|remote|origin|
+  link a github repo with a github repo
+  ! github repo needs to be created 
+  $!$  without readme and license $$
+  ~ references $|$init, rename$$
+
+  example:
+    // if not created
+    > git init
+    > git add .
+    > git commit -m "name"
+    // push existing to github
+    > git branch -M main
+    > git remote add origin
+    > git push -u origin
+#
+submodules:
+#
+|git|
+|submodule|list|
+  list all registered submodules
+  example: 
+    > git submodule
+    -> [idetifier number] [path]
+    -> [idetifier number] [path]
+#
+|git|
+|submodule|foreach|push|
+  recursively go trough all submodules and
+  execute some action
+  using the $_$submodule$$ and $_$foreach$$ commands
+
+    example: 
+      > git submodule foreach git add .
+      > git submodule foreach git commit -m "msg" 
+      > git submodule foreach git push origin main 
+
+?< https://stackoverflow.com/questions/24694509/pushing-all-submodules-recursively >?
+?< https://git-scm.com/book/en/v2/Git-Tools-Submodules >?
+#
+|git|
+|submodule|add|init|create|
+  to add a submodule use the command
+  git submodule add <repo link> <directory, optional>
+  command creates .gitmodules file if none exists
+  and adds an entry for new submodule
+  example:
+    > git submodule add $?$https://github.com/user/name$$  
+    > git submodule add $?$https://github.com/user/name$$ src/name 
+      > Cloning into 'C:/Workspace/C'...
+      > ...
+      > warning: LF will be replaced by CRLF in .gitmodules.
+      > The file will have its original line endings in your working directory
+    
+    in .gitmodules file:
+    [submodule "src/name"]
+      path = src/name
+      url = https://github.com/user/name
+
+?< https://git-scm.com/book/en/v2/Git-Tools-Submodules >?
+#
+
+
+
+
+
+

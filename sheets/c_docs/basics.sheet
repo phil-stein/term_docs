@@ -479,6 +479,7 @@ operators:
 |assign|assignment|assignment_operators|
 |add|addtition|sub|subtract|div|divide|mul|multiply|mod|modulo|
 |bit_shift|shift|bitwise_or|or|bitwise_and|and|
+|+=|-=|*=|/=|%=|<<=|>>=|&=|\|=|^=|
 
   =:   a = b;   a's value is now b's value
   
@@ -648,10 +649,10 @@ macros:
       int a1 = a + b;
     }
 
-
 #
 |stringify|
 |operator|preprocessor|macro|basics|
+|to_string|\#|
   and \\# to macro arg to stringify it
   example:
     \#define TO_STR(arg)  (\\#arg)
@@ -664,12 +665,13 @@ macros:
 #
 |token_pasting|
 |operator|preprocessor|macro|basics|
-|combine_macros|token|\#|
+|combine_macros|token|\#\#|
   using the \\#\\# operator in macros
   you can expand an argument or macro and
   combine it with other text
   ~ using this operator prevents tokens 
   $~$  that are macros to expand $$
+  $~$  making a pasting macro prevents this $$
 
   example:
     \#define TOKEN_PASTING(a, b)  a\\#\\#b
@@ -686,6 +688,21 @@ macros:
     \#define PASTE(a, b, c, d) a\\#\\#b\\#\\#c\\#\\#d
     int PASTE(start, _mid, dle, _end) = 10;
     -> int start_middle_end = 10;
+
+    // because \\#\\# doesnt expand macros
+    \#define _I    int
+    \#define PASTE(a, b)      a\\#\\#b
+    \#define PASTE_2(a, b)    PASTE(a, b)
+    \#define PASTE_3(a, b, c) PASTE_2(PASTE_2(a, b), c)
+    
+    int PASTE_3(start, _middle_, end) = 10;
+    printf("%s\n", \\#PASTE_3(start, _middle_, end));
+    -> start_middle_end
+    
+    int PASTE_3(_I, _middle_, end) = 10;
+    printf("%s\n", \\#PASTE_3(_I, _middle_, end));
+    ->int_middle_end
+    // would be _I_middle_end otherwise
 #
 |__FILE__|__LINE__|__DATE__|__TIME__|
 |__func__|__FUNCTION__|__STDC__|__STDC_HOSTED__|__STDC_VERSION__|
@@ -1234,5 +1251,65 @@ compiler stuff, should prob get its own sheet:
       ?<c: https://en.wikipedia.org/wiki/C_(programming_language) >?           
 #
 
+entry-point:
 
+#
+|entry_point|main|basics|
+|command_line|command_line_arguments|arguments|
+|EXIT_SUCCESS|EXIT_FAILURE|
+  the entry point function is the function that gets 
+  automatically executed at the start of the program
+  so it is where all your logic should start
+  the returned int indicates if the program ran 
+  successfully or not, uses the $G$macros$$
+  the entry point function is always called 'main'
+  it can be type int main(), int main(void) or $$
+  int main(int, char**) / int main(int, char* argv[]) $$
+  both are the same, an array of char* / string
+
+  $G$macros$$:
+    EXIT_SUCCESS: 0,     can be returned in main() 
+    EXIT_FAILURE: non 0, can be returned in main() 
+
+  example:
+    int main()
+    {
+      ...
+      return EXIT_SUCCESS;
+    }
+    
+    // if invoked in terminal, i.e >app arg1 arg2 arg3
+    int main(int argc, char** argv)
+    {
+      // standard names
+      // argc: argument count
+      // argv: argumnet value
+
+      // print all command line args
+      for (int i = 0; i < argc; ++i)
+      {
+        printf("argument[%d]: %s\n", argc, argv[i]);
+      }
+      -> arg1
+      -> arg2
+      -> arg3
+
+      return 0; // same as EXIT_SUCCESS
+    }
+
+    // exit failure if file not found
+    int main()
+    {
+      FILE* f = fopen("file.txt", "r");
+      if (f == NULL)
+      {
+        return EXIT_FAILURE;
+      }
+      
+      ...
+  
+      return EXIT_SUCCESS;
+    }
+
+#
 

@@ -20,24 +20,15 @@
 
 typedef enum
 {
-  SEARCH_DOCUMENTATION    = FLAG(0),
-  SEARCH_DEFINITION    = FLAG(1),
-  SEARCH_SEARCH = FLAG(2),
+  SEARCH_DOCUMENTATION  = FLAG(0),
+  SEARCH_DEFINITION     = FLAG(1),
+  SEARCH_SEARCH         = FLAG(2),
 }search_mode_t;
 
-
-#define _I    int
-#define A(a, b, c) a##b##c
 
 int main(int argc, char** argv)
 {
   core_data_t* core_data = core_data_get();
-
-  int A(start, _middle_, end) = 10;
-  P_INT(A(start, _middle_, end));
-  
-  int A(_I, _middle_, end) = 10;
-  P_INT(A(_I, _middle_, end));
 
   // -- get executable name --
   // P_STR(_getcwd(NULL, 0));

@@ -4,6 +4,7 @@
 |SHORT_MIN|SHORT_MAX|USHORT_MAX|
 |INT_MIN|INT_MAX|UINT_MAX|
 |LONG_MIN|LONG_MAX|ULONG_MAX|
+|min|max|
 macros and types for limits.h
 
 $GREEN$macros$$:

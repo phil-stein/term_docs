@@ -81,17 +81,25 @@ bool doc_search_section(const char* path, const char* file, const char* keyword)
   int start;
   for (start = 1; txt[start] != '\0'; start++)
   {
-    if (txt[start] == keyword[0] && 
+    if ((txt[start] == keyword[0] || 
+         txt[start] == '\\') && 
         txt[start -1] == BORDER_CHAR)
     {
       found = true;
-      int j = 0;
-      for (j = 0; keyword[j] != '\0'; j++)
+      int pos = 0;
+      int skipped = 0;
+      for (pos = 0; keyword[pos] != '\0'; pos++)
       {
-        if (txt[start +j] != keyword[j])
+        int j = pos + skipped;
+
+        // escaped #, also need to j++; because adding skipped to j before
+        if (txt[start +j] == '\\' && txt[start +j +1] == '#') 
+        { skipped++; j++; }
+        
+        if (txt[start +j] != keyword[pos])
         { found = false; break; }
       }
-      if (txt[start +j] != BORDER_CHAR) 
+      if (txt[start +pos +skipped] != BORDER_CHAR) 
       { found = false; }
     }
     if (found) 
@@ -293,6 +301,9 @@ void doc_color_code_section(char* sec)
       while (!(sec[i] == '|' && isspace(sec[i+1])) && i < len)
       {
         if (sec[i] == '\n') { i++; continue; }
+        // skip escaped #
+        if (sec[i] == '\\' && sec[i +1] == '#') { i++; continue; }
+        
         buf[buf_pos++] = sec[i++];
       }
       if (sec[i] != '\n' || sec[i] == '\0') { buf[buf_pos++] = sec[i++]; }

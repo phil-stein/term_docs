@@ -25,7 +25,7 @@ definition search:
   -f/-function, -s/-struct
   doc -f dir name   -> func definition
   doc -s dir name   -> struct definition
-or
+or  ~use this
   -d/-definition, -s/-search
   doc -d dir name   -> func/struct/enum definition
   doc -s dir name   -> func/struct/enum occurance
@@ -40,7 +40,7 @@ or
   -f/-fuzzy
   doc -d -f start      -> start();, start_01();, etc.
 or
-  doc ~start        -> start, start_01, a_start, a_start_01, etc.
+  doc \~start        -> start, start_01, a_start, a_start_01, etc.
 
 #
 
