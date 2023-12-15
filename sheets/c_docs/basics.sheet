@@ -2,6 +2,7 @@
 modifiers:
 
 #
+|c|C|
 |unsigned|type|signed|signdness|
     unsigned integer type variables can hold numbers 2x as big 
     as their signed equivalent, but can't hold negative numbers
@@ -14,6 +15,7 @@ modifiers:
 
       unsigned = 10;  // same as unsigned int 
 #
+|c|C|
 |const|type|constant|
     variables marked const cant be modified during runtime
     can be applied to all types and structs
@@ -29,6 +31,7 @@ modifiers:
 data structures:
 
 #
+|c|C|
 |array|data|type|
     arrays hold multiple variables 
     of the same type in direct succesion in memory
@@ -41,6 +44,7 @@ data structures:
       printf("%d", b[3]); // access third element in b
         -> 3
 #
+|c|C|
 |struct|structure|data|type|
     structs hold variables like an [array], but
     they can hold different types
@@ -53,6 +57,7 @@ data structures:
       struct data_t* ptr = &var;
       float b = ptr->b;   // access variable in struct-pointer
 #
+|c|C|
 |union|data|type|
   unions are declared like structs, with multiple
   variables, but their size is only the size of the 
@@ -82,6 +87,7 @@ data structures:
     which prob. will not read as a proper float value
     and definitely not as 10.0f
 #
+|c|C|
 |typedef|typedef|syntax|
     add a second name for a symbol
     example:
@@ -105,6 +111,7 @@ data structures:
 actual types:
 
 #
+|c|C|
 |void|type|
     used in functions with no return
     void* can point to anything
@@ -114,6 +121,7 @@ actual types:
       void  func() {}
       void* ptr = &var;
 #
+|c|C|
 |bool|boolean|type|
     either true or false
     true: 1, false: 0
@@ -130,6 +138,7 @@ actual types:
       if (a)  {...}
       if (!a) {...} // true->false, false->true
 #
+|c|C|
 |char|type|
     char is a whole number
     signed by default
@@ -142,6 +151,7 @@ actual types:
       char  val = 'A';
       char* ptr = &val;
 #
+|c|C|
 |short|type|
     short is a whole number
     signed by default
@@ -153,6 +163,7 @@ actual types:
       short  val = 10;
       short* ptr = &val;
 #
+|c|C|
 |int|type|
     int is a whole number
     signed by default
@@ -165,6 +176,7 @@ actual types:
       int  val = 10;
       int* ptr = &val;
 #
+|c|C|
 |long|type|
     long is a whole number
     signed by default
@@ -178,6 +190,7 @@ actual types:
       long  val = 10;
       long* ptr = &val;
 #
+|c|C|
 |long-long|long|type|
     long long is a whole number
     signed by default
@@ -190,6 +203,7 @@ actual types:
       long long  val = 10;
       long long* ptr = &val;
 #
+|c|C|
 |float|type|
     float is a decimal number
     32 bit wide
@@ -201,6 +215,7 @@ actual types:
       float* ptr = &val;
 #
 #
+|c|C|
 |double|type|
     double is a decimal number
     64 bit wide
@@ -213,6 +228,7 @@ actual types:
 #
 
 #
+|c|C|
 |literal|literals|number|numbers|string|
   literals are values types directly into the code
 
@@ -255,18 +271,42 @@ actual types:
 non-standard:
 
 #
+|c|C|
 |size_t|type|
+|rsize_t|RSIZE_MAX|
     unsigned integer, defined in most standard header files
     32 bit wide when compiling 32bit, unsigned int
     64 bit wide when compiling 64bit, unsigned long long
+   
+    $_$since C11:$$
+    rsize_t is the same as size_t but was added in C11 for 
+    the _s safe versions of std functions
+    RSIZE_MAX is the upper limit of rsize_t
+    RSIZE_MAX is less than the actual max of rsize_t
+    but because of negative numbers in unsiged int types
+    wrapping around to being large positive numbers
+    RSIZE_MAX catches these cases
+    
+    size_t and rsize_t are defined in many std headers
+    f.e.: <string.h>, <stdlib.h>, <stdio.h>
+
     ! size of types varies, use sizeof() to test
     ~ no different from using an unsigned int directly
     ~ just for clarification of intent, i.e. loops, arrays, etc.
     ~ many standard headers use size_t when numbers cant be neg.
     example: 
       size_t size = sizeof(float);
+
+      // rsize_t safety usage in C11 _s functions:
+      // s is now ULONG_MAX: 18446744073709551615 (in 64bit)
+      // because the unsigned int wrapped around
+      rsize_t s = -1;
+      assert(s < RSIZE_MAX);
+      -> assert triggers because s is ULONG_MAX
+         and RSIZE_MAX is less than ULONG_MAX
 #
 #
+|c|C|
 |NULL|null|pointer|
     pointer of value 0, defined in most standard header files
     ! trying to acces a null pointer causes a crash
@@ -284,6 +324,7 @@ non-standard:
 keywords:
 
 #
+|c|C|
 |extern|
 |variable|
     the extern keyword dictates the following object is defined elsewhere
@@ -305,11 +346,71 @@ keywords:
       extern void func();
 
 #
+|c|C|
+|restrict|
+|type|type-qualifier|
+    the restrict keyword / type qualifier
+    tells the compiler that a pointer is unique
+    so a function isnt passed two pointers
+    to the same memory
+    allowing for optimizations
+    ~ added in C99
+    ~ view memcpy() and memmove() for example
+
+    example:
+      void multiply_arrays(int* dest, int* src1, int* src2, int n)
+      {
+        for(int i = 0; i < n; i++)
+        { dest[i] = src1[i]*src2[i]; }
+      }
+      void multiply_arrays_restrict(int* dest, int* restrict src1, int* restrict src2, int n)
+      {
+        for(int i = 0; i < n; i++)
+        { dest[i] = src1[i]*src2[i]; }
+      }
+
+      \#define LEN 5
+      int arr0[LEN] = { 1, 2, 3, 4, 5 };
+      int arr1[LEN] = { 1, 2, 3, 4, 5 };
+      int dest[LEN];
+
+      // using arr0 for both sr1 and src2 so no restrict
+      muliply_arrays(dest, arr0, arr0 +2, LEN -2);
+      // src1 and src2 are different so we can use restrict
+      muliply_arrays_restrict(dest, arr0, arr1, LEN);
+
+?< https://stackoverflow.com/questions/745870/realistic-usage-of-the-c99-restrict-keyword >?
+#
+|c|C|
+|volatile|
+|type|type-qualifier|
+    the volatile keyword / type qualifier
+    tells the compiler the variable 
+    may be changed outside the program
+    this may be used for example for hardware registers
+
+    example:
+      volatile int i;
+      volatile struct s_t s;
+      int* p = 0;
+      volatile int* vp = p; // OK: adds qualifiers (int to volatile int)
+      p = vp;               // Error: discards qualifiers (volatile int to int)
+      p = (int*)vp;         // OK: cast
+
+      ar *p = 0;
+      // Error: char* and volatile char* are not compatible types
+      volatile char **vpp = &p;
+      // OK, adds qualifiers (char* to char*volatile)
+      char * volatile *pvp = &p; 
+      
+?< https://en.cppreference.com/w/c/language/volatile >?
+#
 
 operators:
 
 
 #
+|c|C|
 |pointer|address|sizeof|
 |basics|operator|operators|size|
 |*|&|
@@ -348,6 +449,7 @@ operators:
     //        int:  4 bytes, 64 bites
     //        etc.
 #
+|c|C|
 |basics|arithmetic_operators|operator|operators|
 |+|-|/|*|%|++|--|
 |add|addtition|sub|subtract|div|divide|mul|multiply|mod|modulo|
@@ -385,6 +487,7 @@ operators:
     printf("a: %d, i: %d\n", a, i);
     -> a: 1, i: 1 // incremented i to i == 1, then accessed arr
 #
+|c|C|
 |basics|operator|boolean|
 |comparison|realtional_operator|realtional_operators|
 |equal|not_equal|less|less_than_or_equal|greater|greater_than_or_equal|
@@ -474,6 +577,7 @@ operators:
 
     -> func()
 #
+|c|C|
 |operator|bitwise_operator|basics|
 |bit_shift|shift|bitwise_or|or|bitwise_and|and|
 |<<|>>|&|
@@ -500,6 +604,7 @@ operators:
 
 ?< https://www.tutorialspoint.com/cprogramming/c_operators.htm >?
 #
+|c|C|
 |operator|bitwise_operator|basics|
 |assign|assignment|assignment_operators|
 |add|addtition|sub|subtract|div|divide|mul|multiply|mod|modulo|
@@ -549,6 +654,7 @@ operators:
 misc:
 
 #
+|c|C|
 |bit_flag|flag|bitwise_operator|basics|
   set and check certain bits in a number
   make number with bit a set
@@ -603,6 +709,7 @@ misc:
 macros:
 
 #
+|c|C|
 |inline|function|
 |always_inline|__forceinline|
   inlining is a way to define a function where
@@ -675,6 +782,7 @@ macros:
     }
 
 #
+|c|C|
 |stringify|
 |operator|preprocessor|macro|basics|
 |to_string|\#|
@@ -688,6 +796,7 @@ macros:
     P_INT(var);
       -> var: 0
 #
+|c|C|
 |token_pasting|
 |operator|preprocessor|macro|basics|
 |combine_macros|token|\#\#|
@@ -729,6 +838,7 @@ macros:
     ->int_middle_end
     // would be _I_middle_end otherwise
 #
+|c|C|
 |__FILE__|__LINE__|__DATE__|__TIME__|
 |__func__|__FUNCTION__|__STDC__|__STDC_HOSTED__|__STDC_VERSION__|
 |file|line|date|time|function|function_name|c-version|
@@ -790,6 +900,7 @@ macros:
     -> __STDC_HOSTED__: 1 
     -> __STDC_VERSION__: 199901
 #
+|c|C|
 |compiler|
 |__GNUC__|__MINGW32__|__MINGW64__|__clang__|_MSC_VER|__EMSCRIPTEN__|
 |c++|__cplusplus|
@@ -822,6 +933,7 @@ macros:
 
 ?< https://dev.to/tenry/predefined-c-c-macros-43id >?
 #
+|c|C|
 |_WIN32|_WIN64|__linux|__linux__|__APPLE__|__ANDROID__|
 |windows|linux|apple|macos|ios|android|operating_system|os|
 |macro|preprocessor|basics|
@@ -859,6 +971,7 @@ macros:
     -> int: 12
     -> multiple args given
 #
+|c|C|
 |defined|
 |preprocessor|macro|basics|
   turns a macro into a suitable condition for \\#if, \\#elif
@@ -875,6 +988,7 @@ macros:
     -> A
     -> not B
 #
+|c|C|
 |define|
 |preprocessor|macro|basics|
     the define preprocessor registeres 
@@ -905,6 +1019,7 @@ macros:
         -> [!!!] warning
         -> hello is defined
 #
+|c|C|
 |undef|
 |undefine|preprocessor|macro|basics|
   the undef preprocessor undefines a previously defined macro
@@ -919,6 +1034,7 @@ macros:
     \#endif
     -> A
 #
+|c|C|
 |if|
 |endif|preprocessor|macro|basics|
   check a condition at compile time and include a piece of code or not
@@ -933,6 +1049,7 @@ macros:
     \#endif
       -> 0 == 0
 #
+|c|C|
 |else|
 |endif|preprocessor|macro|basics|
   used with the \\#if, \\#elif, \\#ifdef preprocessors
@@ -945,6 +1062,7 @@ macros:
     \#endif
       -> 0 == 0
 #
+|c|C|
 |elif|
 |else|endif|preprocessor|macro|basics|
   used with the \\#if, \\#else, \\#ifdef preprocessors
@@ -957,6 +1075,7 @@ macros:
     \#endif
       -> 0 == 0
 #
+|c|C|
 |ifdef|
 |endif|preprocessor|macro|basics|
   the ifdef preprocessor ex/includes a part of code
@@ -972,6 +1091,7 @@ macros:
     \#endif
     -> A1
 #
+|c|C|
 |ifndef|
 |endif|preprocessor|macro|basics|
   the ifndef preprocessor ex/includes a part of code
@@ -987,6 +1107,7 @@ macros:
     \#endif
     -> A0
 #
+|c|C|
 |error|
 |print|preprocessor|macro|basics|
   the error preprocessor error prints an error to the stderr
@@ -1002,6 +1123,7 @@ macros:
      -> this is an error
      -> MACRO isnt defined
 #
+|c|C|
 |pragma|
 |preprocessor|macro|basics|
 |gcc|ignore_warning|
@@ -1026,6 +1148,30 @@ macros:
 flow control:
 
 #
+|c|C|
+|goto|label|Label|
+|flow_control|basics|
+  the goto statement jumps to a label
+  a label is a defined / named position in the code
+  a label is just a name followed by a :
+  ! labels and goto statement are generally regarded
+  $!$   as unsafe and should be avoided$$
+  $!$   as they complicate following the flow of execution$$
+
+  example: 
+    if (str \!= NULL)
+    { goto label_print; }
+    else
+    { goto label_exit; }
+
+    label_print:;
+    printf("%s\n", str);
+    label_exit:;
+    return;
+
+  ?< https://en.cppreference.com/w/c/language/goto >?
+#
+|c|C|
 |if|
 |flow_control|basics|
   execute a piece of code based on a condition
@@ -1042,6 +1188,7 @@ flow control:
       -> true
       -> boolean
 #
+|c|C|
 |else|else_if|
 |flow_control|basics|
   after a if or else if statement this executes
@@ -1071,6 +1218,7 @@ flow control:
     -> 2 else if
     -> c == 2
 #
+|c|C|
 |conditional|ternary|
 |operator|
 |flow_control|basics|
@@ -1095,6 +1243,7 @@ flow control:
     float speed = 10.0f;
     pow(2, speed > 8.0f ? 4 : 6);
 #
+|c|C|
 |while|while_loop|
 |flow_control|loop|basics|
 |break|continue|
@@ -1132,6 +1281,7 @@ flow control:
     -> pos: 221
 
 #
+|c|C|
 |do_while|do|while|do_while_loop|
 |flow_control|basics|
   same as while loop, only that this loop executes the block
@@ -1151,6 +1301,7 @@ flow control:
     printf("a: %d\n", a);
     -> a: 1
 #
+|c|C|
 |for|for_loop|
 |flow_control|loop|basics|
   the for loop executes a block of code 
@@ -1187,6 +1338,7 @@ flow control:
     { printf("%d, ", arr[i]); }
     -> 4, 5, 6,
 #
+|c|C|
 |switch|case|default|
 |flow_control|loop|basics|
   the switch statement checks a input variable 
@@ -1224,6 +1376,7 @@ flow control:
 entry point:
 
 #
+|c|C|
 |main|
 |entry|entrypoint|function|
 |commandline|command_line|arguments|
@@ -1285,6 +1438,7 @@ entry point:
 compiler stuff, should prob get its own sheet:
 
 #
+|c|C|
 |c-version|c|version|c89|c99|c11|c18|compiler|macro|
     c was originally made in 1972 by Dennis Ritchie, 
     so theres been a lot of versions since then
@@ -1341,6 +1495,7 @@ compiler stuff, should prob get its own sheet:
 entry-point:
 
 #
+|c|C|
 |entry_point|main|basics|
 |command_line|command_line_arguments|arguments|
 |EXIT_SUCCESS|EXIT_FAILURE|

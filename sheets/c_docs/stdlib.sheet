@@ -1,4 +1,5 @@
 #
+|c|C|
 |std_lib|stdlib.h|
 |EXIT_SUCCESS|EXIT_FAILURE|
 |exit|return|
@@ -13,6 +14,7 @@ EXIT_FAILURE: 1
 #
 
 #
+|c|C|
 |malloc|
 |allocate|memory|dynamic memory|stdlib|stdlib.h|
 void* malloc(size_t size)   
@@ -27,6 +29,7 @@ void* malloc(size_t size)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm >?
 #
+|c|C|
 |calloc|
 |allocate|memory|dynamic memory|stdlib|stdlib.h|
 void* calloc(size_t items, size_t size)   
@@ -41,6 +44,7 @@ void* calloc(size_t items, size_t size)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_calloc.html >?
 #
+|c|C|
 |realloc|
 |reallocate|allocate|memory|dynamic memory|stdlib|stdlib.h|
 void* realloc(void* ptr, size_t size)   
@@ -58,6 +62,7 @@ void* realloc(void* ptr, size_t size)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_realloc.htm >?
 #
+|c|C|
 |free|
 |deallocate|memory|dynamic memory|stdlib|stdlib.h|
 void free(void* mem)   
@@ -71,6 +76,7 @@ void free(void* mem)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_free.htm >?
 #
+|c|C|
 |atof|
 |convert|stdlib|stdlib.h|
 double atof(const char* str)   
@@ -82,6 +88,7 @@ double atof(const char* str)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atof.htm >?
 #
+|c|C|
 |atoi|
 |convert|stdlib|stdlib.h|
 int atoi(const char* str)   
@@ -93,6 +100,7 @@ int atoi(const char* str)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atoi.htm >?
 #
+|c|C|
 |atol|
 |convert|stdlib|stdlib.h|
 long int atol(const char* str)   
@@ -104,6 +112,7 @@ long int atol(const char* str)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atol.htm >?
 #
+|c|C|
 |strtod|
 |convert|stdlib|stdlib.h|
 double strtod(const char* str, char** endptr)   
@@ -117,6 +126,7 @@ double strtod(const char* str, char** endptr)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strtod.htm >?
 #
+|c|C|
 |strtol|
 |convert|stdlib|stdlib.h|
 long int strtol(const char* str, char** endptri, int base)   
@@ -132,6 +142,7 @@ long int strtol(const char* str, char** endptri, int base)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strtol.htm >?
 #
+|c|C|
 |strtoul|
 |convert|stdlib|stdlib.h|
 unsigned long int strtoul(const char* str, char** endptr)   
@@ -146,6 +157,7 @@ unsigned long int strtoul(const char* str, char** endptr)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strtoul.htm >?
 #
+|c|C|
 |abort|
 |exit|quit|stdlib|stdlib.h|
 void abort()   
@@ -156,6 +168,7 @@ void abort()
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_abort.htm >?
 #
+|c|C|
 |exit|
 |quit|stdlib|stdlib.h|
 void exit(int code)   
@@ -170,6 +183,7 @@ void exit(int code)
 ?< https://www.geeksforgeeks.org/exit-codes-in-c-c-with-examples/ >?
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm >?
 #
+|c|C|
 |atexit|
 |exit|quit|stdlib|stdlib.h|
 void atexit(void (*func)(void))   
@@ -182,6 +196,7 @@ void atexit(void (*func)(void))
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm >?
 #
+|c|C|
 |system|
 |command|command line|stdlib|stdlib.h|
 int exit(const char* command)   

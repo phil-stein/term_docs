@@ -7,13 +7,19 @@
 
 #define KEY_MAX 32
 
-const char key_types[][KEY_MAX] = { "unsigned", "const", "void", "char", "short", "int", "long", "float", "double", "bool", "extern", "struct", "enum", "typedef", "size_t", "FILE"};
+const char key_types[][KEY_MAX] = 
+{ 
+  "unsigned", "const", "extern", "restrict", "volatile", 
+  "void", "char", "short", "int", "long", "float", "double", "bool", 
+  "struct", "enum", "typedef",
+  "size_t", "rsize_t", "errno_t", "FILE"
+};
 const u32  key_types_len = sizeof(key_types) / sizeof(key_types[0]);   
 
-const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "do", "switch" };
+const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "do", "switch"};
 const u32  key_flow_ctrl_len = sizeof(key_flow_ctrl) / sizeof(key_flow_ctrl[0]);
 // @TODO: break & conmtinue dont get highlighted because they dont have () at the end
-const char key_flow_ctrl_cmd[][KEY_MAX] = { "return", "break", "continue", "case", "default" };
+const char key_flow_ctrl_cmd[][KEY_MAX] = { "return", "break", "continue", "case", "default", "goto" };
 const u32  key_flow_ctrl_cmd_len = sizeof(key_flow_ctrl_cmd) / sizeof(key_flow_ctrl_cmd[0]);
 
 const char key_values[][KEY_MAX] = { "NULL", "true", "false" };

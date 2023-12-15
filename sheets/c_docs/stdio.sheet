@@ -1,5 +1,6 @@
 
 #
+|c|C|
 |stdio|stdio.h|
 |FILE|fpos_t|BUFSIZ|EOF|FOPEN_MAX|FILENAME_MAX|
 |SEEK_SET|SEEK_CUR|SEEK_END|stderr|stdin|stdout|
@@ -28,6 +29,7 @@ defines & types for stdio.h
 ?< https://www.tutorialspoint.com/c_standard_library/stdio_h.htm >?
 #
 #
+|c|C|
 |printf_format|print_format|format|
 |print|printf|fprintf|sprintf|vsprintf|vfprintf|vprintf|
 |scanf|fscanf|sscanf|
@@ -101,6 +103,7 @@ defines & types for stdio.h
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_printf.htm >?
 #
 #
+|c|C|
 |printf_format|print_format|format|color|style|mode|
 |stdio|stdio.h|
   you can set the color and style or your text output 
@@ -153,6 +156,7 @@ defines & types for stdio.h
     -> hello
 
 #
+|c|C|
 |fclose|
 |file|close|stdio|
 int fclose(FILE* stream)   
@@ -166,6 +170,7 @@ int fclose(FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fclose.htm >?
 #
 #
+|c|C|
 |clearerr|
 |file|stdio|stdio.h|
 void clearerr(FILE* stream)   
@@ -179,6 +184,7 @@ void clearerr(FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_clearerr.htm >?
 #
 #
+|c|C|
 |feof|
 |file|stdio|stdio.h|
 int feof(FILE* stream)   
@@ -195,6 +201,7 @@ int feof(FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_feof.htm >?
 #
 #
+|c|C|
 |ferror|
 |file|stdio|stdio.h|
 int ferror(FILE* stream)   
@@ -207,6 +214,7 @@ int ferror(FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_ferror.htm >?
 #
 #
+|c|C|
 |fflush|
 |file|stdio|stdio.h|
 int fflush(FILE* stream)   
@@ -218,6 +226,7 @@ int fflush(FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fflush.htm >?
 #
 #
+|c|C|
 |fgetpos|
 |file|stdio|stdio.h|
 int fgetpos(FILE* stream, fpos_t* pos)   
@@ -232,6 +241,7 @@ int fgetpos(FILE* stream, fpos_t* pos)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fgetpos.htm >?
 #
 #
+|c|C|
 |fopen|
 |file|open|stdio|stdio.h|
 FILE* fopen(const char* path, const char* mode)   
@@ -252,6 +262,7 @@ FILE* fopen(const char* path, const char* mode)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fopen.htm >?
 #
 #
+|c|C|
 |fread|
 |file|read|stdio|stdio.h|
 size_t fread(void* arr, size_t size, size_t count, FILE* stream)   
@@ -269,6 +280,7 @@ size_t fread(void* arr, size_t size, size_t count, FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fread.htm >?
 #
 #
+|c|C|
 |freopen|
 |file|open|stdio|stdio.h|
 FILE* freopen(const char* path, const char* mode, FILE* stream)   
@@ -291,6 +303,7 @@ FILE* freopen(const char* path, const char* mode, FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fopen.htm >?
 #
 #
+|c|C|
 |fseek|
 |file|stdio|stdio.h|
 int fseek(FILE* stream, long int offset, int start)   
@@ -309,6 +322,7 @@ int fseek(FILE* stream, long int offset, int start)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fseek.htm >?
 #
 #
+|c|C|
 |ftell|
 |file|stdio|stdio.h|
 long int ftell(FILE* stream)   
@@ -322,6 +336,7 @@ long int ftell(FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_ftell.htm >?
 #
 #
+|c|C|
 |fwrite|
 |file|write|stdio|stdio.h|
 size_t fwrite(const void* arr, size_t size, size_t count, FILE* stream)   
@@ -339,6 +354,7 @@ size_t fwrite(const void* arr, size_t size, size_t count, FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_ftell.htm >?
 #
 #
+|c|C|
 |remove|
 |file|stdio|stdio.h|
 int remove(const char* path)   
@@ -351,6 +367,7 @@ int remove(const char* path)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_remove.htm >?
 #
 #
+|c|C|
 |rename|
 |file|stdio|stdio.h|
 int rename(const char* old_path, const char* new_path)   
@@ -363,6 +380,7 @@ int rename(const char* old_path, const char* new_path)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_rename.htm >?
 #
 #
+|c|C|
 |rewind|
 |file|stdio|stdio.h|
 void rewind(FILE* stream)   
@@ -375,6 +393,7 @@ void rewind(FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_rewind.htm >?
 #
 #
+|c|C|
 |setbuf|
 |file|stdio|stdio.h|
 void setbuf(FILE* stream, char* buffer)   
@@ -390,6 +409,7 @@ void setbuf(FILE* stream, char* buffer)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_setbuf.htm >?
 #
 #
+|c|C|
 |setvbuf|
 |file|stdio|stdio.h|
 int setvbuf(FILE* stream, char* buffer, int mode, size_t size)   
@@ -416,6 +436,7 @@ int setvbuf(FILE* stream, char* buffer, int mode, size_t size)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_setvbuf.htm >?
 #
 #
+|c|C|
 |tmpfile|
 |file|open|stdio|stdio.h|
 FILE* tmpfile()   
@@ -430,6 +451,7 @@ FILE* tmpfile()
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_tmpfile.htm >?
 #
 #
+|c|C|
 |tmpnam|
 |file|stdio|stdio.h|
 char* tmpnam(char* str)   
@@ -445,6 +467,7 @@ char* tmpnam(char* str)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_tmpnam.htm >?
 #
 #
+|c|C|
 |fprintf|
 |file|print|write|stdio|stdio.h|
 int fprintf(FILE* stream, char* format, ...)   
@@ -459,6 +482,7 @@ int fprintf(FILE* stream, char* format, ...)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fprintf.htm >?
 #
 #
+|c|C|
 |printf|
 |print|stdio|stdio.h|
 int printf(char* format, ...) 
@@ -471,6 +495,7 @@ int printf(char* format, ...)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_printf.htm >?
 #
 #
+|c|C|
 |sprintf|
 |print|write|stdio|stdio.h|
 int sprintf(char* str, char* format, ...) 
@@ -485,6 +510,7 @@ int sprintf(char* str, char* format, ...)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_sprintf.htm >?
 #
 #
+|c|C|
 |vfprintf|
 |file|print|stdio|stdio.h|
 int vfprintf(FILE* stream, char* format, va_list arg)   
@@ -505,6 +531,7 @@ int vfprintf(FILE* stream, char* format, va_list arg)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_vfprintf.htm >?
 #
 #
+|c|C|
 |vprintf|
 |file|print|stdio|stdio.h|
 int vprintf(char* format, va_list arg)   
@@ -525,6 +552,7 @@ int vprintf(char* format, va_list arg)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_vfprintf.htm >?
 #
 #
+|c|C|
 |vsprintf|
 |print|write|stdio|stdio.h|
 int vsprintf(char* str, char* format, va_list arg) 
@@ -546,6 +574,7 @@ int vsprintf(char* str, char* format, va_list arg)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_sprintf.htm >?
 #
 #
+|c|C|
 |fscanf|
 |scan|read|stdio|stdio.h|
 int fscanf(FILE* stream, char* format, ...) 
@@ -565,6 +594,7 @@ int fscanf(FILE* stream, char* format, ...)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fscanf.htm >?
 #
 #
+|c|C|
 |scanf|
 |scan|read|stdio|stdio.h|
 int fscanf(char* format, ...) 
@@ -583,6 +613,7 @@ int fscanf(char* format, ...)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_scanf.htm >?
 #
 #
+|c|C|
 |sscanf|
 |scan|read|stdio|stdio.h|
 int sscanf(const char* str, const char* format, ...) 
@@ -600,6 +631,7 @@ int sscanf(const char* str, const char* format, ...)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_scanf.htm >?
 #
 #
+|c|C|
 |fgetc|
 |file|read|stdio|stdio.h|
 int fgetc(FILE* stream)
@@ -614,6 +646,7 @@ int fgetc(FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fgetc.htm >?
 #
 #
+|c|C|
 |fgets|
 |file|read|stdio|stdio.h|
 char* fgets(char* str, int count, FILE* stream)
@@ -628,6 +661,7 @@ char* fgets(char* str, int count, FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fgets.htm >?
 #
 #
+|c|C|
 |fputc|
 |file|write|stdio|stdio.h|
 int fputc(int c, FILE* stream)
@@ -641,6 +675,7 @@ int fputc(int c, FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fputc.htm >?
 #
 #
+|c|C|
 |fputs|
 |file|write|stdio|stdio.h|
 int fputs(const char* str, FILE* stream)
@@ -653,6 +688,7 @@ int fputs(const char* str, FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fputc.htm >?
 #
 #
+|c|C|
 |getc|
 |file|read|stdio|stdio.h|
 int getc(FILE* stream)
@@ -665,6 +701,7 @@ int getc(FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_getc.htm >?
 #
 #
+|c|C|
 |getchar|
 |file|read|stdio|stdio.h|
 int getchar()
@@ -678,6 +715,7 @@ int getchar()
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_getchar.htm >?
 #
 #
+|c|C|
 |gets|
 |file|read|stdio|stdio.h|
 char* gets(char* str)
@@ -692,6 +730,7 @@ char* gets(char* str)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_gets.htm >?
 #
 #
+|c|C|
 |putc|
 |file|write|stdio|stdio.h|
 int putc(int c, FILE* stream)
@@ -704,6 +743,7 @@ int putc(int c, FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_putc.htm >?
 #
 #
+|c|C|
 |putchar|
 |file|write|stdio|stdio.h|
 int putchar(int c)
@@ -716,6 +756,7 @@ int putchar(int c)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_putchar.htm >?
 #
 #
+|c|C|
 |puts|
 |file|write|stdio|stdio.h|
 int puts(const char* str)
@@ -727,6 +768,7 @@ int puts(const char* str)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_putc.htm >?
 #
 #
+|c|C|
 |ungetc|
 |file|stdio|stdio.h|
 int ungetc(int c, FILE* stream)
@@ -746,6 +788,7 @@ int ungetc(int c, FILE* stream)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_getc.htm >?
 #
 #
+|c|C|
 |perror|
 |print|error|stdio|stdio.h|
 void perror(const char* str)

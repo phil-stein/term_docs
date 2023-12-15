@@ -1,4 +1,5 @@
 #
+|c|C|
 |setjmp|setjmp.h|
 |jmp_buf|
 |
@@ -9,6 +10,7 @@ jmp_buf: array type used to hold info for setjmp() & longjmp()
 
 ?< https://www.tutorialspoint.com/c_standard_library/setjmp_h.htm >?
 #
+|c|C|
 |setjmp|
 |setjmp|setjmp.h|
 |unsure|
@@ -25,6 +27,7 @@ int setjmp(jump_buf env)
     setjmp(env);
 ?<https://www.tutorialspoint.com/c_standard_library/c_function_setjmp.htm >?
 #
+|c|C|
 |longjmp|
 |setjmp|setjmp.h|
 |unsure|

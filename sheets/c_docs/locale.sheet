@@ -1,4 +1,5 @@
 #
+|c|C|
 |locale|locale.h|
 |lconv|
 |LC_ALL|LC_COLLATE|LC_CTYPE|LC_MONETARY|LC_NUMERIC|LC_TIME|
@@ -38,6 +39,7 @@ LC_TIME:     affects strftime() function
 
 ?< https://www.tutorialspoint.com/c_standard_library/locale_h.htm >?
 #
+|c|C|
 |setlocale|
 |locale|locale.h|
 char* setlocale(int category, const char* locale)
@@ -68,6 +70,7 @@ char* setlocale(int category, const char* locale)
     -> Date is: Fr 05 Dez 2014 10:35:02 UTC
 ?<https://www.tutorialspoint.com/c_standard_library/c_function_setlocale.htm >?
 #
+|c|C|
 |localeconv|
 |locale|locale.h|
 struct lconv* localeconv()

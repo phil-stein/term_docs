@@ -1,4 +1,5 @@
 #
+|c|C|
 |float|float.h|
 |FLT_ROUNDS|FLT_RADIX|
 |FLT_MANT_DIG|DBL_MANT_DIG|LDBL_MANT_DIG|

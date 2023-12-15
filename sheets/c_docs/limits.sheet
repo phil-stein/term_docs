@@ -1,10 +1,11 @@
 #
+|c|C|
 |limits|limits.h|
 |CHAR_BIT|SCHAR_MIN|SCHAR_MAX|UCHAR_MAX|CHAR_MIN|CHAR_MAX||MB_LEN_MAX|
 |SHORT_MIN|SHORT_MAX|USHORT_MAX|
 |INT_MIN|INT_MAX|UINT_MAX|
 |LONG_MIN|LONG_MAX|ULONG_MAX|
-|min|max|
+|min|max|Min|Max|MIN|MAX|
 macros and types for limits.h
 
 $GREEN$macros$$:

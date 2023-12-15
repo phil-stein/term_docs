@@ -1,5 +1,6 @@
 
 #
+|c|C|
 |_getcwd|
 |dirent|dirent.h|cwd|getcwd|working-directory|
 char* _getcwd(char* buffer, int max_len)
@@ -12,6 +13,7 @@ char* _getcwd(char* buffer, int max_len)
       char  cwd[256];
       _getcwd(cwd, 256);
 #
+|c|C|
 |GetModuleFileName|
 |dirent|dirent.h|winbase|win32|executable|
 WINAPI DWORD GetModuleFileName(HMODULE hModule, LPWSTR lpFilename, DWORD nSize)

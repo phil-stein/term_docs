@@ -1,4 +1,5 @@
 #
+|c|C|
 |assert|assert.h|debug|
 \#define assert(condition)   
     if condition is false, debug info is printed to 

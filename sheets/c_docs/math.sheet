@@ -2,12 +2,14 @@
 math functions:
 
 #
+|c|C|
 |HUGE_VAL|
 |math|math.h|
     HUGE_VAL is returned by math.h functions if 
     return value is too big for double
 #
 #
+|c|C|
 |acos|
 |math|math.h|arc_cosine|arc|cosine|
 double acos(double x)
@@ -22,6 +24,7 @@ double acos(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_acos.htm >?
 #
 #
+|c|C|
 |asin|
 |math|math.h|arc_sine|arc|sine|
 double asin(double x)
@@ -36,6 +39,7 @@ double asin(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_asin.htm >?
 #
 #
+|c|C|
 |atan|
 |math|math.h|arc_tangent|arc|tangent|
 double atan(double x)
@@ -50,6 +54,7 @@ double atan(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atan.htm >?
 #
 #
+|c|C|
 |atan2|
 |math|math.h|atan|arc_tangent|arc|tangent|
 double atan2(double y, double x)
@@ -64,6 +69,7 @@ double atan2(double y, double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atan2.htm >?
 #
 #
+|c|C|
 |cos|
 |math|math.h|cosine|
 double cos(double x)
@@ -77,6 +83,7 @@ double cos(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_cos.htm >?
 #
 #
+|c|C|
 |cosh|
 |math|math.h|hyperbolic_cosine|hyperbolic|cosine|
 double cosh(double x)
@@ -88,6 +95,7 @@ double cosh(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_cosh.htm >?
 #
 #
+|c|C|
 |sin|
 |math|math.h|sine|
 double sin(double x)
@@ -101,6 +109,7 @@ double sin(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_sin.htm >?
 #
 #
+|c|C|
 |sinh|
 |math|math.h|hyperbolic_sine|hyperbolic|sine|
 double sinh(double x)
@@ -112,6 +121,7 @@ double sinh(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_sinh.htm >?
 #
 #
+|c|C|
 |tanh|
 |math|math.h|hyperbolic_tangent|hyperbolic|tangent|
 double tanh(double x)
@@ -123,6 +133,7 @@ double tanh(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_tanh.htm >?
 #
 #
+|c|C|
 |exp|
 |math|math.h|exponential|exponential_value|power|power_of|
 double exp(double x)
@@ -134,6 +145,7 @@ double exp(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_exp.htm >?
 #
 #
+|c|C|
 |frexp|
 |math|math.h|fraction|exponential|exponential_value|power|power_of|
 double frexp(double x, int* exponent)
@@ -150,6 +162,7 @@ double frexp(double x, int* exponent)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_frexp.htm >?
 #
 #
+|c|C|
 |ldexp|
 |math|math.h|exponential|exponential_value|power|power_of|
 double ldexp(double x, int exponent)
@@ -161,6 +174,7 @@ double ldexp(double x, int exponent)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_ldexp.htm >?
 #
 #
+|c|C|
 |log|
 |math|math.h|logarithm|
 double log(double x)
@@ -172,6 +186,7 @@ double log(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_log.htm >?
 #
 #
+|c|C|
 |log10|
 |math|math.h|log|logarithm|
 double log10(double x)
@@ -183,6 +198,7 @@ double log10(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_log10.htm >?
 #
 #
+|c|C|
 |modf|
 |math|math.h|mod|
 double modf(double x, double* integer)
@@ -196,6 +212,7 @@ double modf(double x, double* integer)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_modf.htm >?
 #
 #
+|c|C|
 |pow|
 |math|math.h|power|power_of|
 double pow(double x, double y)
@@ -207,6 +224,7 @@ double pow(double x, double y)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_pow.htm >?
 #
 #
+|c|C|
 |sqrt|
 |math|math.h|squareroot|square_root|
 double sqrt(double x)
@@ -218,6 +236,7 @@ double sqrt(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_sqrt.htm >?
 #
 #
+|c|C|
 |ceil|
 |math|math.h|round|round_up|
 double ceil(double x)
@@ -233,6 +252,7 @@ double ceil(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_ceil.htm >?
 #
 #
+|c|C|
 |fabs|
 |math|math.h|absolute|abs|
 double fabs(double x)
@@ -247,6 +267,7 @@ double fabs(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fabs.htm >?
 #
 #
+|c|C|
 |floor|
 |math|math.h|round|round_down|
 double floor(double x)
@@ -262,6 +283,7 @@ double floor(double x)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_floor.htm >?
 #
 #
+|c|C|
 |fmod|
 |math|math.h|mod|
 double fmod(double x, double y)

@@ -1,4 +1,5 @@
 #
+|c|C|
 |va_list|
 |variadic|arguments|stdarg|stdarg.h|
     type that can hold a list of arguments passed to a 
@@ -20,6 +21,7 @@
 
 ?< https://www.tutorialspoint.com/c_standard_library/stdarg_h.htm >?
 #
+|c|C|
 |va_start|
 |variadic|arguments|stdarg|stdarg.h|
 void va_start(va_list list, int num_args)
@@ -43,6 +45,7 @@ void va_start(va_list list, int num_args)
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_va_start.htm >?
 #
+|c|C|
 |va_arg|
 |variadic|arguments|stdarg|stdarg.h|
 type va_arg(va_list list, type)
@@ -66,6 +69,7 @@ type va_arg(va_list list, type)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_va_arg.htm >?
 #
 #
+|c|C|
 |va_end|
 |variadic|arguments|stdarg|stdarg.h|
 void va_end(va_list list)

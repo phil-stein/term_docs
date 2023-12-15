@@ -1,4 +1,5 @@
 #
+|c|C|
 |time|
 |clock_t|time_t|tm|
 macros and types for time.h
@@ -25,6 +26,7 @@ $GREEN$macros$$:
 
 ?< https://www.tutorialspoint.com/c_standard_library/time_h.htm >?
 #
+|c|C|
 |asctime|
 |time|
 char* asctime(const struct tm* timeptr)
@@ -45,6 +47,7 @@ char* asctime(const struct tm* timeptr)
     -> Tue Mar 10:34:15 2023
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_asctime.htm >?
 #
+|c|C|
 |clock|
 |time|
 clock_t clock()
@@ -58,6 +61,7 @@ clock_t clock()
     printf("elapsed seconds:     %f\n", (double)c / CLOCKS_PER_SEC);
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_clock.htm >?
 #
+|c|C|
 |ctime|
 |time|
 char* ctime(const time_t* timer)
@@ -71,6 +75,7 @@ char* ctime(const time_t* timer)
     -> current time: Tue Mar 22 00:00:00 2023
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_ctime.htm >?
 #
+|c|C|
 |difftime|
 |time|
 double difftime(time_t time0, time_t time1)
@@ -86,6 +91,7 @@ double difftime(time_t time0, time_t time1)
     -> elapsed time: 2.0
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_difftime.htm >?
 #
+|c|C|
 |gmtime|
 |time|
 struct tm* gmtime(const time_t* timer)
@@ -99,6 +105,7 @@ struct tm* gmtime(const time_t* timer)
     struct tm* = gmtime(&t);
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_gmtime.htm >?
 #
+|c|C|
 |localtime|
 |time|
 struct tm* localtime(const time_t* timer)
@@ -112,6 +119,7 @@ struct tm* localtime(const time_t* timer)
     struct tm* = localtime(&t);
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_localtime.htm >?
 #
+|c|C|
 |mktime|
 |time|
 time_t mktime(struct tm* time_ptr)
@@ -126,6 +134,7 @@ time_t mktime(struct tm* time_ptr)
     time_t local = mktime(tm);
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_mktime.htm >?
 #
+|c|C|
 |strftime|
 |time|
 size_t strftime(char* str, size_t max_size, const char* format, const struct tm* time_ptr)
@@ -172,6 +181,7 @@ size_t strftime(char* str, size_t max_size, const char* format, const struct tm*
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_strftime.htm >?
 #
+|c|C|
 |time|
 |time|
 time_t time(time_t* secs)
