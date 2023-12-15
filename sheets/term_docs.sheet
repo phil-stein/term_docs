@@ -1,51 +1,118 @@
 
-@NOTE: testing ground no actual docs here
-
 #
-|custom_sheet|custom_sheets|sheet|sheets|
-|doc|docs|doc_help|term_docs|
-|-help|-h|
-  // @TODO:
-#
-|doc|
-|docs|doc_help|term_docs|
-|-help|-h|
+|term_docs|
+|doc|docs|doc_help|
+|help|h|-help|-h|--help|--h|
+  $_$modifiers:$$
+    add '-xyz' modifiers at the end
+    -color:
+    -c: disable syntax $syn$highlighting ($_$color$$)
+    -d: search for $_$defenition$$ of func in .h file
+    doc <...> -c
+    doc <...> -d
+    doc <...> -d -c
+    doc <...> -c -d
 
-documentation:
-  enter 'doc [word]' into the terminal to search documentation
-  when searching '[word]' is matched against the tags, like the ones above, doc, -help, etc.,
-  in the .sheet documentation
-
-definition search:
-  enter 'doc [dir] [func_name]' to search all .h files in [dir] for [func_names]'s definition
-
-
-  doc word word ... -> .sheet docs 
-
-  -f/-function, -s/-struct
-  doc -f dir name   -> func definition
-  doc -s dir name   -> struct definition
-or  ~use this
-  -d/-definition, -s/-search
-  doc -d dir name   -> func/struct/enum definition
-  doc -s dir name   -> func/struct/enum occurance
-
-incomplete search:
+  $_$search for documentation:$$
+    tag: $|$\|<tag>\|$$
+    doc <tag>
+    doc <tag1> <tag2> ...
   
-  doc start...      -> start, start_01, etc.
-or
-  -f/-fuzzy
-  doc -f start      -> start, start_01, etc.
-or
-  -f/-fuzzy
-  doc -d -f start      -> start();, start_01();, etc.
-or
-  doc \~start        -> start, start_01, a_start, a_start_01, etc.
+  $_$search for definition:$$
+    doc <dir> <func-name> -d
+
+  $_$custom documentation:$$
+    see $|$\|custom-docs\|$$
+
+  example:
+    >doc malloc
+      -> $p$stdlib.sheet\|malloc -------------------------------$$
+      -> 
+      -> $|$\|malloc\|$$
+      -> $|$\|allocate\|memory\|dynamic memory\|$$
+      -> void* malloc(size_t size)
+      ->     allocate the specified amount of memory.
+      ->     ! needs to be freed using [free]
+      ->     ! size is in bytes
+      ->     ! returns NULL on fail
+      ->     ~ included in <stdlib.h>
+      ->     example:
+      ->       // array now has space for 10 int's
+      ->       int* array = malloc(10 * sizeof(int));
+      -> 
+      -> ?< https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm >
+      -> $p$--------------------------------------------------$$
+    
+    $_$look for section with both git and log as tags$$
+    $syn$$_$otherwise (>doc log) would also find math.h log()$$
+    >doc git log
+      -> ...
+    
+    >doc ../src function -d
+      -> $p$function -----------------------------$$
+      -> 
+      -> // comment
+      -> void function(int arg);
+      ->   -> file: 'src/file0.h' line: 34
+      ->   
+      -> void function(char arg);
+      ->   -> file: 'src/file1.h' line: 92
+      -> 
+      -> $p$--------------------------------------$$
 
 #
+|term_docs|
+|custom-sheet|custom-sheets|sheet|sheets|
+|custom-docs|custom-doc|custom|
+  documentation is stored in the .sheet files in the sheet folder
+  int the term_docs root folder
+  inside the .sheet files there are several 'sections' that contain
+  the $|$\|tags\|$$, that doc searches for
+  term_docs uses a custom markup language, as well as highlighting c code
+  ~ view $|$\|sheet-syntax-examples\|$$ for more examples
+  ~ files need to have .sheet extension, but can have any name
 
+  $_$sections:$$
+    '\\#' starts and ends a section inside a .sheet file
+    sections can each have a start and end \\# or use the 
+    last sections end \\# as their start \\#
+    \\#
+    section 01
+    \\#
+    \\#
+    section 02
+    \\#
+    section 03
+    \\#
+  
+  $_$basics:$$
+    \\#
+    $|$\|tag01\|tag02\|$$
+    $|$\|tag03\|$$
+    write text here
+    int main() // gets highlighted
+    ~ this is a hint
+    ! this is a warning
+    ? this is a link
+    
+    example: <- gets highighted
+    \\#
+  
+  $_$text style:$$
+    style operations are put inside $ symbols
+    and reset by a double $
+    character are escaped using a \ symbol
+    view $|$\|sheet-syntax-examples\|$$ using
+    >doc sheet-syntax-examples
+    >doc sheet-syntax-examples -c
+    to see with and without highlighting
+
+    ~ escaping \\# using one \ highlights it as a c macro
+    $~$  use \\ to scape it fully$$
 #
+|term_docs|
 |test|wip|
+|sheet-syntax-examples|
     ! not actual documentation just a test
 
     char    character achar

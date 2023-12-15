@@ -28,6 +28,7 @@ int memcmp(const void* str0, const char* str1, size_t n)
     returns <0 if 'str0' has lower value than 'str1'
     returns >0 if 'str0' has higher value than 'str1'
     ! doesn't stop comparing upon reaching NULL like [strcmp]
+    ~ memcpy() is the same but with restrict pointers
     ~ [strcmp] [strncmp]
     ~ included in <string.h>
     example: 
@@ -55,6 +56,7 @@ errno_t memcpy_s(void* restrict dest, rsize_t destsz,
     ! causes overflow if dest is too small
     ! returns NULL on fail
     ! restrict means dest and src cant be the same pointer
+    $!$  use memmove() instead to avoid this$$
     ~ [memcpy] [strncpy]
     ~ included in <string.h>
     example: 
