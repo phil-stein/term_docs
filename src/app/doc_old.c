@@ -167,4 +167,194 @@
  
 
 
+/*
+// @TODO: give array of keyword to check if has multiple at once
+bool doc_search_file_01(const char* path, const char* file, const char** keywords, int keywords_len)
+{
+  if (!check_file_exists(path)) { return false; }
+  int txt_len = 0;
+  char* txt = read_text_file_len(path, &txt_len);
 
+  bool found_one = false;
+  for (int i = 0; i < keywords_len; ++i)
+  {
+    char* keyword = keywords[i];
+
+    // @TODO: see if better way to do this
+    // bool found_one = false;
+    bool found = false;
+    u32 found_count = 0;
+    int start;
+    for (start = 1; txt[start] != '\0'; start++)
+    {
+      if ((txt[start] == keyword[0] || 
+            txt[start] == '\\') && 
+          txt[start -1] == BORDER_CHAR)
+      {
+        found = true;
+        int pos = 0;
+        int skipped = 0;
+        for (pos = 0; keyword[pos] != '\0'; pos++)
+        {
+          int j = pos + skipped;
+
+          // escaped #, also need to j++; because adding skipped to j before
+          if (txt[start +j] == '\\' && txt[start +j +1] == '#') 
+          { skipped++; j++; }
+
+          if (txt[start +j] != keyword[pos])
+          { found = false; break; }
+        }
+        if (txt[start +pos +skipped] != BORDER_CHAR) 
+        { found = false; }
+      }
+      if (found) 
+      {
+        P("found"); 
+        // -- section start & end --
+        while (txt[start] != '#' || txt[start -1] == '\\') { start--; }
+        int end = start +1;
+        while (txt[end] != '#' || txt[end -1] == '\\')   { end++; }
+
+        start++;          // skip '#'
+        char end_char = txt[end];
+        txt[end] = '\0';  // shorten txt to section
+
+        doc_print_section(txt + start, keyword, file);
+        txt[end] = end_char;
+        start = end +1;
+        found_one = true;
+        found = false;
+        found_count++;
+      }
+    }
+
+    // print ending line
+    if (found_count > 0)
+    {
+      int w, h; io_util_get_console_size_win(&w, &h);
+      w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
+      
+      PF_COLOR(PF_PURPLE);
+      int i = 0;
+      while( i < w -1) { _PF("-"); i++; }
+      
+      PF("\n");
+      PF_COLOR(PF_WHITE);
+    }
+  }
+  FREE(txt);
+
+  return found_one;
+}
+
+// @TODO: see if better way to do this
+bool doc_search_file_02(const char* path, const char* file, const char** keywords, int keywords_len)
+{
+  if (!check_file_exists(path)) { return false; }
+  int txt_len = 0;
+  char* txt = read_text_file_len(path, &txt_len);
+
+  bool found_one = false;
+  bool found = false;
+  int sec_start = 0;
+  #define TAG_MAX 128
+  char tag[TAG_MAX];
+  int  tag_pos = 0;
+  int keywords_matched_count = 0;
+  u32 found_count = 0;
+  for (int i = 0; i < keywords_len; ++i)
+  {
+    char* keyword = keywords[i];
+
+    // bool found_one = false;
+    int start;
+    P_LINE();
+    for (start = 1; txt[start] != '\0'; start++)
+    {
+      if ((txt[start] == keyword[0] || 
+            txt[start] == '\\') && 
+          txt[start -1] == BORDER_CHAR)
+      {
+        // write txt section into string with escaped chars and compare afterwards
+
+        // found = true;
+        tag_pos = 0;
+        int pos = 0;
+        int skipped = 0;
+        for (pos = 0; keyword[pos] != '\0'; pos++)
+        {
+          int j = pos + skipped;
+
+          // escaped #, also need to j++; because adding skipped to j before
+          if (txt[start +j] == '\\' && txt[start +j +1] == '#') 
+          { skipped++; j++; }
+
+          if (txt[start +j] != keyword[pos])
+          { found = false; break; }
+
+          ERR_CHECK(pos < TAG_MAX, "checking tag that is longer than the 'tag' string\n");
+          tag[pos] = txt[start +j +skipped];
+        }
+        tag[pos] = '\0';
+        // check if end in | BORDER_CHAR
+        if (txt[start +pos +skipped] != BORDER_CHAR) 
+        { found = false; }
+        // check if tag == keyword
+        if (strcmp(tag, keyword) == 0)
+        {
+          P_STR(tag);
+          P("tag == keyword");
+          // found = true;
+          keywords_matched_count++;
+          P_INT(keywords_matched_count);
+          sec_start = start;
+        }
+      }
+
+    }
+  }
+
+  // if (found && keywords_matched_count == keywords_len) 
+  if (keywords_matched_count == keywords_len) 
+  {
+    P_INT(keywords_matched_count);
+    P_INT(keywords_len);
+    P_BOOL(found);
+    P_INT(sec_start);
+    // -- section start & end --
+    while (txt[sec_start] != '#' || txt[sec_start -1] == '\\') { sec_start--; }
+    int end = sec_start +1;
+    while (txt[end] != '#' || txt[end -1] == '\\')   { end++; }
+
+    sec_start++;          // skip '#'
+    char end_char = txt[end];
+    txt[end] = '\0';  // shorten txt to section
+
+    // @TODO: make this use all of keywords
+    doc_print_section(txt + sec_start, keywords[0], file);
+    txt[end] = end_char;
+    sec_start = end +1;
+    found_one = true;
+    found = false;
+    found_count++;
+  }
+
+  // print ending line
+  if (found_count > 0)
+  {
+    int w, h; io_util_get_console_size_win(&w, &h);
+    w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
+
+    PF_COLOR(PF_PURPLE);
+    int i = 0;
+    while( i < w -1) { _PF("-"); i++; }
+
+    PF("\n");
+    PF_COLOR(PF_WHITE);
+  }
+  FREE(txt);
+
+  return found_one;
+}
+*/

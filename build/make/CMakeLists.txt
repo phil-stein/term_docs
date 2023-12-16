@@ -39,7 +39,11 @@ target_compile_features(   ${NAME} PRIVATE cxx_std_11)
 # target_compile_options(    ${NAME} PRIVATE -Wall -DGLOBAL_DEBUG -DASSETM_NO_ZIP -DDEBUG_TIMER -DDEBUG_OPENGL -DDEBUG_DRAW -DASSET_PATH=\"/Workspace/C/bovengine/_assets/\")
 target_compile_options(    ${NAME} PRIVATE -Wall -DGLOBAL_DEBUG) 
 
-
+if(${CMAKE_GENERATOR} STREQUAL "MinGW Makefiles")
+else() # if(${CMAKE_GENERATOR} STREQUAL "Visual Studio 2016 19")
+  # target_compile_options(    ${NAME} PRIVATE -DOVERRIDE_SHEET_PATH=\"\\\\Workspace\\\\C\\\\term_docs\\\\sheets\\\\\") 
+  target_compile_options(    ${NAME} PRIVATE -DOVERRIDE_SHEET_PATH=\"/Workspace/C/term_docs/sheets/\") 
+endif()
 # # -- link libs --
 # # set _build/... folder based on generator, i.e. mingw-gcc or vs19
 # if(${CMAKE_GENERATOR} STREQUAL "MinGW Makefiles")

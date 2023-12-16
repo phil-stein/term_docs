@@ -30,6 +30,11 @@ int main(int argc, char** argv)
 {
   core_data_t* core_data = core_data_get();
 
+  // -- get the sheet path either based on executable or macro --
+#ifdef OVERRIDE_SHEET_PATH
+  strncpy(core_data->sheets_path, OVERRIDE_SHEET_PATH, CORE_PATH_MAX);
+  // P_STR(core_data->sheets_path);
+#else
   // -- get executable name --
   // P_STR(_getcwd(NULL, 0));
   GetModuleFileName(NULL, core_data->exec_path, CORE_PATH_MAX);   // get executable location
@@ -46,7 +51,9 @@ int main(int argc, char** argv)
   }
   strcat(core_data->sheets_path, "sheets\\");
   // P_STR(core_data->sheets_path);
+#endif
 
+  // too few arguments, at least 1, i.e. 2 because doc counts
   if (argc < 2)
   { 
     PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  
@@ -106,17 +113,9 @@ int main(int argc, char** argv)
   
   if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
   {
-    // old way searched every keyword individually 
-    // for (u32 i = 0; i < word_arr_pos; ++i)
-    // {
-    //   doc_search_dir(core_data->sheets_path, argv[word_arr[i]], &n);
-    // }
-   
-    for (int i = 0; i < word_arr_pos; ++i)
-    { 
-      P_STR(word_arr[i]); 
-      doc_search_dir(core_data->sheets_path, word_arr, word_arr_pos, &n);
-    }
+    // for (int i = 0; i < word_arr_pos; ++i)
+    // { P_STR(word_arr[i]); }
+    doc_search_dir(core_data->sheets_path, word_arr, word_arr_pos, &n);
   }
   else if (HAS_FLAG(mode, SEARCH_DEFINITION))
   {
@@ -191,10 +190,24 @@ int main(int argc, char** argv)
   { 
     PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  
     PF(" could not find keyword '"); 
-    PF_COLOR(PF_PURPLE); PF("%s", HAS_FLAG(mode, SEARCH_DOCUMENTATION) ? argv[1] : argv[3]); PF_COLOR(PF_WHITE); 
-    
-    if (HAS_FLAG(mode, SEARCH_DEFINITION)) { PF("' in header files.\n"); }
-    else                                   { PF("' in sheets.\n"); }
+    if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
+    {
+      PF_COLOR(PF_PURPLE);
+      for (int i = 1; i < argc; ++i)
+      {
+        PF("%s%s",  argv[i], i < argc-1 ? ", " : "");
+      }
+      PF_COLOR(PF_WHITE); 
+      PF("' in sheets.\n");
+    }
+    else if (HAS_FLAG(mode, SEARCH_DEFINITION))
+    {
+      PF_COLOR(PF_PURPLE);
+      PF("%s", argv[3]); 
+      PF_COLOR(PF_WHITE); 
+      PF("' in header files.\n");
+    }
+    else { P_ERR("unnkown mode"); }
   }
   
   PF_COLOR(PF_WHITE);

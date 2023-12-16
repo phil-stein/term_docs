@@ -25,7 +25,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
   { 
     return; 
   }
-  P_STR(dir_path);
+  // P_STR(dir_path);
   
 
   // recursively read the directory and its sub-directories
@@ -48,7 +48,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
         char* slash = dir_path[strlen(dir_path) -1] == '/'  ? "" :
                       dir_path[strlen(dir_path) -1] == '\\' ? "" : "\\";
         SPRINTF(300, buf, "%s%s%s", dir_path, slash, dp->d_name);
-        P_STR(buf);
+        // P_STR(buf);
         if (doc_search_file(buf, dp->d_name, keywords, keywords_len)) 
         { 
           *n += 1;
@@ -70,238 +70,24 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
   closedir(dir);
 }
 
-// @TODO: give array of keyword to check if has multiple at once
-bool doc_search_file_01(const char* path, const char* file, const char** keywords, int keywords_len)
-{
-  if (!check_file_exists(path)) { return false; }
-  int txt_len = 0;
-  char* txt = read_text_file_len(path, &txt_len);
-
-  bool found_one = false;
-  for (int i = 0; i < keywords_len; ++i)
-  {
-    char* keyword = keywords[i];
-
-    // @TODO: see if better way to do this
-    // bool found_one = false;
-    bool found = false;
-    u32 found_count = 0;
-    int start;
-    for (start = 1; txt[start] != '\0'; start++)
-    {
-      if ((txt[start] == keyword[0] || 
-            txt[start] == '\\') && 
-          txt[start -1] == BORDER_CHAR)
-      {
-        found = true;
-        int pos = 0;
-        int skipped = 0;
-        for (pos = 0; keyword[pos] != '\0'; pos++)
-        {
-          int j = pos + skipped;
-
-          // escaped #, also need to j++; because adding skipped to j before
-          if (txt[start +j] == '\\' && txt[start +j +1] == '#') 
-          { skipped++; j++; }
-
-          if (txt[start +j] != keyword[pos])
-          { found = false; break; }
-        }
-        if (txt[start +pos +skipped] != BORDER_CHAR) 
-        { found = false; }
-      }
-      if (found) 
-      {
-        P("found"); 
-        // -- section start & end --
-        while (txt[start] != '#' || txt[start -1] == '\\') { start--; }
-        int end = start +1;
-        while (txt[end] != '#' || txt[end -1] == '\\')   { end++; }
-
-        start++;          // skip '#'
-        char end_char = txt[end];
-        txt[end] = '\0';  // shorten txt to section
-
-        doc_print_section(txt + start, keyword, file);
-        txt[end] = end_char;
-        start = end +1;
-        found_one = true;
-        found = false;
-        found_count++;
-      }
-    }
-
-    // print ending line
-    if (found_count > 0)
-    {
-      int w, h; io_util_get_console_size_win(&w, &h);
-      w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
-      
-      PF_COLOR(PF_PURPLE);
-      int i = 0;
-      while( i < w -1) { _PF("-"); i++; }
-      
-      PF("\n");
-      PF_COLOR(PF_WHITE);
-    }
-  }
-  FREE(txt);
-
-  return found_one;
-}
-
-// @TODO: see if better way to do this
-bool doc_search_file_02(const char* path, const char* file, const char** keywords, int keywords_len)
-{
-  if (!check_file_exists(path)) { return false; }
-  int txt_len = 0;
-  char* txt = read_text_file_len(path, &txt_len);
-
-  bool found_one = false;
-  bool found = false;
-  int sec_start = 0;
-  #define TAG_MAX 128
-  char tag[TAG_MAX];
-  int  tag_pos = 0;
-  int keywords_matched_count = 0;
-  u32 found_count = 0;
-  for (int i = 0; i < keywords_len; ++i)
-  {
-    char* keyword = keywords[i];
-
-    // bool found_one = false;
-    int start;
-    P_LINE();
-    for (start = 1; txt[start] != '\0'; start++)
-    {
-      if ((txt[start] == keyword[0] || 
-            txt[start] == '\\') && 
-          txt[start -1] == BORDER_CHAR)
-      {
-        // write txt section into string with escaped chars and compare afterwards
-
-        // found = true;
-        tag_pos = 0;
-        int pos = 0;
-        int skipped = 0;
-        for (pos = 0; keyword[pos] != '\0'; pos++)
-        {
-          int j = pos + skipped;
-
-          // escaped #, also need to j++; because adding skipped to j before
-          if (txt[start +j] == '\\' && txt[start +j +1] == '#') 
-          { skipped++; j++; }
-
-          if (txt[start +j] != keyword[pos])
-          { found = false; break; }
-
-          ERR_CHECK(pos < TAG_MAX, "checking tag that is longer than the 'tag' string\n");
-          tag[pos] = txt[start +j +skipped];
-        }
-        tag[pos] = '\0';
-        // check if end in | BORDER_CHAR
-        if (txt[start +pos +skipped] != BORDER_CHAR) 
-        { found = false; }
-        // check if tag == keyword
-        if (strcmp(tag, keyword) == 0)
-        {
-          P_STR(tag);
-          P("tag == keyword");
-          // found = true;
-          keywords_matched_count++;
-          P_INT(keywords_matched_count);
-          sec_start = start;
-        }
-      }
-
-    }
-  }
-
-  // if (found && keywords_matched_count == keywords_len) 
-  if (keywords_matched_count == keywords_len) 
-  {
-    P_INT(keywords_matched_count);
-    P_INT(keywords_len);
-    P_BOOL(found);
-    P_INT(sec_start);
-    // -- section start & end --
-    while (txt[sec_start] != '#' || txt[sec_start -1] == '\\') { sec_start--; }
-    int end = sec_start +1;
-    while (txt[end] != '#' || txt[end -1] == '\\')   { end++; }
-
-    sec_start++;          // skip '#'
-    char end_char = txt[end];
-    txt[end] = '\0';  // shorten txt to section
-
-    // @TODO: make this use all of keywords
-    doc_print_section(txt + sec_start, keywords[0], file);
-    txt[end] = end_char;
-    sec_start = end +1;
-    found_one = true;
-    found = false;
-    found_count++;
-  }
-
-  // print ending line
-  if (found_count > 0)
-  {
-    int w, h; io_util_get_console_size_win(&w, &h);
-    w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
-
-    PF_COLOR(PF_PURPLE);
-    int i = 0;
-    while( i < w -1) { _PF("-"); i++; }
-
-    PF("\n");
-    PF_COLOR(PF_WHITE);
-  }
-  FREE(txt);
-
-  return found_one;
-}
-
 bool doc_search_file(const char* path, const char* file, const char** keywords, int keywords_len)
 {
   if (!check_file_exists(path)) { return false; }
   int txt_len = 0;
   char* txt = read_text_file_len(path, &txt_len);
-  P_STR(path);
-  
+  // P_STR(path);
 
-  // // @TMP: 
-  // int line = 1;
-
-
+  int sections_found_count = 0; // found sections
   int start;
   for (start = 1; txt[start] != '\0'; ++start)
   {
-    // // @TMP: count lines
-    // if (txt[start] == '\n') { line++; }
-
-    // if section start
-    // find section end
-    // P_LINE_STR("%d|%d | start ", line, start);
     int end = start +1;
     while (end < txt_len && (txt[end] != '#' || txt[end -1] == '\\')) 
-    { 
-      // // @TMP: count lines
-      // if (txt[end] == '\n') { line++; }
-      
-      end++; 
-    }
+    { end++; }
     if (txt[end] != '#') 
-    { 
-      // P_LINE_STR("file ended ");
-      break; 
-    }
+    { break; }
 
-    // // @TMP: print section
-    // for (int i = start; i < end; ++i)
-    // { PF("%c", txt[i]); }
-    // PF("\n");
-    // // PF("end"); P_LINE();
-    // P_LINE_STR("%d|%d | end ", line, end);
-
+    // go through section once for each keyword
     int keyword_found_count = 0;
     for (int keyword_idx = 0; keyword_idx < keywords_len; ++keyword_idx)
     {
@@ -325,39 +111,38 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
           keyword_found = true;
           // start at the first char, checked in the if stateent above
           // and check if the next chars fit aswell
-          int tag_pos = section +1;
-          for (; tag_pos < section + strlen(keyword); ++tag_pos)
+          int tag_pos = section;
+          for (; tag_pos < section + strlen(keyword) && tag_pos < txt_len ; ++tag_pos)
           {
-              if (txt[section +tag_pos] != keyword[keyword_pos]) { keyword_found = false; break; }
+              if (txt[tag_pos] != keyword[keyword_pos]) { keyword_found = false; break; }
               // section++;
               keyword_pos++;
           }
           if (keyword_found) 
-          { 
-            for (int c = 0; c  < strlen(keyword); ++c)
-            { PF("%c", txt[section +c]); }
-            PF("\n");
+          {
+            // // PF("in loop: "); P_BOOL(keyword_found);
+            // for (int c = 0; c  < strlen(keyword); ++c)
+            // { PF("%c", txt[section +c]); }
+            // PF("\n");
+  
+            keyword_found_count++; 
+            
             // has to be done here and in case not found
-            section += tag_pos;
+            section = tag_pos;
             break; 
           }
           // has to be done here and in case found
-          section += tag_pos;
+          section = tag_pos;
         }
-        
-        keyword_pos++;
       }
-      // check if keyword in section
-      if (keyword_found)
-      { keyword_found_count++; break; }
-      else
-      { break; }
     }
-    P_INT(keyword_found_count);
-   
-    // // print if all keywords found
-    // if (keyword_found_count == keywords_len)
-    // { doc_print_section(); }
+    
+    // print if all keywords found
+    if (keyword_found_count == keywords_len)
+    {
+      doc_print_section(txt + start, end - start, keywords[0], file);
+      sections_found_count++;
+    }
 
     // skip to next section
     start = end;
@@ -365,26 +150,28 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
 
   FREE(txt);
 
-  // return found_count > 0;
-  return false;
+  return sections_found_count > 0;
 }
 
 
-void doc_print_section(char* sec, const char* keyword, const char* file)
+void doc_print_section(char* sec, int sec_len, const char* keyword, const char* file)
 {
-  int w, h; io_util_get_console_size_win(&w, &h);
-  w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
+  // int w, h; io_util_get_console_size_win(&w, &h);
+  // w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
 
-  // @TODO: use P_LINE_STR() for this
+  // PF_COLOR(PF_PURPLE);
+  // PF("%s|%s ", file, keyword); 
+  // int i = strlen(keyword) + strlen(file) +2;
+  // while( i < w -1) { _PF("-"); i++; }
+  // PF("\n");
   PF_COLOR(PF_PURPLE);
-  PF("%s|%s ", file, keyword); 
-  int i = strlen(keyword) + strlen(file) +2;
-  while( i < w -1) { _PF("-"); i++; }
-  PF("\n");
+  P_LINE_STR("%s|%s ", file, keyword); 
   
   PF_COLOR(PF_WHITE);
-  doc_color_code_section(sec);
- 
+  doc_color_code_section(sec, sec_len);
+   
+  PF_COLOR(PF_PURPLE);
+  P_LINE(); 
   PF_COLOR(PF_WHITE);
 }
 
@@ -413,7 +200,7 @@ void doc_print_section(char* sec, const char* keyword, const char* file)
 #define SET_DEFAULT_STYLE(m, c)   default_pf_style = (m); default_pf_color = (c)
 #define RESET_DEFAULT_STYLE()     default_pf_style = PF_NORMAL; default_pf_color = PF_WHITE
 
-void doc_color_code_section(char* sec)
+void doc_color_code_section(char* sec, int len)
 {
   core_data_t* core_data = core_data_get();
   // @NOTE: no syntax highlighting
@@ -431,7 +218,7 @@ void doc_color_code_section(char* sec)
   }
 
   // @NOTE: syntax highlighting
-  int   len = strlen(sec);
+  // int   len = strlen(sec);
   char* buf = malloc(len + 12 * sizeof(char));  // need to malloc in case long sec
   int   buf_pos = 0;
   // bool in_tag = false;
