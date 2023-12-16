@@ -11,6 +11,8 @@ extern "C" {
 // returns true if the file under the specified path "file_path" exists, otherwise false
 bool check_file_exists(const char* file_path);
 
+bool check_dir_exists(const char* dir_path);
+
 // read a text-file and output all contents as a char*
 // !!! free() the returned char* as it gets allocated
 // taken from: https://github.com/jdah/minecraft-weekend/blob/master/src/gfx/shader.c

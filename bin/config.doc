@@ -1,0 +1,9 @@
+
+[syntax] false 
+[syntax] true 
+[syntax] 0
+[syntax] 1
+
+[sheet_dir] custom_sheets
+[sheet_dir] custom_sheets_02
+[sheet_dir] doesnt_exist

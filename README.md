@@ -136,6 +136,11 @@ change this and call `make clean` and `make` in the root directory
 
 ## todo
   - [ ] bugg: -c syntax highlighting doesnt disable properly
+  - [ ] bugg: -d doesnt find program_start in bovengine
+  - [ ] maybe change -d to just using keyword with () at the end
+  - [x] config file
+    - [x] disble syntax highlighting
+    - [x] set custom sheet file path
   - [ ] multiple search keywords, i.e. doc file read
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references

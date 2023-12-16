@@ -22,7 +22,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
   DIR* dir = opendir(dir_path);
   // unable to open directory stream
   if (!dir) 
-  { 
+  {
     return; 
   }
   // P_STR(dir_path);

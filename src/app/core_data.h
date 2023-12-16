@@ -8,6 +8,7 @@ extern "C" {
 #include "global/global.h"
 
 #define CORE_PATH_MAX   256
+#define CORE_CUSTOM_SHEETS_MAX 8
 
 typedef struct core_data_t
 {
@@ -15,10 +16,14 @@ typedef struct core_data_t
   char exec_path[CORE_PATH_MAX];      // path to executable
   char sheets_path[CORE_PATH_MAX];    // path to sheets folder
 
+  char custom_sheet_paths[CORE_CUSTOM_SHEETS_MAX][CORE_PATH_MAX];
+  int  custom_sheet_paths_len;
+
 }core_data_t;
-#define CORE_DATA_INIT()    \
-{                           \
-  .style_act = true,        \
+#define CORE_DATA_INIT()        \
+{                               \
+  .style_act = true,            \
+  .custom_sheet_paths_len = 0,  \
 }
 
 core_data_t* core_data_get();

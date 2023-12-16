@@ -1,6 +1,6 @@
 #include "file_io.h"
 #include <direct.h>
-
+#include <dirent/dirent.h>  // DIR, opendir()
 
 bool check_file_exists(const char* file_path)
 {
@@ -9,6 +9,16 @@ bool check_file_exists(const char* file_path)
         return false;
     }
     return true;
+}
+bool check_dir_exists(const char* dir_path)
+{
+  DIR* dir = opendir(dir_path);
+  
+  bool ret = dir != NULL; 
+  
+  // close the stream
+  closedir(dir);
+  return ret; 
 }
 
 char* read_text_file(const char* file_path)

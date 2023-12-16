@@ -3,6 +3,7 @@
 #include "app/style.h"
 #include "app/file_io.h"
 #include "app/core_data.h"
+#include "app/config.h"
 
 // order is important, io_util & str_util before global
 #define IO_UTIL_IMPLEMENTATION       // only define once
@@ -30,15 +31,16 @@ int main(int argc, char** argv)
 {
   core_data_t* core_data = core_data_get();
 
+  // -- get executable name --
+  // P_STR(_getcwd(NULL, 0));
+  GetModuleFileName(NULL, core_data->exec_path, CORE_PATH_MAX);   // get executable location
+  assert(core_data->exec_path != NULL);
+
   // -- get the sheet path either based on executable or macro --
 #ifdef OVERRIDE_SHEET_PATH
   strncpy(core_data->sheets_path, OVERRIDE_SHEET_PATH, CORE_PATH_MAX);
   // P_STR(core_data->sheets_path);
 #else
-  // -- get executable name --
-  // P_STR(_getcwd(NULL, 0));
-  GetModuleFileName(NULL, core_data->exec_path, CORE_PATH_MAX);   // get executable location
-  assert(core_data->exec_path != NULL);
   // P_STR(core_data->exec_path);
   strncpy(core_data->sheets_path, core_data->exec_path, CORE_PATH_MAX);
   assert(core_data->sheets_path != NULL);
@@ -52,6 +54,25 @@ int main(int argc, char** argv)
   strcat(core_data->sheets_path, "sheets\\");
   // P_STR(core_data->sheets_path);
 #endif
+  
+  // -- config file --
+
+  #define CONFIG_PATH_MAX 256
+  char config_path[CONFIG_PATH_MAX];
+  strncpy(config_path, core_data->exec_path, CORE_PATH_MAX);
+  assert(config_path != NULL);
+  int dirs_walk_back_02 = 2;
+  for (u32 i = strlen(config_path) -1; i > 0; --i)
+  {
+    if (config_path[i] == '\\') 
+    { dirs_walk_back_02--; if (dirs_walk_back_02 <= 0) { break; } }
+    config_path[i] = '\0';
+  }
+  strcat(config_path, "bin\\config.doc");
+  P_STR(config_path);
+  config_read_config_file(config_path);
+
+  // -- arguments --
 
   // too few arguments, at least 1, i.e. 2 because doc counts
   if (argc < 2)
@@ -109,13 +130,20 @@ int main(int argc, char** argv)
   
   // ---- keywords ----
 
-  int n = 0;  // counts found matches for keyword
+  int found_count = 0;  // counts found matches for keyword
   
   if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
   {
     // for (int i = 0; i < word_arr_pos; ++i)
     // { P_STR(word_arr[i]); }
-    doc_search_dir(core_data->sheets_path, word_arr, word_arr_pos, &n);
+    doc_search_dir(core_data->sheets_path, word_arr, word_arr_pos, &found_count);
+    
+    // custom doc paths
+    for (int i = 0; i < core_data->custom_sheet_paths_len; ++i)
+    {
+      // P_STR(core_data->custom_sheet_paths[i]);
+      doc_search_dir(core_data->custom_sheet_paths[i], word_arr, word_arr_pos, &found_count);
+    }
   }
   else if (HAS_FLAG(mode, SEARCH_DEFINITION))
   {
@@ -149,8 +177,8 @@ int main(int argc, char** argv)
 
     int dir_depth = 0;
     search_result_t* results = NULL;
-    def_search_dir(dir_path, keyword, &n, &results, &dir_depth);
-    n = arrlen(results);  // @BUGG: n seems to be inaccurate
+    def_search_dir(dir_path, keyword, &found_count, &results, &dir_depth);
+    found_count = arrlen(results);  // @BUGG: n seems to be inaccurate
     // P_INT(n);
     // P_INT((int)arrlen(results));
     // for (int i = 0; i < arrlen(results); ++i)
@@ -186,7 +214,8 @@ int main(int argc, char** argv)
     }
   } 
 
-  if (n <= 0)
+  P_INT(found_count);
+  if (found_count <= 0)
   { 
     PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  
     PF(" could not find keyword '"); 

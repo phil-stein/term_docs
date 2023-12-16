@@ -30,6 +30,8 @@ add_executable(${NAME}
               ${ROOT_DIR}/src/app/file_io.h
               ${ROOT_DIR}/src/app/style.c
               ${ROOT_DIR}/src/app/style.h
+              ${ROOT_DIR}/src/app/config.c
+              ${ROOT_DIR}/src/app/config.h
               )
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -std=gnu99")
 
