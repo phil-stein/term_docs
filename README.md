@@ -8,6 +8,8 @@ c documentation for the terminal <br>
 works offline and is customizable <br>
 also has seqarch utility functions <br>
 most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
+also has documentation for some of my stuff:
+[global](https://github.com/phil-stein/global.git)
 
 |doc    |search  |
 |:-----:|:------:|
