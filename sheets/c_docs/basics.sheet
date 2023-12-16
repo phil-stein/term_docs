@@ -450,7 +450,7 @@ operators:
     //        etc.
 #
 |c|C|
-|basics|arithmetic_operators|operator|operators|
+|basics|arithmetic-operators|operator|operators|
 |+|-|/|*|%|++|--|
 |add|addtition|sub|subtract|div|divide|mul|multiply|mod|modulo|
   basic mathematic/arithmetic operators
@@ -489,10 +489,10 @@ operators:
 #
 |c|C|
 |basics|operator|boolean|
-|comparison|realtional_operator|realtional_operators|
-|equal|not_equal|less|less_than_or_equal|greater|greater_than_or_equal|
+|comparison|realtional-operator|realtional-operators|
+|equal|not-equal|less|less-than-or-equal|greater|greater-than-or-equal|
 |==|!=|<|<=|>|>=|
-|logical_operator|logical_operators|
+|logical-operator|logical-operators|
 |and|or|invert|not|
 |&&|!|
   
@@ -578,8 +578,9 @@ operators:
     -> func()
 #
 |c|C|
-|operator|bitwise_operator|basics|
-|bit_shift|shift|bitwise_or|or|bitwise_and|and|
+|operator|bitwise-operator|basics|
+|bit-shift|shift|bitwise-or|or|bitwise-and|and|
+|bit|byte|
 |<<|>>|&|
   bit shift
     <<: left sides bits are moved left by number on right side
@@ -605,22 +606,23 @@ operators:
 ?< https://www.tutorialspoint.com/cprogramming/c_operators.htm >?
 #
 |c|C|
-|operator|bitwise_operator|basics|
-|assign|assignment|assignment_operators|
+|operator|bitwise-operator|basics|
+|assign|assignment|assignment-operators|bitwise-assignment
 |add|addtition|sub|subtract|div|divide|mul|multiply|mod|modulo|
-|bit_shift|shift|bitwise_or|or|bitwise_and|and|
+|bit-shift|shift|bitwise-or|or|bitwise-and|and|
+|bit|byte|
 |+=|-=|*=|/=|%=|<<=|>>=|&=|\|=|^=|
 
   =:   a = b;   a's value is now b's value
   
-  $GREEN$arithmetic operators, see $|$\|arithmetic_operators\|$$:
+  $GREEN$arithmetic operators, see $|$\|arithmetic-operators\|$$:
   +=:  a += b;  is equal to a = a + b
   -=:  a -= b;  is equal to a = a - b
   *=:  a *= b;  is equal to a = a * b
   /=:  a /= b;  is equal to a = a / b
   %=:  a %= b;  is equal to a = a % b
   
-  $GREEN$bitwise operators, see $|$\|bitwise_operator\|$$:
+  $GREEN$bitwise operators, see $|$\|bitwise-operator\|$$:
   <<=: a <<= b; is equal to a = a << b
   >>=: a >>= b; is equal to a = a >> b
   &=:  a &= b;  is equal to a = a & b
@@ -655,11 +657,12 @@ misc:
 
 #
 |c|C|
-|bit_flag|flag|bitwise_operator|basics|
+|bit-flag|flag|bitwise-operator|basics|
+|bit|byte|
   set and check certain bits in a number
   make number with bit a set
 
-  see $|$\|bitwise_operator\|$$ for explanation
+  see $|$\|bitwise-operator\|$$ for explanation
   of <<, >>, &, \| operators
 
   example:
@@ -785,7 +788,7 @@ macros:
 |c|C|
 |stringify|
 |operator|preprocessor|macro|basics|
-|to_string|\#|
+|to-string|to_string|\#|
   and \\# to macro arg to stringify it
   example:
     \#define TO_STR(arg)  (\\#arg)
@@ -797,9 +800,9 @@ macros:
       -> var: 0
 #
 |c|C|
-|token_pasting|
+|token-pasting|token_pasting|
 |operator|preprocessor|macro|basics|
-|combine_macros|token|\#\#|
+|combine-macros|token|\#\#|\#|
   using the \\#\\# operator in macros
   you can expand an argument or macro and
   combine it with other text
@@ -973,7 +976,7 @@ macros:
 #
 |c|C|
 |defined|
-|preprocessor|macro|basics|
+|preprocessor|macro|basics|\#|
   turns a macro into a suitable condition for \\#if, \\#elif
 
   example:
@@ -990,7 +993,7 @@ macros:
 #
 |c|C|
 |define|
-|preprocessor|macro|basics|
+|preprocessor|macro|basics|\#|
     the define preprocessor registeres 
     a piece of code under a name
     alternatively a macro can also just 
@@ -1021,7 +1024,7 @@ macros:
 #
 |c|C|
 |undef|
-|undefine|preprocessor|macro|basics|
+|undefine|preprocessor|macro|basics|\#|
   the undef preprocessor undefines a previously defined macro
   example:
     \#define A
@@ -1036,7 +1039,7 @@ macros:
 #
 |c|C|
 |if|
-|endif|preprocessor|macro|basics|
+|endif|preprocessor|macro|basics|\#|
   check a condition at compile time and include a piece of code or not
   ! has to be terminated with one of \#endif, \#else or \#elif
   
@@ -1051,7 +1054,7 @@ macros:
 #
 |c|C|
 |else|
-|endif|preprocessor|macro|basics|
+|endif|preprocessor|macro|basics|\#|
   used with the \\#if, \\#elif, \\#ifdef preprocessors
   
   example:
@@ -1064,7 +1067,7 @@ macros:
 #
 |c|C|
 |elif|
-|else|endif|preprocessor|macro|basics|
+|else|endif|preprocessor|macro|basics|\#|
   used with the \\#if, \\#else, \\#ifdef preprocessors
 
   example:
@@ -1077,7 +1080,7 @@ macros:
 #
 |c|C|
 |ifdef|
-|endif|preprocessor|macro|basics|
+|endif|preprocessor|macro|basics|\#|
   the ifdef preprocessor ex/includes a part of code
   depending on if the given macro is defined
 
@@ -1093,7 +1096,7 @@ macros:
 #
 |c|C|
 |ifndef|
-|endif|preprocessor|macro|basics|
+|endif|preprocessor|macro|basics|\#|
   the ifndef preprocessor ex/includes a part of code
   depending on if the given macro is not defined
 
@@ -1109,7 +1112,7 @@ macros:
 #
 |c|C|
 |error|
-|print|preprocessor|macro|basics|
+|print|preprocessor|macro|basics|\#|
   the error preprocessor error prints an error to the stderr
 
   example:
@@ -1126,7 +1129,8 @@ macros:
 |c|C|
 |pragma|
 |preprocessor|macro|basics|
-|gcc|ignore_warning|
+|gcc|ignore-warning|ignore|warning|\#|
+|GCC|diagnostic|push|ignored|pop|
   the pragma preprocessor issues commands to the compiler,
   therefore the commands may vary from compiler to compiler
 
@@ -1150,7 +1154,7 @@ flow control:
 #
 |c|C|
 |goto|label|Label|
-|flow_control|basics|
+|flow-control|basics|
   the goto statement jumps to a label
   a label is a defined / named position in the code
   a label is just a name followed by a :
@@ -1173,7 +1177,7 @@ flow control:
 #
 |c|C|
 |if|
-|flow_control|basics|
+|flow-control|basics|
   execute a piece of code based on a condition
 
   example:
@@ -1189,8 +1193,8 @@ flow control:
       -> boolean
 #
 |c|C|
-|else|else_if|
-|flow_control|basics|
+|else|else-if|else-if|
+|flow-control|basics|
   after a if or else if statement this executes
   a block of code if the previous statement didnt
   else if executes the block of code under those 
@@ -1221,7 +1225,7 @@ flow control:
 |c|C|
 |conditional|ternary|
 |operator|
-|flow_control|basics|
+|flow-control|basics|
   single line statement evaluating to a value
   that works like a if / if else / else chain
   
@@ -1244,8 +1248,8 @@ flow control:
     pow(2, speed > 8.0f ? 4 : 6);
 #
 |c|C|
-|while|while_loop|
-|flow_control|loop|basics|
+|while|while-loop|
+|flow-control|loop|basics|
 |break|continue|
   repeatedly executes a block of code
   while the given condition is true
@@ -1282,8 +1286,8 @@ flow control:
 
 #
 |c|C|
-|do_while|do|while|do_while_loop|
-|flow_control|basics|
+|do-while|do|while|do-while-loop|
+|flow-control|basics|
   same as while loop, only that this loop executes the block
   once before checking the condition, assuring it always gets 
   executed least once
@@ -1302,8 +1306,8 @@ flow control:
     -> a: 1
 #
 |c|C|
-|for|for_loop|
-|flow_control|loop|basics|
+|for|for-loop|
+|flow-control|loop|basics|
   the for loop executes a block of code 
   as long as the middle condition is true
   it also initializes a local variable
@@ -1340,7 +1344,7 @@ flow control:
 #
 |c|C|
 |switch|case|default|
-|flow_control|loop|basics|
+|flow-control|loop|basics|
   the switch statement checks a input variable 
   agaist multiple cases and executes the code 
   if cases are met by the variable
@@ -1379,8 +1383,8 @@ entry point:
 |c|C|
 |main|
 |entry|entrypoint|function|
-|commandline|command_line|arguments|
-|command_line_arguments|cmd|terminal|
+|commandline|command-line|arguments|
+|command-line-arguments|cmd|terminal|
 |argc|argv|basics|
   the function main() is the entrypoint of any c program
   it gets called when the program is started and the 
@@ -1496,8 +1500,8 @@ entry-point:
 
 #
 |c|C|
-|entry_point|main|basics|
-|command_line|command_line_arguments|arguments|
+|entry|entry-point|main|basics|
+|command-line|command-line-arguments|arguments|
 |EXIT_SUCCESS|EXIT_FAILURE|
   the entry point function is the function that gets 
   automatically executed at the start of the program

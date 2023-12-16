@@ -1,6 +1,10 @@
 #ifndef STYLE_H
 #define STYLE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "global/global.h"
 
 #define BORDER_CHAR '|'
@@ -42,5 +46,8 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr);
 
 void style_highlight_c_comment(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr);
 
+#ifdef __cplusplus
+}   // extern c
+#endif
 
 #endif

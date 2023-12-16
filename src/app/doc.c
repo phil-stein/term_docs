@@ -25,6 +25,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
   { 
     return; 
   }
+  P_STR(dir_path);
   
 
   // recursively read the directory and its sub-directories
@@ -47,6 +48,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
         char* slash = dir_path[strlen(dir_path) -1] == '/'  ? "" :
                       dir_path[strlen(dir_path) -1] == '\\' ? "" : "\\";
         SPRINTF(300, buf, "%s%s%s", dir_path, slash, dp->d_name);
+        P_STR(buf);
         if (doc_search_file(buf, dp->d_name, keywords, keywords_len)) 
         { 
           *n += 1;
@@ -69,7 +71,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
 }
 
 // @TODO: give array of keyword to check if has multiple at once
-bool doc_search_file(const char* path, const char* file, const char** keywords, int keywords_len)
+bool doc_search_file_01(const char* path, const char* file, const char** keywords, int keywords_len)
 {
   if (!check_file_exists(path)) { return false; }
   int txt_len = 0;
@@ -258,30 +260,114 @@ bool doc_search_file_02(const char* path, const char* file, const char** keyword
   return found_one;
 }
 
-// bool doc_search_file_wip(const char* path, const char* file, const char** keywords, int keywords_len)
-// {
-//   if (!check_file_exists(path)) { return false; }
-//   int txt_len = 0;
-//   char* txt = read_text_file_len(path, &txt_len);
-//   
-// 
-//   int start;
-//   for (start = 1; txt[start] != '\0'; start++)
-//   {
-//     // check if section start
-// 
-//     // check if section end
-//     -> doc_print_the_section_func();
-// 
-//     for (int i = 0; i < keywords_len; ++i)
-//     {
-//     }
-//   }
-// 
-//   FREE(txt);
-// 
-//   return found_one;
-// }
+bool doc_search_file(const char* path, const char* file, const char** keywords, int keywords_len)
+{
+  if (!check_file_exists(path)) { return false; }
+  int txt_len = 0;
+  char* txt = read_text_file_len(path, &txt_len);
+  P_STR(path);
+  
+
+  // // @TMP: 
+  // int line = 1;
+
+
+  int start;
+  for (start = 1; txt[start] != '\0'; ++start)
+  {
+    // // @TMP: count lines
+    // if (txt[start] == '\n') { line++; }
+
+    // if section start
+    // find section end
+    // P_LINE_STR("%d|%d | start ", line, start);
+    int end = start +1;
+    while (end < txt_len && (txt[end] != '#' || txt[end -1] == '\\')) 
+    { 
+      // // @TMP: count lines
+      // if (txt[end] == '\n') { line++; }
+      
+      end++; 
+    }
+    if (txt[end] != '#') 
+    { 
+      // P_LINE_STR("file ended ");
+      break; 
+    }
+
+    // // @TMP: print section
+    // for (int i = start; i < end; ++i)
+    // { PF("%c", txt[i]); }
+    // PF("\n");
+    // // PF("end"); P_LINE();
+    // P_LINE_STR("%d|%d | end ", line, end);
+
+    int keyword_found_count = 0;
+    for (int keyword_idx = 0; keyword_idx < keywords_len; ++keyword_idx)
+    {
+      char* keyword = keywords[keyword_idx];
+
+      int  keyword_pos = 0;
+      bool keyword_found = false;
+      // search for keyword
+      for (int section = start; section < end; ++section)
+      {
+        // escaped #, skip the '\'
+        if (txt[section] == '\\' && txt[section +1] == '#') 
+        { section++; }
+
+        // if the first char in sectin fits keyword's first char
+        // loop over the next chars to see if it is the keyword
+        if (txt[section] == keyword[keyword_pos])
+        {
+          // P("first char matched");
+          // assume true incase strlen(keyword) == 1
+          keyword_found = true;
+          // start at the first char, checked in the if stateent above
+          // and check if the next chars fit aswell
+          int tag_pos = section +1;
+          for (; tag_pos < section + strlen(keyword); ++tag_pos)
+          {
+              if (txt[section +tag_pos] != keyword[keyword_pos]) { keyword_found = false; break; }
+              // section++;
+              keyword_pos++;
+          }
+          if (keyword_found) 
+          { 
+            for (int c = 0; c  < strlen(keyword); ++c)
+            { PF("%c", txt[section +c]); }
+            PF("\n");
+            // has to be done here and in case not found
+            section += tag_pos;
+            break; 
+          }
+          // has to be done here and in case found
+          section += tag_pos;
+        }
+        
+        keyword_pos++;
+      }
+      // check if keyword in section
+      if (keyword_found)
+      { keyword_found_count++; break; }
+      else
+      { break; }
+    }
+    P_INT(keyword_found_count);
+   
+    // // print if all keywords found
+    // if (keyword_found_count == keywords_len)
+    // { doc_print_section(); }
+
+    // skip to next section
+    start = end;
+  }
+
+  FREE(txt);
+
+  // return found_count > 0;
+  return false;
+}
 
 
 void doc_print_section(char* sec, const char* keyword, const char* file)
@@ -289,6 +375,7 @@ void doc_print_section(char* sec, const char* keyword, const char* file)
   int w, h; io_util_get_console_size_win(&w, &h);
   w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
 
+  // @TODO: use P_LINE_STR() for this
   PF_COLOR(PF_PURPLE);
   PF("%s|%s ", file, keyword); 
   int i = strlen(keyword) + strlen(file) +2;
@@ -721,174 +808,5 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
 #undef SET_COLOR
 #undef SET_DEFAULT_STYLE
 #undef RESET_DEFAULT_STYLE
-
-// old highlight system
-    // if (isspace(sec[i -1]) && sec[i -1] != '|') //  && !in_tag)  // !isalnum(sec[i -1])
-    // {
-
-    //   // -- types --
-    //   for (u32 s = 0; s < key_types_len; ++s) // string
-    //   {
-    //     // @UNSURE: could use strcmp()
-    //     bool equal = false;
-    //     u32 len = strlen(key_types[s]);
-    //     u32 c;
-    //     for (c = 0; c < len; ++c)             // char
-    //     {
-    //       equal = sec[i +c] == key_types[s][c];
-    //       if (!equal) { break; }
-    //     }
-    //     if (equal && TYPE_END(sec[i +len]))
-    //     {
-    //       DUMP_COLORED(len, COL_TYPE);
-    //       break;
-    //     }
-    //   }
-
-    //   // -- flow control --
-    //   for (u32 s = 0; s < key_flow_ctrl_len; ++s) // string
-    //   {
-    //     // @UNSURE: could use strcmp()
-    //     bool equal = false;
-    //     u32 len = strlen(key_flow_ctrl[s]);
-    //     u32 c;
-    //     for (c = 0; c < len; ++c)             // char
-    //     {
-    //       equal = sec[i +c] == key_flow_ctrl[s][c];
-    //       if (!equal) { break; }
-    //     }
-    //     if (equal && FLOW_CTRL_END(sec[i +len]))
-    //     {
-    //       DUMP_COLORED(len, COL_TYPE);
-    //       break;
-    //     }
-    //   }
-    // }
-
-    // // -- functions --
-    // int j = 0;
-    // while(isalnum(sec[i +j]) || sec[i +j] == '_') 
-    // { j++; }
-    // if (sec[i +j] == '(')
-    // {
-    //   BUF_DUMP();
-    //   SET_COLOR(COL_FUNC);
-    //   while (j > 0) { buf[buf_pos++] = sec[i++]; j--; }
-    //   BUF_DUMP();
-    //   SET_COLOR(PF_WHITE);
-    // }
-
-    // // -- values --
-
-    // if (isdigit(sec[i]) && !isalpha(sec[i -1]) && 
-    //     (!isalpha(sec[i +1]) || sec[i +1] == 'f') && 
-    //     !in_tag)                                      // numbers
-    // {
-    //   BUF_DUMP();
-    //   SET_COLOR(COL_VALUE);
-    //   int j = 0;
-    //   while (isdigit(sec[i +j]) || sec[i +j] == '.' || sec[i +j] == 'f') { j++; }
-    //   while (j > 0) { buf[buf_pos++] = sec[i++]; j--; }
-    //   BUF_DUMP();
-    //   SET_COLOR(PF_WHITE);
-    // }
-    // if (sec[i +0] == 't' && sec[i +1] == 'r' &&     // value symbols
-    //     sec[i +2] == 'u' && sec[i +3] == 'e')
-    // { DUMP_COLORED(4, COL_VALUE); }
-    // if (sec[i +0] == 'f' && sec[i +1] == 'a' &&
-    //     sec[i +2] == 'l' && sec[i +3] == 's' &&
-    //     sec[i +4] == 'e')
-    // { DUMP_COLORED(5, COL_VALUE); }
-    // if (sec[i +0] == 'N' && sec[i +1] == 'U' &&
-    //     sec[i +2] == 'L' && sec[i +3] == 'L')
-    // { DUMP_COLORED(4, COL_VALUE); }
-    // if (sec[i] == '"')                        // strings
-    // {
-    //   BUF_DUMP();
-    //   SET_COLOR(COL_VALUE);
-    //   buf[buf_pos++] = sec[i++];
-    //   while (sec[i] != '"') { buf[buf_pos++] = sec[i++]; }
-    //   buf[buf_pos++] = sec[i++];
-    //   BUF_DUMP();
-    //   SET_COLOR(PF_WHITE);
-    // }
-    // if (sec[i] == '\'' && sec[i +2] == '\'')  // chars
-    // {
-    //   BUF_DUMP();
-    //   SET_COLOR(COL_VALUE);
-    //   buf[buf_pos++] = sec[i++];
-    //   buf[buf_pos++] = sec[i++];
-    //   buf[buf_pos++] = sec[i++];
-    //   BUF_DUMP();
-    //   SET_COLOR(PF_WHITE);
-    // }
-
-
-
-// old keyword highlight system
-//
-      // if (sec[i +0] == 'v' && sec[i +1] == 'o' &&
-      //     sec[i +2] == 'i' && sec[i +3] == 'd' && 
-      //     TYPE_END(sec[i +4]))
-      // { DUMP_COLORED(4, COL_TYPE); }
-      // if (sec[i +0] == 'i' && sec[i +1] == 'n' &&
-      //     sec[i +2] == 't' && TYPE_END(sec[i +3]))
-      // { DUMP_COLORED(3, COL_TYPE); }
-      // if (sec[i +0] == 'f' && sec[i +1] == 'l' &&
-      //     sec[i +2] == 'o' && sec[i +3] == 'a' &&
-      //     sec[i +4] == 't' && TYPE_END(sec[i +5]))
-      // { DUMP_COLORED(5, COL_TYPE); }
-      // if (sec[i +0] == 'd' && sec[i +1] == 'o' &&
-      //     sec[i +2] == 'u' && sec[i +3] == 'b' &&
-      //     sec[i +4] == 'l' && sec[i +5] == 'e' && 
-      //     TYPE_END(sec[i +6]))
-      // { DUMP_COLORED(6, COL_TYPE); }
-      // if (sec[i +0] == 's' && sec[i +1] == 'h' &&
-      //     sec[i +2] == 'o' && sec[i +3] == 'r' &&
-      //     sec[i +4] == 't' && TYPE_END(sec[i +5]))
-      // { DUMP_COLORED(5, COL_TYPE); }
-      // if (sec[i +0] == 'l' && sec[i +1] == 'o' &&
-      //     sec[i +2] == 'n' && sec[i +3] == 'g' && 
-      //     TYPE_END(sec[i +4]))
-      // { DUMP_COLORED(4, COL_TYPE); }
-      // if (sec[i +0] == 's' && sec[i +1] == 'i' &&
-      //     sec[i +2] == 'z' && sec[i +3] == 'e' &&
-      //     sec[i +4] == '_' && sec[i +5] == 't' && 
-      //     TYPE_END(sec[i +6]))
-      // { DUMP_COLORED(6, COL_TYPE); }
-      // if (sec[i +0] == 'u' && sec[i +1] == 'n' &&
-      //     sec[i +2] == 's' && sec[i +3] == 'i' &&
-      //     sec[i +4] == 'g' && sec[i +5] == 'n' &&
-      //     sec[i +6] == 'e' && sec[i +7] == 'd' && 
-      //     TYPE_END(sec[i +8]))
-      // { DUMP_COLORED(8, COL_TYPE); }
-      // if (sec[i +0] == 'e' && sec[i +1] == 'n' &&
-      //     sec[i +2] == 'u' && sec[i +3] == 'm' && 
-      //     TYPE_END(sec[i +4]))
-      // { DUMP_COLORED(4, COL_TYPE); }
-      // if (sec[i +0] == 's' && sec[i +1] == 't' &&
-      //     sec[i +2] == 'r' && sec[i +3] == 'u' &&
-      //     sec[i +4] == 'c' && sec[i +5] == 't' && 
-      //     TYPE_END(sec[i +6]))
-      // { DUMP_COLORED(6, COL_TYPE); }
-      // if (sec[i +0] == 'c' && sec[i +1] == 'h' &&
-      //     sec[i +2] == 'a' && sec[i +3] == 'r' && 
-      //     TYPE_END(sec[i +4]))
-      // { DUMP_COLORED(4, COL_TYPE); }
-      // if (sec[i +0] == 'b' && sec[i +1] == 'o' &&
-      //     sec[i +2] == 'o' && sec[i +3] == 'l' && 
-      //     TYPE_END(sec[i +4]))
-      // { DUMP_COLORED(4, COL_TYPE); }
-      // if (sec[i +0] == 'c' && sec[i +1] == 'o' &&
-      //     sec[i +2] == 'n' && sec[i +3] == 's' &&
-      //     sec[i +4] == 't' && TYPE_END(sec[i +5]))
-      // { DUMP_COLORED(5, COL_TYPE); }
-      // if (sec[i +0] == 't' && sec[i +1] == 'y' &&
-      //     sec[i +2] == 'p' && sec[i +3] == 'e' &&
-      //     sec[i +4] == 'd' && sec[i +5] == 'e' &&
-      //     sec[i +6] == 'f' && TYPE_END(sec[i +7]))
-      // { DUMP_COLORED(7, COL_TYPE); }
- 
-
 
 

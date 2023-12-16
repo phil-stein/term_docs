@@ -109,6 +109,7 @@
 
     ~ escaping \\# using one \ highlights it as a c macro
     $~$  use \\ to scape it fully$$
+    $~$  use \ to escape \\# inside of tags$$
 #
 |term_docs|
 |test|wip|

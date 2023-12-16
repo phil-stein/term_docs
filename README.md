@@ -137,18 +137,15 @@ change this and call `make clean` and `make` in the root directory
 ## todo
   - [ ] bugg: -c syntax highlighting doesnt disable properly
   - [ ] multiple search keywords, i.e. doc file read
-  - [ ] search structure definitions in specified dir
+  - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
   - [ ] load keys for style.c from file, for custamization
   - [ ] searching 'INT_MIN' etc. in limits.h sont work
-  - [ ] add way to invoke tag from section
-    - i.e. searching 'printf' section printf invokes 'printf_format' and that gets displayed too
   - [ ] c-syntax in macros, for numbers, strings, etc.
-  - [ ] make # available in tags as \#
+  - [ ] make sure all sheets use '-' as space in tags
   - [ ] more documentation
     - [ ] docs (finish functionality first)
-      - [ ] -help, 
       - [ ] custom .sheet
       - [ ] custom name
     - [ ] make
