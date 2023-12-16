@@ -37,14 +37,10 @@ int main(int argc, char** argv)
   assert(core_data->exec_path != NULL);
 
   // -- get the sheet path either based on executable or macro --
-#ifdef OVERRIDE_SHEET_PATH
-  strncpy(core_data->sheets_path, OVERRIDE_SHEET_PATH, CORE_PATH_MAX);
-  // P_STR(core_data->sheets_path);
-#else
-  // P_STR(core_data->exec_path);
+  
   strncpy(core_data->sheets_path, core_data->exec_path, CORE_PATH_MAX);
   assert(core_data->sheets_path != NULL);
-  int dirs_walk_back = 2;
+  int dirs_walk_back = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
   for (u32 i = strlen(core_data->sheets_path) -1; i > 0; --i)
   {
     if (core_data->sheets_path[i] == '\\') 
@@ -52,23 +48,22 @@ int main(int argc, char** argv)
     core_data->sheets_path[i] = '\0';
   }
   strcat(core_data->sheets_path, "sheets\\");
-  // P_STR(core_data->sheets_path);
-#endif
+  P_STR(core_data->sheets_path);
   
   // -- config file --
-
+  
   #define CONFIG_PATH_MAX 256
   char config_path[CONFIG_PATH_MAX];
   strncpy(config_path, core_data->exec_path, CORE_PATH_MAX);
   assert(config_path != NULL);
-  int dirs_walk_back_02 = 2;
+  int dirs_walk_back_02 = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
   for (u32 i = strlen(config_path) -1; i > 0; --i)
   {
     if (config_path[i] == '\\') 
     { dirs_walk_back_02--; if (dirs_walk_back_02 <= 0) { break; } }
     config_path[i] = '\0';
   }
-  strcat(config_path, "bin\\config.doc");
+  strcat(config_path, "config.doc");
   P_STR(config_path);
   config_read_config_file(config_path);
 

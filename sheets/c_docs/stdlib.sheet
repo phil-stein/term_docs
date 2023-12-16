@@ -16,7 +16,7 @@ EXIT_FAILURE: 1
 #
 |c|C|
 |malloc|
-|allocate|memory|dynamic memory|stdlib|stdlib.h|
+|allocate|memory|dynamic-memory|stdlib|stdlib.h|
 void* malloc(size_t size)   
     allocate the specified amount of memory.
     ! needs to be freed using [free]
@@ -31,7 +31,7 @@ void* malloc(size_t size)
 #
 |c|C|
 |calloc|
-|allocate|memory|dynamic memory|stdlib|stdlib.h|
+|allocate|memory|dynamic-memory|stdlib|stdlib.h|
 void* calloc(size_t items, size_t size)   
     allocate the specified amount of memory.
     sets memory to 0.
@@ -46,7 +46,7 @@ void* calloc(size_t items, size_t size)
 #
 |c|C|
 |realloc|
-|reallocate|allocate|memory|dynamic memory|stdlib|stdlib.h|
+|reallocate|allocate|memory|dynamic-memory|stdlib|stdlib.h|
 void* realloc(void* ptr, size_t size)   
     allocate the specified amount of memory.
     if ptr already allocated, allocates
@@ -64,7 +64,7 @@ void* realloc(void* ptr, size_t size)
 #
 |c|C|
 |free|
-|deallocate|memory|dynamic memory|stdlib|stdlib.h|
+|deallocate|memory|dynamic-memory|stdlib|stdlib.h|
 void free(void* mem)   
     free a previously allocated bit of memory
     ! mem may not be NULL
@@ -198,7 +198,7 @@ void atexit(void (*func)(void))
 #
 |c|C|
 |system|
-|command|command line|stdlib|stdlib.h|
+|command|command-line|stdlib|stdlib.h|
 int exit(const char* command)   
     gives command to the os's terminal
     ! available commands depend on current os

@@ -100,7 +100,7 @@ void config_handle_argument()
     char path[CORE_PATH_MAX];
     strncpy(path, core_data->exec_path, CORE_PATH_MAX);
     assert(path != NULL);
-    int dirs_walk_back = 2;
+    int dirs_walk_back = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
     for (u32 i = strlen(path) -1; i > 0; --i)
     {
       if (path[i] == '\\') 

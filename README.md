@@ -134,14 +134,25 @@ or ``doc test`` to see all usecases for syntax
 in the makefile in the root directory at the top there is a variable called NAME `NAME = doc.exe` <br>
 change this and call `make clean` and `make` in the root directory
 
-## todo
+## buggs
   - [ ] bugg: -c syntax highlighting doesnt disable properly
   - [ ] bugg: -d doesnt find program_start in bovengine
+  - [x] bugg: doesnt find stderr, stdin, stdout in stdio.sheet
+    - i think it only find every other tag
+  - [x] bugg: FILE find things like |file| and |tmpfile|
+    - doesnt check if tag is actually surrounded by |
+  - [ ] bugg: config file doesnt work in vs19 because dependent on exec path
+
+## todo
   - [ ] maybe change -d to just using keyword with () at the end
+  - [ ] update readme
+    - [ ] docemtation & defenition search
+    - [ ] custom exec name
+    - [ ] config file
   - [x] config file
     - [x] disble syntax highlighting
     - [x] set custom sheet file path
-  - [ ] multiple search keywords, i.e. doc file read
+  - [x] multiple search keywords, i.e. doc file read
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
@@ -154,6 +165,7 @@ change this and call `make clean` and `make` in the root directory
       - [ ] custom .sheet
       - [ ] custom name
     - [ ] make
+    - [ ] cmake
     - [ ] gcc
     - [ ] opengl 
       - [ ] every func in debug_opengl.h `WIP`

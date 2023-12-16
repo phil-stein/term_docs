@@ -42,9 +42,9 @@ target_compile_features(   ${NAME} PRIVATE cxx_std_11)
 target_compile_options(    ${NAME} PRIVATE -Wall -DGLOBAL_DEBUG) 
 
 if(${CMAKE_GENERATOR} STREQUAL "MinGW Makefiles")
+  target_compile_options(    ${NAME} PRIVATE -DDIRS_TO_WALK_BACK_TO_ROOT=1) 
 else() # if(${CMAKE_GENERATOR} STREQUAL "Visual Studio 2016 19")
-  # target_compile_options(    ${NAME} PRIVATE -DOVERRIDE_SHEET_PATH=\"\\\\Workspace\\\\C\\\\term_docs\\\\sheets\\\\\") 
-  target_compile_options(    ${NAME} PRIVATE -DOVERRIDE_SHEET_PATH=\"/Workspace/C/term_docs/sheets/\") 
+  target_compile_options(    ${NAME} PRIVATE -DDIRS_TO_WALK_BACK_TO_ROOT=2) 
 endif()
 # # -- link libs --
 # # set _build/... folder based on generator, i.e. mingw-gcc or vs19

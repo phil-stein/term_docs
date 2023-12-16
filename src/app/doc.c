@@ -93,20 +93,21 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
     {
       char* keyword = keywords[keyword_idx];
 
-      int  keyword_pos = 0;
       bool keyword_found = false;
       // search for keyword
       for (int section = start; section < end; ++section)
       {
+        int  keyword_pos = 0;
+        
         // escaped #, skip the '\'
         if (txt[section] == '\\' && txt[section +1] == '#') 
         { section++; }
 
         // if the first char in sectin fits keyword's first char
-        // loop over the next chars to see if it is the keyword
-        if (txt[section] == keyword[keyword_pos])
+        // and the char before is |, because |<tag>| 
+         // loop over the next chars to see if it is the keyword
+        if (txt[section -1] == BORDER_CHAR && txt[section] == keyword[keyword_pos])
         {
-          // P("first char matched");
           // assume true incase strlen(keyword) == 1
           keyword_found = true;
           // start at the first char, checked in the if stateent above
@@ -114,10 +115,14 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
           int tag_pos = section;
           for (; tag_pos < section + strlen(keyword) && tag_pos < txt_len ; ++tag_pos)
           {
-              if (txt[tag_pos] != keyword[keyword_pos]) { keyword_found = false; break; }
+              if (txt[tag_pos] == '|' || txt[tag_pos] != keyword[keyword_pos]) { keyword_found = false; break; }
               // section++;
               keyword_pos++;
           }
+          
+          // check if tag ends in | 
+          if (txt[tag_pos] != BORDER_CHAR) { keyword_found = false; }
+          
           if (keyword_found) 
           {
             // // PF("in loop: "); P_BOOL(keyword_found);
