@@ -706,7 +706,7 @@ misc:
     if (HAS_FLAG(a, HAS_B)) { printf("has b");}
     if (HAS_FLAG(a, HAS_C)) { printf("has c");}
       -> has a
-      -> has b
+      -> has c
 #
 
 macros:
@@ -800,9 +800,9 @@ macros:
       -> var: 0
 #
 |c|C|
-|token-pasting|token_pasting|
+|token-pasting|pasting|
 |operator|preprocessor|macro|basics|
-|combine-macros|token|\#\#|\#|
+|combine|combine-macros|token|\#\#|\#|
   using the \\#\\# operator in macros
   you can expand an argument or macro and
   combine it with other text

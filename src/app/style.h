@@ -29,6 +29,9 @@ extern "C" {
 #define COL_VALUE             PF_YELLOW
 #define COL_MACRO             PF_PURPLE
 
+#define DOC_PF_COLOR(c)       if (core_data->style_act) { PF_COLOR((c)); }
+#define DOC_PF_STYLE(s, c)    if (core_data->style_act) { PF_STYLE((s), (c)); }
+
 // pass the txt to be modified as well as the buffer the sections from txt
 // are written to, also pointers to the buffer position and i (iterator)
 // of the for loop in which this should be called

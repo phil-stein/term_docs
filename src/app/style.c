@@ -1,5 +1,6 @@
 #include "app/style.h"
 #include "app/doc.h"
+#include "app/core_data.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -62,17 +63,29 @@ const u32  key_comment_len = sizeof(key_comment) / sizeof(key_comment[0]);
     PF("%s", buf +(offset));    \
     buf_pos = 0;
 
-#define DUMP_COLORED(n, col)                              \
-    { BUF_DUMP();                                         \
-    PF_COLOR(col);                                        \
-    int j = 0;                                            \
-    while (j < (n)) { buf[buf_pos++] = txt[i++]; j++; }   \
-    BUF_DUMP();                                           \
-    PF_COLOR(PF_WHITE); }
+#define DUMP_COLORED(n, col)                                \
+    if (core_data->style_act)                               \
+    {                                                       \
+      BUF_DUMP();                                           \
+      PF_COLOR(col);                                        \
+      int j = 0;                                            \
+      while (j < (n)) { buf[buf_pos++] = txt[i++]; j++; }   \
+      BUF_DUMP();                                           \
+      PF_COLOR(PF_WHITE);                                   \
+    } else                                                  \
+    {                                                       \
+      BUF_DUMP();                                           \
+      int j = 0;                                            \
+      while (j < (n)) { buf[buf_pos++] = txt[i++]; j++; }   \
+      BUF_DUMP();                                           \
+    }
+
 
 
 bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr) 
 {
+  core_data_t* core_data = core_data_get();
+  
   // buf_pos & i are macros for _ptr equivalent
 
   // -- types --
@@ -172,10 +185,10 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   if (txt[i +j] == '(' || (txt[i +j] == ' ' && txt[i +j +1] == '('))
   {
     BUF_DUMP();
-    PF_COLOR(COL_FUNC);
+    DOC_PF_COLOR(COL_FUNC);
     while (j > 0) { buf[buf_pos++] = txt[i++]; j--; }
     BUF_DUMP();
-    PF_COLOR(PF_WHITE);
+    DOC_PF_COLOR(PF_WHITE);
   }
  
   // -- values --
@@ -183,57 +196,57 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   if (isdigit(txt[i]) && (isspace(txt[i -1]) || txt[i -1] == '+' || txt[i -1] == '-') && !isalpha(txt[i -1]))  
   {
     BUF_DUMP();
-    PF_COLOR(COL_VALUE);
+    DOC_PF_COLOR(COL_VALUE);
     int j = 0;
     while (isdigit(txt[i +j]) || txt[i +j] == '.' || txt[i +j] == 'f' || 
            (j == 1 && txt[i] == '0' && (txt[i +j] == 'b' || txt[i +j] == 'x'))) // 0x687, 0b1010
     { j++; }
     while (j > 0) { buf[buf_pos++] = txt[i++]; j--; }
     BUF_DUMP();
-    PF_COLOR(PF_WHITE);
+    DOC_PF_COLOR(PF_WHITE);
   }
   else if (txt[i] == '"')                        // strings
   {
     BUF_DUMP();
-    PF_COLOR(COL_VALUE);
+    DOC_PF_COLOR(COL_VALUE);
     buf[buf_pos++] = txt[i++];
     while (txt[i] != '"') { buf[buf_pos++] = txt[i++]; }  // || txt[i+1] == '"'
     buf[buf_pos++] = txt[i++]; // i++
     BUF_DUMP();
-    PF_COLOR(PF_WHITE);
+    DOC_PF_COLOR(PF_WHITE);
     i--;
     return true;
   }
   else if (txt[i] == '\'' && txt[i +2] == '\'')  // chars
   {
-    BUF_DUMP(); PF_COLOR(COL_VALUE);
+    BUF_DUMP(); DOC_PF_COLOR(COL_VALUE);
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
     buf[buf_pos++] = txt[i++];
-    BUF_DUMP(); PF_COLOR(PF_WHITE);
+    BUF_DUMP(); DOC_PF_COLOR(PF_WHITE);
   }
   else if (txt[i] == '\'' && txt[i+1] == '\\' && txt[i +3] == '\'')  // escaped chars
   {
-    BUF_DUMP(); PF_COLOR(COL_VALUE);
+    BUF_DUMP(); DOC_PF_COLOR(COL_VALUE);
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
-    BUF_DUMP(); PF_COLOR(PF_WHITE);
+    BUF_DUMP(); DOC_PF_COLOR(PF_WHITE);
   }
   else if (txt[i] == '\'' && txt[i+1] == 'u' && txt[i +6] == '\'')  // unicode chars
   {
-    BUF_DUMP(); PF_COLOR(COL_VALUE);
+    BUF_DUMP(); DOC_PF_COLOR(COL_VALUE);
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
     buf[buf_pos++] = txt[i++];
-    BUF_DUMP(); PF_COLOR(PF_WHITE);
+    BUF_DUMP(); DOC_PF_COLOR(PF_WHITE);
   }
 
   // -- comments --
   else if (txt[i] == '/' && txt[i +1] == '/')
   {
     BUF_DUMP();
-    PF_STYLE(PF_ITALIC, COL_COMMENT);
-    PF_STYLE(PF_DIM, COL_COMMENT);
+    DOC_PF_STYLE(PF_ITALIC, COL_COMMENT);
+    DOC_PF_STYLE(PF_DIM, COL_COMMENT);
     while (txt[i] != '\n') 
     { 
       if ((txt[i] == '\\' && txt[i+1] == '\n') ||
@@ -252,13 +265,13 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       else { i++; }
     }
     BUF_DUMP();
-    PF_COLOR(PF_WHITE);
+    DOC_PF_COLOR(PF_WHITE);
   }
   else if (txt[i] == '/' && txt[i +1] == '*')
   {
     BUF_DUMP();
-    PF_STYLE(PF_ITALIC, COL_COMMENT);
-    PF_STYLE(PF_DIM, COL_COMMENT);
+    DOC_PF_STYLE(PF_ITALIC, COL_COMMENT);
+    DOC_PF_STYLE(PF_DIM, COL_COMMENT);
     while (txt[i -2] != '*' || txt[i -1] != '/') 
     {
       style_highlight_c_comment(txt, buf, &buf_pos, &i);
@@ -269,7 +282,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       else { i++; }
     }
     BUF_DUMP();
-    PF_COLOR(PF_WHITE);
+    DOC_PF_COLOR(PF_WHITE);
   } 
 
   // -- macros --
@@ -277,7 +290,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   {
     // PF_COLOR(COL_TYPE);
     BUF_DUMP();
-    PF_COLOR(COL_MACRO);
+    DOC_PF_COLOR(COL_MACRO);
     while (txt[i] != '\n' && txt[i] != '\0')
     { 
       // multiline, macros, comments, has to be done here
@@ -300,7 +313,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       else { i++; }
     }
     BUF_DUMP();
-    PF_COLOR(PF_WHITE);
+    DOC_PF_COLOR(PF_WHITE);
   }
   
   return false;
@@ -308,6 +321,8 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
 
 void style_highlight_c_comment(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr) 
 {
+  core_data_t* core_data = core_data_get();
+  
   // buf_pos & i are macros for _ptr equivalent
   
   // starts with whitespace
@@ -327,13 +342,13 @@ void style_highlight_c_comment(char* txt, char* buf, int* buf_pos_ptr, int* i_pt
     if (equal && isspace(txt[i +len]))
     {
       BUF_DUMP(); 
-      PF_STYLE(PF_ITALIC, COL_COMMENT_HIGHLIGHT);
+      DOC_PF_STYLE(PF_ITALIC, COL_COMMENT_HIGHLIGHT);
       
       while (c > 0) { buf[buf_pos++] = txt[i++]; c--; }   \
       
         BUF_DUMP(); 
-      PF_STYLE(PF_ITALIC, COL_COMMENT);
-      PF_STYLE(PF_DIM, COL_COMMENT);
+      DOC_PF_STYLE(PF_ITALIC, COL_COMMENT);
+      DOC_PF_STYLE(PF_DIM, COL_COMMENT);
       return;;
     }
   }

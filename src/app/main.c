@@ -48,7 +48,7 @@ int main(int argc, char** argv)
     core_data->sheets_path[i] = '\0';
   }
   strcat(core_data->sheets_path, "sheets\\");
-  P_STR(core_data->sheets_path);
+  // P_STR(core_data->sheets_path);
   
   // -- config file --
   
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
     config_path[i] = '\0';
   }
   strcat(config_path, "config.doc");
-  P_STR(config_path);
+  // P_STR(config_path);
   config_read_config_file(config_path);
 
   // -- arguments --
@@ -144,9 +144,9 @@ int main(int argc, char** argv)
   {
     if (argc - cmd_count < 2) // need dir and keyword
     {
-      PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  
+      DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
       PF(" structure for definition search: '"); 
-      PF_COLOR(PF_CYAN); PF("doc [directory] [keyword] -f"); PF_COLOR(PF_WHITE); PF("'\n");
+      DOC_PF_COLOR(PF_CYAN); PF("doc [directory] [keyword] -f"); DOC_PF_COLOR(PF_WHITE); PF("'\n");
       exit(1);
     }
     
@@ -187,12 +187,9 @@ int main(int argc, char** argv)
       int w, h; io_util_get_console_size_win(&w, &h);
       w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
       
-      PF_STYLE(PF_ITALIC, PF_PURPLE);
-      PF("[%s]", keyword);
-      u32 i = strlen(keyword) +2;
-      while( i < w -1) { _PF("-"); i++; }
-      PF_STYLE(PF_NORMAL, PF_WHITE);
-      PF("\n\n");
+      DOC_PF_STYLE(PF_ITALIC, PF_PURPLE);
+      P_LINE_STR("[%s]", keyword);
+      PF("\n");
 
       for (u32 i = 0; i < arrlen(results); ++i)
       {
@@ -201,40 +198,38 @@ int main(int argc, char** argv)
       }
 
       PF("\n");
-      PF_STYLE(PF_ITALIC, PF_PURPLE);
-      i = 0;
-      while( i < w -1) { _PF("-"); i++; }
-      PF("\n");
-      PF_STYLE(PF_NORMAL, PF_WHITE);
+      DOC_PF_STYLE(PF_ITALIC, PF_PURPLE);
+      P_LINE();
+      DOC_PF_STYLE(PF_NORMAL, PF_WHITE);
     }
   } 
 
   P_INT(found_count);
   if (found_count <= 0)
   { 
-    PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  
+    DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
     PF(" could not find keyword '"); 
     if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
     {
-      PF_COLOR(PF_PURPLE);
+      DOC_PF_COLOR(PF_PURPLE);
       for (int i = 1; i < argc; ++i)
       {
         PF("%s%s",  argv[i], i < argc-1 ? ", " : "");
       }
-      PF_COLOR(PF_WHITE); 
+      DOC_PF_COLOR(PF_WHITE); 
       PF("' in sheets.\n");
     }
     else if (HAS_FLAG(mode, SEARCH_DEFINITION))
     {
-      PF_COLOR(PF_PURPLE);
+      DOC_PF_COLOR(PF_PURPLE);
       PF("%s", argv[3]); 
-      PF_COLOR(PF_WHITE); 
+      DOC_PF_COLOR(PF_WHITE); 
       PF("' in header files.\n");
     }
     else { P_ERR("unnkown mode"); }
   }
   
-  PF_COLOR(PF_WHITE);
+  DOC_PF_COLOR(PF_WHITE);
 	return 0;
 }
 

@@ -27,5 +27,4 @@ LONG_MAX:     9223372036854775807\| max. val for long int type
 ULONG_MAX:   18446744073709551615\| max. val for unsigned long int type
 
 ?< https://www.tutorialspoint.com/c_standard_library/limits_h.htm >?
-
-
+#

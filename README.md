@@ -135,15 +135,19 @@ in the makefile in the root directory at the top there is a variable called NAME
 change this and call `make clean` and `make` in the root directory
 
 ## buggs
-  - [ ] bugg: -c syntax highlighting doesnt disable properly
-  - [ ] bugg: -d doesnt find program_start in bovengine
-  - [x] bugg: doesnt find stderr, stdin, stdout in stdio.sheet
+  - [x] -c syntax highlighting doesnt disable properly
+  - [ ] -d doesnt find program_start in bovengine
+  - [x] doesnt find stderr, stdin, stdout in stdio.sheet
     - i think it only find every other tag
-  - [x] bugg: FILE find things like |file| and |tmpfile|
+  - [x] FILE find things like |file| and |tmpfile|
     - doesnt check if tag is actually surrounded by |
-  - [ ] bugg: config file doesnt work in vs19 because dependent on exec path
+  - [x] config file doesnt work in vs19 because dependent on exec path
+  - [x] searching 'INT_MIN' etc. in limits.h dont work
+  - [ ] highlights return in 'returns: ' in opengl.sheet glGetError
+    - the : at the end makes it highlight as return, like return 0;
 
 ## todo
+  - [ ] make modifiers, '-c', '-d', available anywhere not just the end
   - [ ] maybe change -d to just using keyword with () at the end
   - [ ] update readme
     - [ ] docemtation & defenition search
@@ -157,7 +161,6 @@ change this and call `make clean` and `make` in the root directory
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
   - [ ] load keys for style.c from file, for custamization
-  - [ ] searching 'INT_MIN' etc. in limits.h sont work
   - [ ] c-syntax in macros, for numbers, strings, etc.
   - [ ] make sure all sheets use '-' as space in tags
   - [ ] more documentation
@@ -175,7 +178,7 @@ change this and call `make clean` and `make` in the root directory
       - [ ] everything in input.c
     - [ ] vim cheatsheet
     - [ ] my stuff ?
-      - [ ] global.h
+      - [x] global.h
       - [ ] serialization
       - [ ] text
       - [ ] math

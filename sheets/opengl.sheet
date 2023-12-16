@@ -1,6 +1,7 @@
 #
 |glGetError|
-|opengl|glad|debug|
+|OpenGL|GL|opengl|
+|glad|debug|
 unsigned int glGetError()
   returns: an error code of the stack
            or GL_NO_ERROR if no error on the stack
@@ -13,7 +14,7 @@ unsigned int glGetError()
            GL_OUT_OF_MEMORY                
            GL_INVALID_FRAMEBUFFER_OPERATION
   ~ call repeatedly until return is GL_NO_ERROR
-  ~ to get all errors of the stack
+  $~$  to get all errors of the stack$$
 
 example:
     unsigned int err;

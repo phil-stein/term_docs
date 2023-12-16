@@ -1,0 +1,442 @@
+#
+|global|global.h|global_h|
+|GLOBAL_BOOL_TYPE|
+  global.h is a collection of defines/macros i use frequently
+
+  $_$include all files like this once and then only include global.h$$
+  $_$order is important, io_util & str_util before global$$
+  // only define once
+  \#define IO_UTIL_IMPLEMENTATION
+  // only need to include here, normally included via global.h
+  \#include "global/io_util.h"          
+  // only define once
+  \#define STR_UTIL_IMPLEMENTATION      
+  // only need to include here, normally included via global.h
+  \#include "global/str_util.h" 
+  // optional is int by default
+  \#define GLOBAL_BOOL_TYPE int/u8/etc. 
+  \#include "global/global.h"
+
+  if you want to use the P_..., etc. macros
+  define $P$GLOBAL_DEBUG$$ globally in visual studio / make / etc.
+  to have every P_/PF macro print its location 
+  define $P$PF_PRINT_LOCATION$$ aswell
+    $_$gcc:$$
+    gcc ... -DGLOBAL_DEBUG
+
+    $_$cmake:$$
+    target_compile_options(<target-name> PRIVATE -DGLOBAL_DEBUG) 
+#
+|global|global.h|global_h|
+|NULL|GLOBAL_BOOL_TYPE|bool|true|false|
+|s8|s16|s32|s64|u8|u16|u32|u64|f32|f64|empty_callback|
+  typedefs defined in global.h
+
+  $g$$_$s8$$:  char 
+  $g$$_$s16$$: short
+  $g$$_$s32$$: int
+  $g$$_$s64$$: long long
+  $g$$_$u8$$:  unsigned char 
+  $g$$_$u16$$: unsigned short
+  $g$$_$u32$$: unsigned int
+  $g$$_$u64$$: unsigned long long
+  $g$$_$f32$$: float 
+  $g$$_$f64$$: double
+
+  $g$$_$empty_callback$$: typedef void (empty_callback)(void)
+  example: 
+    void func() { ... }
+    empty_callback* func_ptr = func;
+    func_ptr();
+#
+|global|global.h|global_h|
+|INLINE|inline|
+  see $|$\|inline\|$$ for explanaition on inlining
+  inlining works different in msvc and gcc
+  
+  ! doesnt handle clang yet
+
+  \#if defined(_MSC_VER)
+    \#define INLINE __forceinline
+  \#else  // msvc
+    \#define INLINE static inline __attribute((always_inline))
+  \#endif
+#
+|global|global.h|global_h|
+|FLAG|
+  see $|$\|bit-flag\|$$ for explanaition on bit flags
+  
+  make number with single bit a set 
+  1 << 0 0000
+  1 << 1 0001
+  1 << 2 0010
+  1 << 3 0100
+  1 << 4 1000
+  aka. 1<<a == 2^a, 0, 2, 4, 8, ...
+  
+  \#define FLAG(a) (1 << (a)) 
+#
+|global|global.h|global_h|
+|HAS_FLAG|
+  see $|$\|bit-flag\|$$ for explanaition on bit flags
+  
+  check if flag a and b have a set bit in common
+  a: 00010010
+  b: 00000010
+  &: 00000010 true bc. >1
+  
+  \#define HAS_FLAG(a, b)   ((a) & (b))
+#
+|global|global.h|global_h|
+|REMOVE_FLAG|
+  see $|$\|bit-flag\|$$ for explanaition on bit flags
+
+  set all shared bits between a and b to 0 in a 
+  \#define REMOVE_FLAG(a, b) ((a) &= ~(b))
+#
+|global|global.h|global_h|
+|STR_VAR|TO_STR|EXPAND_TO_STR|STR_BOOL|
+|PASTE|PASTE_2|PASTE_3|PASTE_4|
+  see $|$\|stringify\|$$ for explanaition 
+  of \\# operator and example
+
+  // @DOC: turn macro input to string
+  \#define STR_VAR(v)        (\\#v)    
+  \#define TO_STR(v)         \\#v
+  \#define EXPAND_TO_STR(v)  TO_STR(v)
+  
+  // @DOC: turn bool to string
+  \#define STR_BOOL(v) ((v) ? "true" : "false")
+  
+  see $|$\|token-pasting\|$$ for explanaition 
+  of \\#\\# operator and example
+  
+  // @DOC: paste, aka. expand and combine macros
+  \#define PASTE(a, b)           a\\#\\#b
+  \#define PASTE_2(a, b)         PASTE(a, b)
+  \#define PASTE_3(a, b, c)      PASTE_2(PASTE_2(a, b), c)
+  \#define PASTE_4(a, b, c, d)   PASTE_3(PASTE_3(a, b, c), d)
+
+  example:
+    int variable_xyz = 0;
+    printf("var: %s\n", STR_VAR(variable_xyz));
+    -> var: variable_xyz
+    printf("var: %s\n", TO_STR(variable_xyz));
+    -> var: variable_xyz
+    printf("bool: %s\n", STR_BOOL(false));
+    -> bool: false
+
+
+#
+|global|global.h|global_h|
+|pf_mode|pf_bg|pf_fg|
+
+  used for setting terminal output to a specific mode, using PF_MODE(), PF_STYLE, etc.
+  typedef enum pf_mode
+  {
+    PF_NORMAL     = 0,
+    PF_BOLD       = 1,    // bright
+    PF_DIM        = 2,
+    PF_ITALIC     = 3,
+    PF_UNDERLINE  = 4,
+    PF_REVERSE    = 5,
+    PF_HIDDEN     = 6
+  }pf_mode;
+  used for setting terminal output to a specific text color, using PF_MODE(), PF_STYLE, etc.
+  typedef enum pf_fg
+  {
+    PF_BLACK    = 30,
+    PF_RED      = 31,
+    PF_GREEN    = 32,
+    PF_YELLOW   = 33,
+    PF_BLUE     = 34,
+    PF_PURPLE   = 35,
+    PF_CYAN     = 36,
+    PF_WHITE    = 37 
+  }pf_color;
+  used for setting terminal output to a specific background color, using PF_MODE(), PF_STYLE, etc.
+  typedef enum pf_bg
+  {
+    PF_BG_BLACK    = 40,
+    PF_BG_RED      = 41,
+    PF_BG_GREEN    = 42,
+    PF_BG_YELLOW   = 43,
+    PF_BG_BLUE     = 44,
+    PF_BG_PURPLE   = 45,
+    PF_BG_CYAN     = 46,
+    PF_BG_WHITE    = 47 
+  }pf_bg;
+#
+|global|global.h|global_h|
+|_PF|PF_MODE|PF_STYLE|PF_COLOR|
+|PF_MODE_RESET|PF_STYLE_RESET|
+  // @DOC: doesnt print location, just printf
+  \#define _PF(...)		printf(__VA_ARGS__)
+  
+  // @DOC: setting terminal output to a specific mode, text and background color
+  \#define PF_MODE(style, fg, bg)   _PF("\033[%d;%d;%dm", style, fg, bg)
+  // @DOC: setting terminal output to a specific mode and text color
+  \#define PF_STYLE(style, color)   _PF("\033[%d;%dm", style, color)
+  // @DOC: setting terminal output to a specific text color
+  \#define PF_COLOR(color)          PF_STYLE(PF_NORMAL, color)
+  // @DOC: setting terminal output to default mode, text and background color
+  \#define PF_MODE_RESET()          PF_MODE(PF_NORMAL, PF_WHITE, PF_BG_BLACK)
+  // @DOC: setting terminal output to default mode and text
+  \#define PF_STYLE_RESET()         PF_STYLE(PF_NORMAL, PF_WHITE)
+#
+|global|global.h|global_h|
+|P_LOCATION|PF_IF_LOC|
+  // @DOC: print location, as in file and line, append anywhere that info is usefull
+  \#define P_LOCATION() PF_STYLE(PF_DIM, PF_WHITE); PF_STYLE(PF_ITALIC, PF_WHITE); _PF(" -> file: %s, line: %d\n", __FILE__, __LINE__); PF_STYLE_RESET()
+  // @DOC: print location on all P_ macros or not
+  //       PF_IF_LOC() used in P/PF macros
+  // \#define PF_PRINT_LOCATION
+  \#ifdef PF_PRINT_LOCATION
+    \#define PF_IF_LOC() P_LOCATION() 
+  \#else
+    \#define PF_IF_LOC()
+  \#endif
+#
+|global|global.h|global_h|
+|PF|P|P_INFO|
+  \#define PF(...)		 printf(__VA_ARGS__); PF_IF_LOC()                                                    
+  \#define P(msg)		   _PF("%s\n", msg); PF_IF_LOC()                                                         
+  \#define P_INFO(msg) PF_COLOR(PF_YELLOW); _PF("[INFO] "); PF_STYLE_RESET(); _PF("%s\n", msg); P_LOCATION()
+#
+|global|global.h|global_h|
+|P_LINE|P_LINE_STR|
+
+  // @DOC: draw --- line as long as the current console is wide, only works on windows
+  \#if defined( _WIN32 )
+  \#define P_LINE()    { int w, h; io_util_get_console_size_win(&w, &h); for (int i = 0; i < w -1; ++i) { _PF("-"); } _PF("\n"); }
+ 
+  // @DOC: draw formatted string followed by line as wide as console
+  //       example: P_LINE_STR("hello"); P_LINE_STR("str: %s", str);
+  \#define P_LINE_STR(...)                                                   \
+                          {                                                 \
+                            char buf[248];                                  \
+                            SPRINTF(248, buf, __VA_ARGS__);                 \
+                            int w, h; io_util_get_console_size_win(&w, &h); \
+                            PF("%s", buf);                                  \
+                            int i = strlen(buf) +2;                         \
+                            while( i < w -1) { _PF("-"); i++; }             \
+                            PF("\n");                                       \
+                          }
+  
+  \#else
+  \#define P_LINE()          P_ERR("P_LINE() currently only supported in windows")
+  \#define P_LINE_STR(_str)  P_ERR("P_LINE_STR() currently only supported in windows")                                                
+  \#endif
+#
+|global|global.h|global_h|
+|P_SIGNED|P_INT|P_S32|P_S16|P_S8|
+|P_UNSIGNED|P_U64|P_U32|P_U16|P_U8|
+|P_F32|P_F64|
+|P_BOOL|P_CHAR|P_STR|P_TXT|P_PTR|
+|P_LOC_INT|P_LOC_S32|P_LOC_S16|P_LOC_S8|
+|P_LOC_U64|P_LOC_U32|P_LOC_U16|P_LOC_U8|
+|P_LOC_F32|P_LOC_F64|
+|P_LOC_BOOL|P_LOC_CHAR|P_LOC_STR|P_LOC_TXT|P_LOC_PTR|
+  macros for printing variables
+
+  // @DOC: print the different types, e.g. P_INT(variable), highlights variable name cyan
+  \#define P_SIGNED(v) 	  PF_COLOR(PF_CYAN); _PF("%s", \#v); PF_STYLE_RESET(); _PF(": %d\n", (v)); PF_IF_LOC()
+  \#define P_INT(v) 	    P_SIGNED(v)
+  \#define P_S32(v) 	    P_SIGNED(v) 
+  \#define P_S16(v) 	    P_SIGNED(v) 
+  \#define P_S8(v) 	      P_SIGNED(v) 
+  \#define P_UNSIGNED(v)  PF_COLOR(PF_CYAN); _PF("%s", \#v); PF_STYLE_RESET(); _PF(": %u\n", (v)); PF_IF_LOC()
+  \#define P_U64(u)       printf("|%s| %"PRId64"\n", \#u, u)
+  \#define P_U32(v)       P_UNSIGNED(v)
+  \#define P_U16(v)       P_UNSIGNED(v)
+  \#define P_U8(v)        P_UNSIGNED(v)
+  
+  \#define P_F32(v) 	    PF_COLOR(PF_CYAN); _PF("%s", \#v); PF_STYLE_RESET(); _PF(": %f\n", (v)); PF_IF_LOC()
+  \#define P_F64(v) 	    P_F32(v) 
+  
+  \#define P_BOOL(v) 	    PF_COLOR(PF_CYAN); _PF("%s", \#v); PF_STYLE_RESET(); _PF(": %s\n", STR_BOOL(v)); PF_IF_LOC()
+  
+  \#define P_CHAR(v) 	    PF_COLOR(PF_CYAN); _PF("%s", \#v); PF_STYLE_RESET(); _PF(": '%c'\n", (char)(v)); PF_IF_LOC()
+  \#define P_STR(v) 	    PF_COLOR(PF_CYAN); _PF("%s", \#v); PF_STYLE_RESET(); _PF(": \"%s\"\n", (v)); PF_IF_LOC() 
+  \#define P_TXT(v)       PF_COLOR(PF_CYAN); _PF("%s", \#v); PF_STYLE_RESET(); _PF(":\n%s\n", (v)); PF_IF_LOC()    
+  
+  \#define P_PTR(v) 	    PF_COLOR(PF_CYAN); _PF("%s", \#v); PF_STYLE_RESET(); _PF(": %p\n", (v)); PF_IF_LOC()
+  
+  // always print location
+  \#define P_LOC_INT(v)   P_INT(v);  P_LOCATION()
+  \#define P_LOC_S32(v) 	P_S32(v);  P_LOCATION() 
+  \#define P_LOC_S16(v) 	P_S16(v);  P_LOCATION() 
+  \#define P_LOC_S8(v) 	  P_S8(v);   P_LOCATION()
+  \#define P_LOC_U8(v)    P_U8(v);   P_LOCATION()
+  \#define P_LOC_U32(v)   P_U32(v);  P_LOCATION()
+  \#define P_LOC_U16(v)   P_U16(v);  P_LOCATION() 
+  \#define P_LOC_F32(v) 	P_F32(v);  P_LOCATION()
+  \#define P_LOC_BOOL(v)  P_BOOL(v); P_LOCATION()
+  \#define P_LOC_CHAR(v)  P_CHAR(v); P_LOCATION()
+  \#define P_LOC_STR(v) 	P_STR(v);  P_LOCATION() 
+  \#define P_LOC_TXT(v)   P_TXT(v);  P_LOCATION()    
+  \#define P_LOC_PTR(v)   P_PTR(v);  P_LOCATION()
+
+  example: 
+    int var = 123;
+    P_INT(var);
+    ->var: 123
+    P_LOC_INT(var);
+    ->var: 123
+    -> -> file: <file>, line: <line-nr>
+#
+|global|global.h|global_h|
+|P_ERR|ASSERT|ERR|ERR_CHECK|P_ERR_CHECK|
+|F32_NAN|P_NAN|
+  
+  macros for checking for error and printing them
+  
+  // @DOC: print an error with location, without stopping the execution
+  \#define P_ERR(...)	PF_COLOR(PF_RED); _PF("[ERROR] "); PF_MODE_RESET(); _PF(__VA_ARGS__); P_LOCATION()
+  // @DOC: print an error with location if the condition c if false, stopping the execution
+  \#define ASSERT(c)   if(!(c)) { PF_COLOR(PF_RED); _PF("[ASSERT]" ); PF_MODE_RESET(); _PF("'%s'\n", \#c); P_LOCATION(); abort(); }
+  // @DOC: print an error with location, stopping the execution
+  \#define ERR(...)  P_ERR(__VA_ARGS__); abort();
+  // @DOC: print an error with location, and custom message if the condition c if false, stopping the execution
+  \#define ERR_CHECK(c, ...) if(!(c)) { ERR(__VA_ARGS__); }
+  // @DOC: print an error with location, and custom message if the condition c if false, without stopping the execution
+  \#define P_ERR_CHECK(c, ...) if(!(c)) { P_ERR(__VA_ARGS__); }
+  
+  // @DOC: check f32/float is nan
+  \#define F32_NAN(v)  (isnan(v) != 0)
+  // @DOC: print if f32/float is nan
+  \#define P_NAN(v)    { if (F32_NAN(v)) { _PF("%s is nan\n", \#v); PF_IF_LOC(); } }
+
+  example: 
+    P_ERR("error occured\n");$$
+    ->$r$[ERROR]$$ error occured
+    -> -> file: <file>, line: <line-nr>
+    
+    ERR("error occured\n");$$
+    ->$r$[ERROR]$$ error occured
+    -> -> file: <file>, line: <line-nr>
+    -> stops executable
+    
+    ERR_CHECK(1 == 2, "error occured\n");$$
+    ->$r$[ERROR]$$ error occured
+    -> -> file: <file>, line: <line-nr>
+    -> stops executable
+#
+|global|global.h|global_h|
+|GLOBAL_TEST_P_MACROS|debug|
+
+  // @DOC: print out all macros once for testing
+  \#define GLOBAL_TEST_P_MACROS() { s32 int_32 = 0; s16 int_16 = 0; s8 int_8 = 0; u32 uint_32 = 0; u16 uint_16 = 0; u8 uint_8  = 0; f32 floating_point = 0.5f; bool b = true; s8 s_byte = '?'; char* str = "hello, there"; char* txt = "this is very textual\nmhhh yess\nlicrictically intricate"; \
+  P_INT(int_32); P_S32(int_32); P_S16(int_16); P_S8(int_8); P_U32(uint_32); P_U16(uint_16); P_U8(uint_8); P_F32(floating_point); P_BOOL(b); P_CHAR(s_byte); P_STR(str); P_TXT(txt); P_INFO("info"); P_ERR("hello\n"); /*ASSERT(0);*/ }
+
+#
+|global|global.h|global_h|
+|P_C_VERSION|
+
+  // @DOC: print the currently in use version of c
+  \#define P_C_VERSION()                     \
+    if (__STDC_VERSION__ >=  201710L)       \
+    { PF("-- using c18 --\n"); }            \
+    else if (__STDC_VERSION__ >= 201112L)   \
+    { PF("-- using c11 --\n"); }            \
+    else if (__STDC_VERSION__ >= 199901L)   \
+    { PF("-- using c99 --\n"); }            \
+    else                                    \
+    { PF("-- using c89/c90 --\n"); }
+#
+|global|global.h|global_h|
+|SPRINTF|STRCPY|MALLOC|CALLOC|REALLOC|FREE|
+
+  // @DOC: wrappers around standard functions to make the safer, can be compiled out
+  \#define SPRINTF(max, ...)        ASSERT(sprintf(__VA_ARGS__) < (max))                   
+  \#define STRCPY(dest, source)     ASSERT(strcpy(dest, source) != NULL)
+  \#define MALLOC(ptr, size)        (ptr) = malloc(size);        ASSERT((ptr) != NULL)     
+  \#define CALLOC(ptr, items, size) (ptr) = calloc(items, size); ASSERT((ptr) != NULL)     
+  \#define REALLOC(ptr, size)       (ptr) = realloc(ptr, size);  ASSERT((ptr) != NULL)     
+  \#define FREE(ptr)                ASSERT(ptr != NULL); free(ptr); ptr = NULL  
+  
+  // stb_ds ?<https://github.com/nothings/stb>?
+  \#define ARRFREE(a)               arrfree((a)); (a) = NULL  
+  \#define HMFREE(a)                hmfree((a));  (a) = NULL
+  \#define SHFREE(a)                shfree((a));  (a) = NULL
+#
+|global|global.h|global_h|
+|DBG|DBG_F_L|
+
+  attempt at automating making debug functions like
+  void func_dbg(int arg, char* file, int line);
+  \#define func(arg) func_dbg((arg), __FILE__, __LINE__)
+  to have info on where a function is called from
+  doesnt work properly / isnt an improvement
+
+  // @UNSURE:
+  // @DOC: wraps a function with file and line args
+  //       void DBG(func(int arg))
+  //       ->
+  //       void func(int arg, const char* _file, const int _line)
+  //       this way it can be compiled out
+  \#define DBG(func, ...)       (func)(__VA_ARGS__, const char* _file, const int _line)
+  // @DOC: file and line macro for defining DBG() funcs macros
+  //       void DBG(func(int arg))
+  //       \#define func(arg)      func(arg DBG_F_L)
+  //       this way it can be compiled out
+  \#define DBG_F_L              , __FILE__, __LINE__
+#
+
+io_util.h:
+
+#
+|io_util|io_util.h|
+|io_util_get_console_size_win|
+|console|terminal|
+  void io_util_get_console_size_win(int* w, int* h);
+
+  puts the width of the current console into w and h
+
+  ! only works on windows
+  ~ in io_util.h, which is included by global.h
+
+  example:
+    int w, h;
+    io_util_get_console_size_win(&w, &h);
+    printf("console width: %d, height: %d\n", w, h);
+#
+
+str_util.h:
+
+#
+|str_util|str_util.h|
+|str_util_find_last_of|
+|string|String|last-of|find|
+  char* str_util_find_last_of(char* str, char* identifier);
+  returns the last occurance of identifier in str
+  ~ in str_util.h, which is included by global.h
+
+  example:
+    char* str  = "hello_hi_hello_hi_hello";
+    char* last = str_util_find_last_of(str, "hi");
+    printf("%s", last);
+    ->hi_hello
+#
+|str_util|str_util.h|
+|str_util_trunc|
+|string|String|
+|trunc|Trunc|truncate|Truncate|
+  char* str_util_trunc(char* str, int pos);
+  truncate string at pos
+  ~ in str_util.h, which is included by global.h
+
+  example:
+    char* str01 = "123_hello world :)_123";
+    char* str02 = "123_hello world :)_123";
+    char* trunc01 = str_util_trunc(str01, 4);
+    char* trunc02 = str_util_trunc(str02, -4);
+    P_STR(trunc01);
+    ->hello_world :)_123
+    P_STR(trunc02);
+    ->123_hello_world :)
+
+  
+  ?< https://www.delftstack.com/howto/c/truncate-string-in-c/ >?
+#
+

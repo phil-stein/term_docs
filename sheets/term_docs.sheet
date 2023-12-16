@@ -106,6 +106,7 @@
     >doc sheet-syntax-examples
     >doc sheet-syntax-examples -c
     to see with and without highlighting
+    to see the unformatted text view "sheets/term_docs.sheet"
 
     ~ escaping \\# using one \ highlights it as a c macro
     $~$  use \\ to scape it fully$$
@@ -150,6 +151,10 @@
     switch ()   switch()
     
     return; return val; break; continue; case 23: default:
+    default
+    return
+    returns
+    returning
     
     if else for while do switch
     return break continue case default

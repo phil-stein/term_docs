@@ -161,18 +161,10 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
 
 void doc_print_section(char* sec, int sec_len, const char* keyword, const char* file)
 {
-  // int w, h; io_util_get_console_size_win(&w, &h);
-  // w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
-
-  // PF_COLOR(PF_PURPLE);
-  // PF("%s|%s ", file, keyword); 
-  // int i = strlen(keyword) + strlen(file) +2;
-  // while( i < w -1) { _PF("-"); i++; }
-  // PF("\n");
   PF_COLOR(PF_PURPLE);
   P_LINE_STR("%s|%s ", file, keyword); 
-  
   PF_COLOR(PF_WHITE);
+  
   doc_color_code_section(sec, sec_len);
    
   PF_COLOR(PF_PURPLE);
@@ -199,28 +191,28 @@ void doc_print_section(char* sec, int sec_len, const char* keyword, const char* 
     BUF_DUMP();                                           \
     SET_COLOR(PF_WHITE); }
 
-#define SET_STYLE(m, c) PF_STYLE((m), (c)); cur_pf_style = (m); cur_pf_color = (c)
-#define SET_COLOR(c)    PF_COLOR((c)); cur_pf_color = (c)
+#define SET_STYLE(m, c) if (core_data->style_act) { PF_STYLE((m), (c)); cur_pf_style = (m); cur_pf_color = (c); }
+#define SET_COLOR(c)    if (core_data->style_act) { PF_COLOR((c)); cur_pf_color = (c); }
 
-#define SET_DEFAULT_STYLE(m, c)   default_pf_style = (m); default_pf_color = (c)
-#define RESET_DEFAULT_STYLE()     default_pf_style = PF_NORMAL; default_pf_color = PF_WHITE
+#define SET_DEFAULT_STYLE(m, c)   if (core_data->style_act) { default_pf_style = (m); default_pf_color = (c); }
+#define RESET_DEFAULT_STYLE()     if (core_data->style_act) { default_pf_style = PF_NORMAL; default_pf_color = PF_WHITE; }
 
 void doc_color_code_section(char* sec, int len)
 {
   core_data_t* core_data = core_data_get();
   // @NOTE: no syntax highlighting
-  if (!core_data->style_act)
-  {
-    // PF("%s\n", sec);
-    u32 i = 0;
-    while (sec[i] != '\0')
-    {
-      if (sec[i] == '\r') { PF("CR"); }
-      if (sec[i] == '\n') { PF("*"); }
-      PF("%c", sec[i++]);
-    }
-    return;
-  }
+  // if (!core_data->style_act)
+  // {
+  //   // PF("%s\n", sec);
+  //   u32 i = 0;
+  //   while (sec[i] != '\0')
+  //   {
+  //     if (sec[i] == '\r') { PF("CR"); }
+  //     if (sec[i] == '\n') { PF("*"); }
+  //     PF("%c", sec[i++]);
+  //   }
+  //   return;
+  // }
 
   // @NOTE: syntax highlighting
   // int   len = strlen(sec);
@@ -350,6 +342,8 @@ void doc_color_code_escape_chars(char* sec, char* buf, int* buf_pos_ptr, int* i_
   #define i         (*i_ptr)
   #define skip_char (*skip_char_ptr)
   
+  core_data_t* core_data = core_data_get();
+  
   if (sec[i] == '\\' && sec[i +1] == '\\' && sec[i+2] == '#')
   {
     buf[buf_pos++] = sec[i +2]; // put # in buf
@@ -381,6 +375,9 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
   #define buf_pos   (*buf_pos_ptr)
   #define i         (*i_ptr)
   #define skip_char (*skip_char_ptr)
+  
+  core_data_t* core_data = core_data_get();
+
   if (sec[i] == '$' && sec[i+1] == '$')                             // reset to normal
   { BUF_DUMP(); SET_STYLE(default_pf_style, default_pf_color); (*syntax) = true; skip_char = true; i++; }
   // white
