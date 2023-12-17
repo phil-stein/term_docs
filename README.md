@@ -141,7 +141,8 @@ to include a '#' symbol in your documentation you need to escape it ``\\#``, <br
 or escape once for macros ``\#define`` and tags ``|\#|``<br>
 the same applies to `` ! ~ ? |``  `` \! \~ \? \|``  ``a = a \!= b \? c : d; -> a = a != b ? c : d;`` <br>
 
-to color/style text use $...$ command and $$ to reset
+to color/style text use `$...$` command and `$$` to reset
+```
     $red$red$$ $green$green$$ $yellow$yellow$$ $blue$blue$$
     $purple$purple$$ $cyan$cyan$$
     $r$red $g$green $y$yellow $b$blue $p$purple $c$cyan $$
@@ -157,6 +158,8 @@ to color/style text use $...$ command and $$ to reset
     $?$set link style$$ normal again
     $|$set tag style$$ normal again
     $|$not_tag$|$ $$ $not_tag$ finds this
+    $|$\|tag-name\|$$ -> |tag-name|
+```
 
 for more help on custom sheets or general usage use command ``doc -h`` in terminal, <br>
 or ``doc sheet-syntax-examples`` to see all usecases for syntax <br>
