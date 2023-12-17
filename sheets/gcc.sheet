@@ -1,0 +1,99 @@
+#
+|gcc|GCC|
+|compiler|
+  gcc or the GNU Compiler Collection includes front ends for 
+  C, C++, Objective-C, Fortran, Ada, Go, and D, 
+  as well as libraries for these languages
+  
+  $_$32bit gcc windows compiler:$$
+    MinGW: ?< https://sourceforge.net/projects/mingw/ >?
+
+  $_$32/64bit gcc windows compilers:$$
+    TDM:     ?< https://sourceforge.net/projects/tdm-gcc/ >?
+    MinGW64: ?< https://sourceforge.net/projects/mingw-w64/files/ >?
+
+  $_$setup:$$
+    vscode: ?< https://code.visualstudio.com/docs/cpp/config-mingw >?
+
+  $_$compiling$$
+    compile source to exec:
+    gcc -o <executable_name> <file_01.c> <file_02.c> ...
+    compile source to object file:
+    gcc -c <file.c> -o <file.o>
+    link object files:
+    gcc -o <executable_name> <file_01.o> <file_02.o> ...
+    ?< https://www.wikihow.com/Compile-a-C-Program-Using-the-GNU-Compiler-(GCC) >?
+ 
+  $_$flags:$$
+    see $|$\|compiler-flags\|$$
+
+  
+  example:
+    $_$compile in one:$$
+    >gcc -o app main.c app.c
+    ->app.exe
+
+    $_$compile object files an link:$$
+    >gcc -c main.c -o main.o
+    >gcc -c app.c  -o app.o
+    >gcc -o app main.o app.o
+    ->app.exe
+
+
+  ?< https://gcc.gnu.org/ >?
+#
+|gcc|GCC|
+|compiler|flags|compiler-flags|
+|-o|-g|-I|-L|-l|
+|-Wall|-W|-Wextra|Werror|
+|-O1|-O2|-O3|-Ofast|-std|-std=|
+|-S|-V|-D|
+|assembly|asm|
+  $_$compiler flags:$$
+    -o:         output name
+    -c:         compile without linking
+    -g:         debug info
+    -I:         include directory
+    -L:         library include dir
+    -l:         link library
+    -Wall:      print all warnings
+    -W/-Wextra: extra warnings
+    -Werror:    convert warnings to errors
+    -O1:        optimize code
+    -O2:        optimize code
+    -O3:        optimize code
+    -Ofast:     optimize code heavily, may break
+    -std:       set c standard
+    -S:         get assembly code
+    -V:         get verbose output for compilation
+    -D:         define macro globally
+  
+  $_$syntax:$$
+    generally compiler flags go at the end
+    some need an argument to follow them though
+    >gcc ... -g -Wall
+    >gcc ... -I vendor -I src
+
+  example:
+    $_$get assembly:$$
+    >gcc -S main.c > main.s
+    
+    $_$define macro:$$
+    defines $p$MACRO$$
+    >gcc ... -DMACRO
+    >gcc ... -DMACRO=1
+    >gcc ... -DMACRO=\"string\"
+    
+    $_$include directory:$$
+    >gcc ... -I vendor -I src
+    
+    $_$link library libname.a:$$
+    libname.a becomes name
+    >gcc ... -L libs/64bit -l name
+
+  ?< https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html >?
+  ?< https://www.spec.org/hpc2021/flags/gcc.html >?
+  ?< https://linuxhandbook.com/gcc-flags/ >?
+  ?< https://developers.redhat.com/blog/2018/03/21/compiler-and-linker-flags-gcc >?
+  ?< https://stackoverflow.com/questions/3375697/what-are-the-useful-gcc-flags-for-c >?
+#
