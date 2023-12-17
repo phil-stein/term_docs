@@ -7,9 +7,7 @@
 c documentation for the terminal <br>
 works offline and is customizable <br>
 also has seqarch utility functions <br>
-most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm) <br>
-also has documentation for some of my stuff: <br>
-[global](https://github.com/phil-stein/global.git) <br>
+most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
 
 |doc    |search  |
 |:-----:|:------:|
@@ -171,7 +169,7 @@ change this and call `make clean` and `make` in the root directory
       - [ ] custom name
     - [ ] make
     - [ ] cmake
-    - [ ] gcc
+    - [x] gcc 
     - [ ] opengl 
       - [ ] every func in debug_opengl.h `WIP`
       - [ ] macros in glad.h ( GL_TEXTURE0, etc.)

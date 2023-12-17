@@ -45,29 +45,55 @@
 |gcc|GCC|
 |compiler|flags|compiler-flags|
 |-o|-g|-I|-L|-l|
-|-Wall|-W|-Wextra|Werror|
 |-O1|-O2|-O3|-Ofast|-std|-std=|
-|-S|-V|-D|
+|-S|-V|-D|-fverbose-asm|
+|-Wall|-W|-Wextra|Werror|
+|-Wfloat-equal|-Wundef|-Wshadow|-Wpointer-arith|
+|-Wtype-limits|-Wcast-align|-Wpedantic|-Wcast-qual|
+|-Wunreachable-code|-Wconversion|-Wswitch-default|-Wswitch-enum|
+|-pedantic-errors|
 |assembly|asm|
   $_$compiler flags:$$
-    -o:         output name
-    -c:         compile without linking
-    -g:         debug info
-    -I:         include directory
-    -L:         library include dir
-    -l:         link library
-    -Wall:      print all warnings
-    -W/-Wextra: extra warnings
-    -Werror:    convert warnings to errors
-    -O1:        optimize code
-    -O2:        optimize code
-    -O3:        optimize code
-    -Ofast:     optimize code heavily, may break
-    -std:       set c standard
-    -S:         get assembly code
-    -V:         get verbose output for compilation
-    -D:         define macro globally
-  
+    $_$compilation:$$
+    -o:                 output name
+    -c:                 compile without linking
+    -g:                 debug info
+    -I:                 include directory
+    -L:                 library include dir
+    -l:                 link library
+    -O1:                optimize code
+    -O2:                optimize code
+    -O3:                optimize code
+    -Ofast:             optimize code heavily, may break
+    -std:               set c standard
+    -S:                 get assembly code
+    -fverbose-asm:      get comments in -S assembly
+    -V:                 get verbose output for compilation
+    -D:                 define macro globally
+    $_$warnings:$$
+    -Wall:              print all warnings
+    -W/-Wextra:         extra warnings
+    -Werror:            convert warnings to errors
+    -Wfloat-equal:      earn if checking floats  equal
+    -Wundef:            check if undefined macro in \#if
+    -Wshadow:           check if variable name declared 
+                        in multiple scopes
+    -Wpointer-arith:    warn if 
+    -Wtype-limits:      warn if comparison always true due
+                        to limited type size, unsigned < 0
+    -Wcast-align:       casting poiter to different size
+                        char* = int*
+    -Wcast-qual:        warn if casting pointer type removes
+                        type qualifier, int* = const int*
+    -Wunreachable-code: warn about code thats never executed
+    -Wconversion:       warn about conversion that may loose
+                        precisions, float -> int
+    -Wswitch-default:   warn if switch doesnt have default case
+    -Wswitch-enum:      warn if switch doesnt cover all cases
+    -Wpedantic:         warn about anythiong not ISO C
+    $_$errors:$$
+    -pedantic-errors:   turn -Wpendatic warings to errors
+
   $_$syntax:$$
     generally compiler flags go at the end
     some need an argument to follow them though
