@@ -20,6 +20,10 @@ most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://
   - [instalation](#instalation)
   - [troubleshoot](#troubleshoot)
   - [customization](#customization)
+    - [custom documentation](#custom-documentation)
+    - [custom executable name](#custom-executable-name)
+    - [config file](#config-file)
+ 
   - [todo](#todo)
 
 
@@ -27,6 +31,7 @@ most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://
   - search documentation for standard c functions
   - search function definitions in specified dir
   - syntax highlighting
+  - config file
 
 
 ## example
