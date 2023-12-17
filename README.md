@@ -41,6 +41,7 @@ most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://
 doc -h -help    -> help
 doc -c -color   -> disable syntax highlighting
 doc -d          -> search for func defenition
+doc -config     -> print config file
 
 '-abc' modifiers always at the end
 example:
@@ -174,13 +175,18 @@ config file is `root/config.doc` <br>
 ```
 [syntax] true
 [syntax] false
-[sheet_dir] custom_sheets
-[sheet_dir] src/sheets
+
+[sheet_dir_rel] src/sheets
+
+[sheet_dir] C:\custom_sheets
 ```
 `[syntax]` enables or disables highlighting <br>
 can be set to `1, true, 0, false` <br>
-`[sheet_dir]` adds a new path to check for .sheet files <br>
-relative to root dir, max is 8 right now<br>
+`[sheet_dir]` and [sheet_dir_rel] add a new path to check for .sheet files <br>
+`[sheet_dir_rel]` is relative to root dir <br>
+max is 8 right now<br>
+
+use `-config` modifier to print config file
 
 ## buggs
   - [x] -c syntax highlighting doesnt disable properly
@@ -199,7 +205,11 @@ relative to root dir, max is 8 right now<br>
   - [ ] maybe change -d to just using keyword with () at the end
   - [x] config file
     - [x] disble syntax highlighting
+    - [x] set custom sheet relative file path
     - [x] set custom sheet file path
+    - [x] make -config modifier
+      - print config file, location and its effect
+  - [ ] clean up main.c
   - [x] multiple search keywords, i.e. doc file read
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references
@@ -214,8 +224,9 @@ relative to root dir, max is 8 right now<br>
     - [ ] make
     - [ ] cmake
     - [ ] stb
-      - [ ] stb_ds
+      - [x] stb_ds
       - [ ] stb_image
+      - [ ] stb_truetype
     - [x] gcc 
     - [ ] opengl 
       - [ ] every func in debug_opengl.h `WIP`

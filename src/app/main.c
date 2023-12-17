@@ -26,6 +26,10 @@ typedef enum
   SEARCH_SEARCH         = FLAG(2),
 }search_mode_t;
 
+// activated by '-config'
+bool print_config_cmd = false;
+// activated by -c/-color 
+bool color_cmd = false;
 
 int main(int argc, char** argv)
 {
@@ -49,23 +53,6 @@ int main(int argc, char** argv)
   }
   strcat(core_data->sheets_path, "sheets\\");
   // P_STR(core_data->sheets_path);
-  
-  // -- config file --
-  
-  #define CONFIG_PATH_MAX 256
-  char config_path[CONFIG_PATH_MAX];
-  strncpy(config_path, core_data->exec_path, CORE_PATH_MAX);
-  assert(config_path != NULL);
-  int dirs_walk_back_02 = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
-  for (u32 i = strlen(config_path) -1; i > 0; --i)
-  {
-    if (config_path[i] == '\\') 
-    { dirs_walk_back_02--; if (dirs_walk_back_02 <= 0) { break; } }
-    config_path[i] = '\0';
-  }
-  strcat(config_path, "config.doc");
-  // P_STR(config_path);
-  config_read_config_file(config_path);
 
   // -- arguments --
 
@@ -90,19 +77,31 @@ int main(int argc, char** argv)
   {
     // // @NOTE: '-h' or '-help' for help is in term_docs.sheet
     
-    // @NOTE: '-c' or '-color' to disable color and styles
-    if ((argv[i][0] == '-'  && 
-         argv[i][1] == 'c') ||
-        
-        (argv[i][0] == '-'  && 
-         argv[i][1] == 'c'  && 
-         argv[i][2] == 'o'  && 
-         argv[i][3] == 'l'  && 
-         argv[i][4] == 'o'  && 
-         argv[i][5] == 'r') ) 
+    // @NOTE: '-config' to print config file
+    if (argv[i][0] == '-'  && 
+        argv[i][1] == 'c'  && 
+        argv[i][2] == 'o'  && 
+        argv[i][3] == 'n'  && 
+        argv[i][4] == 'f'  && 
+        argv[i][5] == 'i'  && 
+        argv[i][6] == 'g') 
     {
       cmd_count++;
-      core_data->style_act = false;
+      print_config_cmd = true;
+    }
+    // @NOTE: '-c' or '-color' to disable color and styles
+    else if ((argv[i][0] == '-'  && 
+              argv[i][1] == 'c') ||
+             
+             (argv[i][0] == '-'  && 
+              argv[i][1] == 'c'  && 
+              argv[i][2] == 'o'  && 
+              argv[i][3] == 'l'  && 
+              argv[i][4] == 'o'  && 
+              argv[i][5] == 'r') ) 
+    {
+      cmd_count++;
+      color_cmd = true;
     }
     
     // -- modes --
@@ -121,8 +120,30 @@ int main(int argc, char** argv)
       ERR_CHECK(word_arr_pos < WORD_ARR_MAX, "more words than the word_arr arr can hold, max is: %d\n", WORD_ARR_MAX);
     }
   }
-  if (argc -cmd_count <= 1) { exit(1); } // @NOTE: no actual stuff just '-abc' type stuff
   
+  // -- config file --
+  
+  #define CONFIG_PATH_MAX 256
+  char config_path[CONFIG_PATH_MAX];
+  strncpy(config_path, core_data->exec_path, CORE_PATH_MAX);
+  assert(config_path != NULL);
+  int dirs_walk_back_02 = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
+  for (u32 i = strlen(config_path) -1; i > 0; --i)
+  {
+    if (config_path[i] == '\\') 
+    { dirs_walk_back_02--; if (dirs_walk_back_02 <= 0) { break; } }
+    config_path[i] = '\0';
+  }
+  strcat(config_path, "config.doc");
+  // P_STR(config_path);
+  config_read_config_file(config_path, print_config_cmd);
+  
+  // -c / -color modifier
+  if (color_cmd) { core_data->style_act = false; }
+
+  // not enough arguments for documentation or definition
+  if (argc -cmd_count <= 1) { exit(1); } // @NOTE: no actual stuff just '-abc' type stuff
+
   // ---- keywords ----
 
   int found_count = 0;  // counts found matches for keyword

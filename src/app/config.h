@@ -8,7 +8,8 @@ extern "C" {
 
 #include "global/global.h"
 
-void config_read_config_file(const char* path);
+// void config_read_config_file(const char* path);
+void config_read_config_file(const char* path, bool print_config);
 void config_handle_argument();
 int config_parse_bool();
 

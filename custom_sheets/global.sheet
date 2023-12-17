@@ -170,6 +170,9 @@
 |global|global.h|global_h|
 |_PF|PF_MODE|PF_STYLE|PF_COLOR|
 |PF_MODE_RESET|PF_STYLE_RESET|
+  
+  view $|$\|pf_mode\|pf_bg\|pf_fg\|$$
+  
   // @DOC: doesnt print location, just printf
   \#define _PF(...)		printf(__VA_ARGS__)
   

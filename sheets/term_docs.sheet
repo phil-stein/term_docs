@@ -111,6 +111,34 @@
     ~ escaping \\# using one \ highlights it as a c macro
     $~$  use \\ to scape it fully$$
     $~$  use \ to escape \\# inside of tags$$
+
+  $_$config file:$$
+    view $|$\|config-file\|$$
+#
+|term_docs|
+|config|config-file|confic.doc|
+|syntax|sheet_dir|sheet_dir_rel|
+|[syntax]|[sheet_dir]|[sheet_dir_rel]|
+
+  config file is "root/config.doc"
+ 
+  [syntax]: 
+    enables or disables highlighting 
+    can be set to 1, true, 0, false
+  [sheet_dir] and [sheet_dir_rel]: 
+    add a new path to check for .sheet files
+    [sheet_dir_rel] is relative to root dir
+    max is 8 right now
+
+  example:
+    $_$in config.doc:$$
+    [syntax] true
+    [syntax] false
+    
+    [sheet_dir_rel] src/sheets
+    
+    [sheet_dir] C:\custom_sheets
+
 #
 |term_docs|
 |test|wip|
