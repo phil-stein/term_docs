@@ -157,7 +157,11 @@ void config_handle_argument()
       path[i] = '\0';
     }
     strcat(path, value_buf);
-    strcat(path, "\\");
+    if (value_buf[value_buf_pos-1] != '/' &&
+        value_buf[value_buf_pos-1] != '\\')
+    {
+      strcat(path, "\\");
+    }
     // PF("sheet_path: %s\n", path);
     if (!check_dir_exists(path)) { P_ERR("couldnt find path given for [sheet_dir_rel]: %s\n -> %s\n", value_buf, path); return; }
    
@@ -180,8 +184,13 @@ void config_handle_argument()
       name_buf[7] == 'i' &&
       name_buf[8] == 'r' )
   {
-    strcat(value_buf, "\\");
-    value_buf_pos++;
+    P_CHAR(value_buf[value_buf_pos-1]);
+    if (value_buf[value_buf_pos-1] != '/' &&
+        value_buf[value_buf_pos-1] != '\\')
+    {
+      strcat(value_buf, "\\");
+      value_buf_pos++;
+    }
     // PF("sheet_path: %s\n", path);
     if (!check_dir_exists(value_buf)) { P_ERR("couldnt find path given for [sheet_dir]: %s\n", value_buf); return; }
    
