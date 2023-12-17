@@ -23,12 +23,17 @@ most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://
     - [custom documentation](#custom-documentation)
     - [custom executable name](#custom-executable-name)
     - [config file](#config-file)
- 
   - [todo](#todo)
 
 
 ## features
-  - search documentation for standard c functions
+  - search documentation
+    - basic c functionality/types/etc. 
+    - all standard c functions
+    - git
+    - gcc
+    - [stb_ds](https://github.com/nothings/stb)
+    - my own: [global](https://github.com/phil-stein/global)
   - search function definitions in specified dir
   - syntax highlighting
   - config file
@@ -53,7 +58,7 @@ example:
 doc [keyword1] [keyword2] ...  -> documentation
 example:
   doc git log
-  -> ...
+  -> finds all docs with both git and log tags
   doc malloc
 
 stdlib.sheet|malloc -------------------------------
@@ -215,7 +220,7 @@ use `-config` modifier to print config file
     - [x] set custom sheet file path
     - [x] make -config modifier
       - print config file, location and its effect
-  - [ ] clean up main.c
+  - [x] clean up main.c
   - [x] multiple search keywords, i.e. doc file read
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references

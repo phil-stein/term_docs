@@ -62,7 +62,10 @@ void config_read_config_file(const char* path, bool print_config)
       config_handle_argument();
     }
   }
-
+  
+  // -c/-color command overrides config settings
+  if (core_data->style_deact_cmd) { core_data->style_act = false; }
+  
   if (print_config)
   {
     DOC_PF_COLOR(PF_PURPLE);

@@ -75,6 +75,7 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
   if (!check_file_exists(path)) { return false; }
   int txt_len = 0;
   char* txt = read_text_file_len(path, &txt_len);
+
   // P_STR(path);
 
   int sections_found_count = 0; // found sections
@@ -161,15 +162,17 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
 
 void doc_print_section(char* sec, int sec_len, const char* keyword, const char* file)
 {
-  PF_COLOR(PF_PURPLE);
+  core_data_t* core_data = core_data_get();
+  
+  DOC_PF_COLOR(PF_PURPLE);
   P_LINE_STR("%s|%s ", file, keyword); 
-  PF_COLOR(PF_WHITE);
+  DOC_PF_COLOR(PF_WHITE);
   
   doc_color_code_section(sec, sec_len);
    
-  PF_COLOR(PF_PURPLE);
+  DOC_PF_COLOR(PF_PURPLE);
   P_LINE(); 
-  PF_COLOR(PF_WHITE);
+  DOC_PF_COLOR(PF_WHITE);
 }
 
   

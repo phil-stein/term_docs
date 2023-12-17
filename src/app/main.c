@@ -53,18 +53,6 @@ int main(int argc, char** argv)
   }
   strcat(core_data->sheets_path, "sheets\\");
   // P_STR(core_data->sheets_path);
-
-  // -- arguments --
-
-  // too few arguments, at least 1, i.e. 2 because doc counts
-  if (argc < 2)
-  { 
-    PF_COLOR(PF_RED); PF("[!]"); PF_COLOR(PF_WHITE);  
-    PF(" provide keyword to search or command, i.e. '"); 
-    PF_COLOR(PF_CYAN); PF("-h"); PF_COLOR(PF_WHITE);
-    PF("' for help.\n"); 
-    exit(1);
-  }
  
   // ---- commands ----
 
@@ -121,6 +109,13 @@ int main(int argc, char** argv)
     }
   }
   
+  // -c / -color modifier
+  if (color_cmd) 
+  { 
+    core_data->style_act       = false; 
+    core_data->style_deact_cmd = true; 
+  } 
+  
   // -- config file --
   
   #define CONFIG_PATH_MAX 256
@@ -137,12 +132,19 @@ int main(int argc, char** argv)
   strcat(config_path, "config.doc");
   // P_STR(config_path);
   config_read_config_file(config_path, print_config_cmd);
-  
-  // -c / -color modifier
-  if (color_cmd) { core_data->style_act = false; }
 
+  // -- arguments --
+  
+  // too few arguments, at least 1, i.e. 2 because doc counts
   // not enough arguments for documentation or definition
-  if (word_arr_len <= 1) { exit(1); } // @NOTE: no actual stuff just '-abc' type stuff
+  if (word_arr_len < 1) 
+  { 
+    DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
+    PF(" provide keyword to search or command, i.e. '"); 
+    DOC_PF_COLOR(PF_CYAN); PF("-h"); DOC_PF_COLOR(PF_WHITE);
+    PF("' for help.\n"); 
+    exit(1);
+  } // @NOTE: no actual stuff just '-abc' type stuff
 
   // ---- keywords ----
 
@@ -150,8 +152,10 @@ int main(int argc, char** argv)
   
   if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
   {
-    for (int i = 0; i < word_arr_len; ++i)
-    { P_STR(word_arr[i]); }
+    // // @TMP: print word_arr
+    // for (int i = 0; i < word_arr_len; ++i)
+    // { P_STR(word_arr[i]); }
+    
     doc_search_dir(core_data->sheets_path, word_arr, word_arr_len, &found_count);
     
     // custom doc paths
@@ -173,13 +177,16 @@ int main(int argc, char** argv)
     
     char* dir_name = word_arr[0]; // argv[1];
     char* keyword  = word_arr[1]; // argv[2];
-    // P_STR(argv[0]);
-    // P_STR(dir_name);
     
     def_search_and_print(dir_name, keyword, &found_count);
   } 
 
-  P_INT(found_count);
+  // check if nothing was found
+  if (core_data->style_act) 
+  { P_INT(found_count); }
+  else
+  { PF("found_count: %d\n", found_count); }
+  
   if (found_count <= 0)
   { 
     if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
@@ -211,6 +218,7 @@ int main(int argc, char** argv)
   }
   
   DOC_PF_COLOR(PF_WHITE);
+  DOC_PF_STYLE_RESET();
 	return 0;
 }
 
