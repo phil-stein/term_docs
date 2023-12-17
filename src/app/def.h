@@ -22,6 +22,7 @@ typedef struct search_result_t
 void def_print_result(search_result_t* r);
 void def_search_dir(const char* dir_path, const char* keyword, int* n, search_result_t** search_results, int* dir_depth);
 bool def_search_section(const char* path, const char* file, const char* keyword, search_result_t** search_results);
+void def_search_and_print(char* dir_name, char* keyword, int* found_count);
 
 #ifdef __cplusplus
 }   // extern c

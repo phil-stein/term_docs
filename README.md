@@ -43,12 +43,17 @@ doc -c -color   -> disable syntax highlighting
 doc -d          -> search for func defenition
 doc -config     -> print config file
 
-'-abc' modifiers always at the end
-example:
-  doc malloc -c -d
+modifier can have arbitrary position
 
-doc [keyword]  -> documentation
 example:
+  doc malloc -c
+  doc -c malloc
+  doc -c malloc -config stdlib
+
+doc [keyword1] [keyword2] ...  -> documentation
+example:
+  doc git log
+  -> ...
   doc malloc
 
 stdlib.sheet|malloc -------------------------------
@@ -72,6 +77,7 @@ void* malloc(size_t size)
 doc [dir] [keyword] -d  -> search
 example:
   doc ../code function -d 
+  doc -d ../code function 
 
 function -----------------------------------------
 

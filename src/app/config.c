@@ -184,7 +184,6 @@ void config_handle_argument()
       name_buf[7] == 'i' &&
       name_buf[8] == 'r' )
   {
-    P_CHAR(value_buf[value_buf_pos-1]);
     if (value_buf[value_buf_pos-1] != '/' &&
         value_buf[value_buf_pos-1] != '\\')
     {

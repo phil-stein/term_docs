@@ -72,7 +72,7 @@ int main(int argc, char** argv)
   u32 cmd_count = 0;
   #define WORD_ARR_MAX 24
   char* word_arr[WORD_ARR_MAX] = { NULL }; // all words, aka. not commands, like malloc, git, etc.
-  int   word_arr_pos = 0;
+  int   word_arr_len = 0;
   for (u32 i = 1; i < argc; ++i)
   {
     // // @NOTE: '-h' or '-help' for help is in term_docs.sheet
@@ -116,8 +116,8 @@ int main(int argc, char** argv)
     // if none of the commands its a word, i.e. 'malloc', 'function', etc.
     else
     { 
-      word_arr[word_arr_pos++] = argv[i]; 
-      ERR_CHECK(word_arr_pos < WORD_ARR_MAX, "more words than the word_arr arr can hold, max is: %d\n", WORD_ARR_MAX);
+      word_arr[word_arr_len++] = argv[i]; 
+      ERR_CHECK(word_arr_len < WORD_ARR_MAX, "more words than the word_arr arr can hold, max is: %d\n", WORD_ARR_MAX);
     }
   }
   
@@ -142,7 +142,7 @@ int main(int argc, char** argv)
   if (color_cmd) { core_data->style_act = false; }
 
   // not enough arguments for documentation or definition
-  if (argc -cmd_count <= 1) { exit(1); } // @NOTE: no actual stuff just '-abc' type stuff
+  if (word_arr_len <= 1) { exit(1); } // @NOTE: no actual stuff just '-abc' type stuff
 
   // ---- keywords ----
 
@@ -150,102 +150,62 @@ int main(int argc, char** argv)
   
   if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
   {
-    // for (int i = 0; i < word_arr_pos; ++i)
-    // { P_STR(word_arr[i]); }
-    doc_search_dir(core_data->sheets_path, word_arr, word_arr_pos, &found_count);
+    for (int i = 0; i < word_arr_len; ++i)
+    { P_STR(word_arr[i]); }
+    doc_search_dir(core_data->sheets_path, word_arr, word_arr_len, &found_count);
     
     // custom doc paths
     for (int i = 0; i < core_data->custom_sheet_paths_len; ++i)
     {
       // P_STR(core_data->custom_sheet_paths[i]);
-      doc_search_dir(core_data->custom_sheet_paths[i], word_arr, word_arr_pos, &found_count);
+      doc_search_dir(core_data->custom_sheet_paths[i], word_arr, word_arr_len, &found_count);
     }
   }
   else if (HAS_FLAG(mode, SEARCH_DEFINITION))
   {
-    if (argc - cmd_count < 2) // need dir and keyword
+    if (word_arr_len < 2) // need dir and keyword
     {
       DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
       PF(" structure for definition search: '"); 
-      DOC_PF_COLOR(PF_CYAN); PF("doc [directory] [keyword] -f"); DOC_PF_COLOR(PF_WHITE); PF("'\n");
+      DOC_PF_COLOR(PF_CYAN); PF("doc [directory] [keyword] -d"); DOC_PF_COLOR(PF_WHITE); PF("'\n");
       exit(1);
     }
     
-    char* dir_name = argv[1];
-    char* keyword  = argv[2];
+    char* dir_name = word_arr[0]; // argv[1];
+    char* keyword  = word_arr[1]; // argv[2];
     // P_STR(argv[0]);
     // P_STR(dir_name);
     
-    char* cwd = _getcwd(NULL, 0);
-    cwd += 2; // cut off the "C:" before "\directory\..."
-    for (int i = 0; i < strlen(cwd); ++i)       // replace \ with /
-    { cwd[i] = cwd[i] == '\\' ? '/' : cwd[i]; }
-    // P_STR(cwd);
-    
-    char dir_path[128];
-    sprintf(dir_path, "%s/%s", cwd, dir_name);
-    // P_STR(dir_path);
-
-    // remove '/' as 'def_search_dir()' appends it
-    u32 len = strlen(argv[1]);
-    if (argv[1][len -1] == '/' || argv[1][len -1] == '\\') 
-    { argv[1][len -1] = '\0'; }
-
-    int dir_depth = 0;
-    search_result_t* results = NULL;
-    def_search_dir(dir_path, keyword, &found_count, &results, &dir_depth);
-    found_count = arrlen(results);  // @BUGG: n seems to be inaccurate
-    // P_INT(n);
-    // P_INT((int)arrlen(results));
-    // for (int i = 0; i < arrlen(results); ++i)
-    // {
-    //   P_STR(results[i].file); 
-    // }
-
-    // @NOTE: draw bottom / top lines and results
-    if (arrlen(results) > 0)  // draw top line
-    {
-      int w, h; io_util_get_console_size_win(&w, &h);
-      w = w > MAX_LINE_WIDTH ? MAX_LINE_WIDTH : w;;
-      
-      DOC_PF_STYLE(PF_ITALIC, PF_PURPLE);
-      P_LINE_STR("[%s]", keyword);
-      PF("\n");
-
-      for (u32 i = 0; i < arrlen(results); ++i)
-      {
-        search_result_t* r = &results[i];
-        def_print_result(r);
-      }
-
-      PF("\n");
-      DOC_PF_STYLE(PF_ITALIC, PF_PURPLE);
-      P_LINE();
-      DOC_PF_STYLE(PF_NORMAL, PF_WHITE);
-    }
+    def_search_and_print(dir_name, keyword, &found_count);
   } 
 
   P_INT(found_count);
   if (found_count <= 0)
   { 
-    DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
-    PF(" could not find keyword '"); 
     if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
     {
+      DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
+      PF(" could not find keyword '"); 
       DOC_PF_COLOR(PF_PURPLE);
-      for (int i = 1; i < argc; ++i)
+      for (int i = 1; i < word_arr_len; ++i)
       {
-        PF("%s%s",  argv[i], i < argc-1 ? ", " : "");
+        PF("%s%s",  word_arr[i], i < argc-1 ? ", " : "");
       }
       DOC_PF_COLOR(PF_WHITE); 
       PF("' in sheets.\n");
     }
     else if (HAS_FLAG(mode, SEARCH_DEFINITION))
     {
+      DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
+      PF(" could not find function defenition '"); 
       DOC_PF_COLOR(PF_PURPLE);
-      PF("%s", argv[3]); 
+      PF("%s", word_arr[1]); 
       DOC_PF_COLOR(PF_WHITE); 
-      PF("' in header files.\n");
+      PF("'\n    in header files under '");
+      DOC_PF_COLOR(PF_PURPLE);
+      PF("%s", word_arr[0]); 
+      DOC_PF_COLOR(PF_WHITE); 
+      PF("'\n");
     }
     else { P_ERR("unnkown mode"); }
   }
