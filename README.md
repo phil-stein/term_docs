@@ -100,6 +100,8 @@ void function(char arg);
     some terminals don't support it, like command prompt on windows <br>
     on windows the new windows terminal, found in microsoft store, supports it <br>
     see [config](#config) to permanently disable highlighting <br>
+  - documentation doesnt show up, check if its surrounded by `#`<br>
+    and the tags are surrounded in `|`
 
 ## customization
 
@@ -110,6 +112,7 @@ void function(char arg);
 ### custom documentation
 the documentation in in the '.sheet' file in the 'sheets' folder <br>
 adding a new file here lets you add any documentation, using a custom markup style <br>
+you can add more paths in the [config file](#config-file) <br>
 
 ```
 #
@@ -137,6 +140,23 @@ void* malloc(size_t size)
 to include a '#' symbol in your documentation you need to escape it ``\\#``, <br>
 or escape once for macros ``\#define`` and tags ``|\#|``<br>
 the same applies to `` ! ~ ? |``  `` \! \~ \? \|``  ``a = a \!= b \? c : d; -> a = a != b ? c : d;`` <br>
+
+to color/style text use $...$ command and $$ to reset
+    $red$red$$ $green$green$$ $yellow$yellow$$ $blue$blue$$
+    $purple$purple$$ $cyan$cyan$$
+    $r$red $g$green $y$yellow $b$blue $p$purple $c$cyan $$
+    $R$red $G$green $Y$yellow $B$blue $P$purple $C$cyan $$
+
+    changing $italic$mode italic $red$color$white$ hello $$ normal
+    $dim$mode dim,$$ $italic$$dim$ italic dim$$
+    $underline$underline$$ normal
+    $/$italic$$ normal $_$underline$$ normal $%$dim$$ \? $$
+        
+    $~$set info style$$ normal again
+    $!$set warn style$$ normal again
+    $?$set link style$$ normal again
+    $|$set tag style$$ normal again
+    $|$not_tag$|$ $$ $not_tag$ finds this
 
 for more help on custom sheets or general usage use command ``doc -h`` in terminal, <br>
 or ``doc sheet-syntax-examples`` to see all usecases for syntax <br>
@@ -174,10 +194,6 @@ relative to root dir, max is 8 right now<br>
 ## todo
   - [ ] make modifiers, '-c', '-d', available anywhere not just the end
   - [ ] maybe change -d to just using keyword with () at the end
-  - [ ] update readme
-    - [ ] docemtation & defenition search
-    - [ ] custom exec name
-    - [ ] config file
   - [x] config file
     - [x] disble syntax highlighting
     - [x] set custom sheet file path
