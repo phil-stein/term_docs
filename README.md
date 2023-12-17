@@ -1,12 +1,12 @@
 
 # term docs
 
-** [!] not finished see [todo](#todo) for planned features **
-** [!] only tested on windows **
+[!] see [todo](#todo) for planned features<br>
+[!] only tested on windows<br>
 
 c documentation for the terminal <br>
 works offline and is customizable <br>
-also has seqarch utility functions <br>
+also has search utility functions <br>
 most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
 
 |doc    |search  |
@@ -34,11 +34,12 @@ most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://
 ```c
 
 doc -h -help    -> help
-doc -c -color   -> disable syntax highlighting  
+doc -c -color   -> disable syntax highlighting
+doc -d          -> search for func defenition
 
 '-abc' modifiers always at the end
 example:
-  doc malloc -h -c
+  doc malloc -c -d
 
 doc [keyword]  -> documentation
 example:
@@ -62,9 +63,9 @@ void* malloc(size_t size)
 
 --------------------------------------------------
 
-doc [dir] [keyword]   -> search
+doc [dir] [keyword] -d  -> search
 example:
-  doc ../code function 
+  doc ../code function -d 
 
 function -----------------------------------------
 
@@ -81,21 +82,26 @@ void function(char arg);
 
 ## instalation
   1. clone git repo
-  2. use gcc & make to compile <br>
-    -> type `make` into terminal in root dir
-  3. add root/build directory to your path
+  2. use cmake & make / vs19 to build <br>
+    -> in root call `cmake_build`
+    -> make: call `build`
+    -> vs19: go to `build/vs19/doc.sln`
+      -> compile
+  4. add root/build directory to your [path](https://stackoverflow.com/questions/44272416/how-to-add-a-folder-to-path-environment-variable-in-windows-10-with-screensho)
 
 ## troubleshoot
   - output text is messed up
     try adding '-c' to your command to disable syntax highlighting, <br>
     some terminals don't support it, like command prompt on windows <br>
-    on windows the new windows terminal, found in microsoft stor, supports it
+    on windows the new windows terminal, found in microsoft store, supports it <br>
+    see [config](#config) to permanently disable highlighting <br>
 
 ## customization
 
   - [custom documentation](#custom-documentation)
   - [custom executable name](#custom-executable-name)
-
+  - [config file](#config-file)
+  
 ### custom documentation
 the documentation in in the '.sheet' file in the 'sheets' folder <br>
 adding a new file here lets you add any documentation, using a custom markup style <br>
@@ -123,16 +129,30 @@ void* malloc(size_t size)
 '~' info <br>
 '?' link <br>
 
-to include a '#' symbol in your documentation you need to escape it ``\\#``, or escape once for macros ``\#define`` <br>
+to include a '#' symbol in your documentation you need to escape it ``\\#``, <br>
+or escape once for macros ``\#define`` and tags ``|\#|``<br>
 the same applies to `` ! ~ ? |``  `` \! \~ \? \|``  ``a = a \!= b \? c : d; -> a = a != b ? c : d;`` <br>
 
 for more help on custom sheets or general usage use command ``doc -h`` in terminal, <br>
-or ``doc test`` to see all usecases for syntax
+or ``doc sheet-syntax-examples`` to see all usecases for syntax <br>
 
 
 ### custom executable name
-in the makefile in the root directory at the top there is a variable called NAME `NAME = doc.exe` <br>
-change this and call `make clean` and `make` in the root directory
+open `build/make/CMakeLists.txt` change `set(NAME "...")` at the top
+now repeat the [instalation](#instalation) steps
+
+### config file
+config file is `root/config.doc` <br>
+```
+[syntax] true
+[syntax] false
+[sheet_dir] custom_sheets
+[sheet_dir] src/sheets
+```
+`[syntax]` enables or disables highlighting <br>
+can be set to `1, true, 0, false` <br>
+`[sheet_dir]` adds a new path to check for .sheet files <br>
+relative to root dir, max is 8 right now<br>
 
 ## buggs
   - [x] -c syntax highlighting doesnt disable properly
