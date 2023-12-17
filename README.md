@@ -213,6 +213,9 @@ relative to root dir, max is 8 right now<br>
       - [ ] custom name
     - [ ] make
     - [ ] cmake
+    - [ ] stb
+      - [ ] stb_ds
+      - [ ] stb_image
     - [x] gcc 
     - [ ] opengl 
       - [ ] every func in debug_opengl.h `WIP`
