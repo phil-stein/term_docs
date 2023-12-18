@@ -197,34 +197,18 @@ config file is `root/config.doc` <br>
 can be set to `1, true, 0, false` <br>
 `[sheet_dir]` and [sheet_dir_rel] add a new path to check for .sheet files <br>
 `[sheet_dir_rel]` is relative to root dir <br>
-max is 8 right now<br>
+max is 8 right now, view `doc -config` for current max <br>
 use `//` for comments <br>
 
 use `-config` modifier to print config file
 
 ## buggs
-  - [x] -c syntax highlighting doesnt disable properly
   - [ ] -d doesnt find program_start in bovengine
-  - [x] doesnt find stderr, stdin, stdout in stdio.sheet
-    - i think it only find every other tag
-  - [x] FILE find things like |file| and |tmpfile|
-    - doesnt check if tag is actually surrounded by |
-  - [x] config file doesnt work in vs19 because dependent on exec path
-  - [x] searching 'INT_MIN' etc. in limits.h dont work
   - [ ] highlights return in 'returns: ' in opengl.sheet glGetError
     - the : at the end makes it highlight as return, like return 0;
 
 ## todo
-  - [ ] make modifiers, '-c', '-d', available anywhere not just the end
   - [ ] maybe change -d to just using keyword with () at the end
-  - [x] config file
-    - [x] disble syntax highlighting
-    - [x] set custom sheet relative file path
-    - [x] set custom sheet file path
-    - [x] make -config modifier
-      - print config file, location and its effect
-  - [x] clean up main.c
-  - [x] multiple search keywords, i.e. doc file read
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
@@ -241,7 +225,6 @@ use `-config` modifier to print config file
       - [x] stb_ds
       - [ ] stb_image
       - [ ] stb_truetype
-    - [x] gcc 
     - [ ] opengl 
       - [ ] every func in debug_opengl.h `WIP`
       - [ ] macros in glad.h ( GL_TEXTURE0, etc.)

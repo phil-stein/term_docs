@@ -3,15 +3,17 @@
 |term_docs|
 |doc|docs|doc_help|
 |help|h|-help|-h|--help|--h|
+|-c|-color|config|-d|
   $_$modifiers:$$
-    add '-xyz' modifiers at the end
     -color:
-    -c: disable syntax $syn$highlighting ($_$color$$)
-    -d: search for $_$defenition$$ of func in .h file
+    -c:      disable syntax $syn$highlighting ($_$color$$)
+    -d:      search for $_$defenition$$ of func in .h file
+    -config: print config file
     doc <...> -c
     doc <...> -d
-    doc <...> -d -c
     doc <...> -c -d
+    doc -d <...>
+    doc <...> -d <...>
 
   $_$search for documentation:$$
     tag: $|$\|<tag>\|$$
@@ -20,9 +22,14 @@
   
   $_$search for definition:$$
     doc <dir> <func-name> -d
+    doc - <dir> <func-name>
 
   $_$custom documentation:$$
     see $|$\|custom-docs\|$$
+
+  $_$config file:$
+    view $|$\|config-file\|$$
+    doc -config to print config file
 
   example:
     >doc malloc
@@ -130,14 +137,33 @@
     [sheet_dir_rel] is relative to root dir
     max is 8 right now
 
+  doc -config to print config file
+
   example:
     $_$in config.doc:$$
     [syntax] true
     [syntax] false
-    
-    [sheet_dir_rel] src/sheets
-    
+    // comment
+    [sheet_dir_rel] src/sheets 
     [sheet_dir] C:\custom_sheets
+
+    $_$in terminal:$$
+    >doc -config
+    -> $p$config.doc --------------------------------------$$
+    ->
+    -> [syntax] false
+    -> [syntax] true
+    -> // comment
+    -> [sheet_dir_rel] src/sheets
+    -> [sheet_dir] C:\custom_sheets
+    ->
+    -> $dim$-------------------------------------------------$$
+    -> $C$config path$$: C:\Workspace\C\term_docs\config.doc
+    -> $C$syntax$$: true
+    -> $r$max sheet paths$$: 8
+    -> $C$path[0]$$: C:\Workspace\C\term_docs\src\sheets\
+    -> $C$path[1]$$: C:\custom_sheets\
+    -> $p$-------------------------------------------------$$
 
 #
 |term_docs|
