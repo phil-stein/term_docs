@@ -51,7 +51,7 @@ int main(int argc, char** argv)
     { dirs_walk_back--; if (dirs_walk_back <= 0) { break; } }
     core_data->sheets_path[i] = '\0';
   }
-  strcat(core_data->sheets_path, "sheets\\");
+  strcat(core_data->sheets_path, "sheets\\builtin_sheets\\");
   // P_STR(core_data->sheets_path);
  
   // ---- commands ----

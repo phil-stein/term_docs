@@ -35,7 +35,7 @@ most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://
     - [stb_ds](https://github.com/nothings/stb)
     - my own: [global](https://github.com/phil-stein/global)
   - search function definitions in specified dir
-  - syntax highlighting
+  - syntax highlighting & markup language
   - config file
 
 
@@ -187,6 +187,8 @@ config file is `root/config.doc` <br>
 [syntax] true
 [syntax] false
 
+// comment
+
 [sheet_dir_rel] src/sheets
 
 [sheet_dir] C:\custom_sheets
@@ -196,6 +198,7 @@ can be set to `1, true, 0, false` <br>
 `[sheet_dir]` and [sheet_dir_rel] add a new path to check for .sheet files <br>
 `[sheet_dir_rel]` is relative to root dir <br>
 max is 8 right now<br>
+use `//` for comments <br>
 
 use `-config` modifier to print config file
 

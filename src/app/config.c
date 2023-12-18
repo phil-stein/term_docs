@@ -23,6 +23,13 @@ void config_read_config_file(const char* path, bool print_config)
 
   for (int c = 0; c < txt_len; ++c)
   {
+    // skip comments
+    if (txt[c] == '/' && txt[c +1] == '/')
+    { 
+      c += 2; 
+      while (c < txt_len && (txt[c] != '\n' && txt[c] != '\0')) { c++; } 
+    }
+    
     // start of argument name
     if (txt[c] == '[')
     {

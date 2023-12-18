@@ -4,6 +4,6 @@
 [syntax] 0
 [syntax] 1
 
-[sheet_dir_rel] custom_sheets
+[sheet_dir_rel] sheets\custom_sheets
 
-[sheet_dir] C:\workspace\c\term_docs\custom_sheets_02
+// [sheet_dir] C:\workspace\c\term_docs\sheets\custom_sheets_02
