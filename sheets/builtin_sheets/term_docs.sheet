@@ -138,6 +138,9 @@
     max is 8 right now
 
   doc -config to print config file
+  
+  ~ all paths use '/' instead of '\' for 
+  $~$  compatibility with linux$$
 
   example:
     $_$in config.doc:$$
