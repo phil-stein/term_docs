@@ -11,7 +11,7 @@ most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://
 
 |doc    |search  |
 |:-----:|:------:|
-| <img src="https://github.com/phil-stein/term_docs/blob/main/screenshots/screenshot_doc01.png" alt="logo" width="600"> | <img src="https://github.com/phil-stein/term_docs/blob/main/screenshots/screenshot_search01.png" alt="logo" width="400"> |
+| <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_doc01.png" alt="logo" width="600"> | <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_search01.png" alt="logo" width="400"> |
 
 
 ## table of contents
