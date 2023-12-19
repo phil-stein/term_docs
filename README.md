@@ -215,6 +215,7 @@ use `-config` modifier to print config file
   - [ ] load keys for style.c from file, for custamization
   - [ ] c-syntax in macros, for numbers, strings, etc.
   - [ ] make sure all sheets use '-' as space in tags
+  - [ ] replace file_io.c/.h with the one in bovengine
   - [ ] more documentation
     - [ ] docs (finish functionality first)
       - [ ] custom .sheet
