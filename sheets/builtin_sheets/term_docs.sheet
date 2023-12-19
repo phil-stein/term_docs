@@ -158,11 +158,11 @@
     -> [sheet_dir] C:\custom_sheets
     ->
     -> $dim$-------------------------------------------------$$
-    -> $C$config path$$: C:\Workspace\C\term_docs\config.doc
+    -> $C$config path$$: C:/Workspace/C/term_docs/config.doc
     -> $C$syntax$$: true
     -> $r$max sheet paths$$: 8
-    -> $C$path[0]$$: C:\Workspace\C\term_docs\src\sheets\
-    -> $C$path[1]$$: C:\custom_sheets\
+    -> $C$path[0]$$: C:/Workspace/C/term_docs/src/sheets/
+    -> $C$path[1]$$: C:/custom_sheets/
     -> $p$-------------------------------------------------$$
 
 #

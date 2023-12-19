@@ -91,7 +91,15 @@ void config_read_config_file(const char* path, bool print_config)
     PF("config path");
     DOC_PF_COLOR(PF_WHITE);
     PF(": %s\n", path);
-
+    
+    int lines = 0;
+    doc_count_lines_dir(core_data->sheets_path, &lines);
+    DOC_PF_COLOR(PF_CYAN);
+    PF("sheet path");
+    DOC_PF_COLOR(PF_WHITE);
+    PF(": %s\n", core_data->sheets_path);
+    PF(" -> lines: %d\n", lines);
+    
     DOC_PF_COLOR(PF_CYAN);
     PF("syntax");
     DOC_PF_COLOR(PF_WHITE);
@@ -104,10 +112,15 @@ void config_read_config_file(const char* path, bool print_config)
 
     for (int i = 0; i < core_data->custom_sheet_paths_len; ++i)
     {
+      
+      lines = 0;
+      doc_count_lines_dir(core_data->custom_sheet_paths[i], &lines);
+      
       DOC_PF_COLOR(PF_CYAN);
       PF("path[%d]", i);
       DOC_PF_COLOR(PF_WHITE);
       PF(": %s\n", core_data->custom_sheet_paths[i]);
+      PF(" -> lines: %d\n", lines);
     }
     
     DOC_PF_COLOR(PF_PURPLE);
@@ -162,17 +175,19 @@ void config_handle_argument()
     int dirs_walk_back = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
     for (u32 i = strlen(path) -1; i > 0; --i)
     {
-      if (path[i] == '\\') 
+      if (path[i] == '\\' || path[i] == '/')
       { dirs_walk_back--; if (dirs_walk_back <= 0) { break; } }
       path[i] = '\0';
     }
     strcat(path, value_buf);
     if (value_buf[value_buf_pos-1] != '/' &&
         value_buf[value_buf_pos-1] != '\\')
-    {
-      strcat(path, "\\");
-    }
-    // PF("sheet_path: %s\n", path);
+    { strcat(path, "/"); }
+    // replace '\' with '/'
+    for (u32 i = 0; i < strlen(path); ++i)
+    { if (path[i] == '\\') { path[i] = '/'; } }
+    PF("sheet_path: %s\n", path);
+    
     if (!check_dir_exists(path)) { P_ERR("couldnt find path given for [sheet_dir_rel]: %s\n -> %s\n", value_buf, path); return; }
    
     if (core_data->custom_sheet_paths_len < CORE_CUSTOM_SHEETS_MAX)

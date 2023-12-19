@@ -18,6 +18,10 @@ void doc_color_code_section(char* sec, int len);
 void doc_color_code_escape_chars(char* sec, char* buf, int* buf_pos_ptr, int* i_ptr, bool* skip_char_ptr);
 void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_ptr, int* i_ptr, bool* skip_char_ptr, bool* syntax);
 
+// @DOC: count lines in directory of .sheet files
+void doc_count_lines_dir(const char* dir_path, int* lines);
+void doc_count_lines_file(const char* path, int* lines);
+
 #ifdef __cplusplus
 }   // extern c
 #endif

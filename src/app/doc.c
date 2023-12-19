@@ -601,4 +601,74 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
 #undef SET_DEFAULT_STYLE
 #undef RESET_DEFAULT_STYLE
 
+// @TODO: make keword an array and check all keywords are in section
+void doc_count_lines_dir(const char* dir_path, int* lines)
+{
+  char path[256];
+  struct dirent* dp;
+  DIR* dir = opendir(dir_path);
+  // unable to open directory stream
+  if (!dir) 
+  {
+    return; 
+  }
+  // P_STR(dir_path);
+  
+
+  // recursively read the directory and its sub-directories
+  while ((dp = readdir(dir)) != NULL)
+  {
+    // check that the file currently read isn't a directory
+    if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
+    {
+      // check_file(dp->d_name, strlen(dp->d_name), dir_path);
+      if (dp->d_name[dp->d_namlen -6] == '.' &&
+          dp->d_name[dp->d_namlen -5] == 's' &&
+          dp->d_name[dp->d_namlen -4] == 'h' &&
+          dp->d_name[dp->d_namlen -3] == 'e' &&
+          dp->d_name[dp->d_namlen -2] == 'e' &&
+          dp->d_name[dp->d_namlen -1] == 't' )
+      {
+
+        char buf[300];
+        // add slash if missing
+        char* slash = dir_path[strlen(dir_path) -1] == '/'  ? "" :
+                      dir_path[strlen(dir_path) -1] == '\\' ? "" : "\\";
+        SPRINTF(300, buf, "%s%s%s", dir_path, slash, dp->d_name);
+        // P_STR(buf);
+        doc_count_lines_file(buf, lines);
+      }
+      
+
+      // construct new path from our base path
+      strcpy(path, dir_path);
+      path[strlen(path) -1] = '\0';
+      strcat(path, "\\");
+      strcat(path, dp->d_name);
+      
+      doc_count_lines_dir(path, lines); // search recursively
+    }
+  }
+
+  // close the stream
+  closedir(dir);
+}
+void doc_count_lines_file(const char* path, int* lines)
+{
+  if (!check_file_exists(path)) { return false; }
+  int txt_len = 0;
+  char* txt = read_text_file_len(path, &txt_len);
+  
+  int lines_count = 0;
+
+  for (int i = 0; i < txt_len && txt[i] != '\0'; ++i)
+  {
+    if (txt[i] == '\n') { lines_count++; } 
+  }
+
+  (*lines) += lines_count;
+  // PF("\"%s\": %d - %d\n", path, lines_count, (*lines));
+  FREE(txt);
+}
+
 
