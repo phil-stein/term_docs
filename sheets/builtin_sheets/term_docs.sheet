@@ -27,6 +27,9 @@
   $_$custom documentation:$$
     see $|$\|custom-docs\|$$
 
+  $_$custom name:$$
+    see $|$\|custom-name\|$$
+
   $_$config file:$
     view $|$\|config-file\|$$
     doc -config to print config file
@@ -67,6 +70,7 @@
       -> 
       -> $p$--------------------------------------$$
 
+  ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
 |term_docs|
 |custom-sheet|custom-sheets|sheet|sheets|
@@ -121,6 +125,8 @@
 
   $_$config file:$$
     view $|$\|config-file\|$$
+  
+  ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
 |term_docs|
 |config|config-file|confic.doc|
@@ -168,6 +174,7 @@
     -> $C$path[1]$$: C:/custom_sheets/
     -> $p$-------------------------------------------------$$
 
+  ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
 |term_docs|
 |test|wip|
@@ -313,4 +320,15 @@
     \#define MACRO "string"
     \\#not a macro
 
+  ?< https://github.com/phil-stein/term_docs/tree/main >?
+#
+|term_docs|
+|custom-name|
+  1. open "build/make/CMakeLists.txt" change set(NAME "...") 
+     at the top
+  2. in root
+    -> >build_cmake
+    -> >build
+  
+  ?< https://github.com/phil-stein/term_docs/tree/main >?
 #

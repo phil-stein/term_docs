@@ -100,10 +100,10 @@ void function(char arg);
 ## instalation
   1. clone git repo
   2. use cmake & make / vs19 to build <br>
-    -> in root call `cmake_build`
-    -> make: call `build`
-    -> vs19: go to `build/vs19/doc.sln`
-      -> compile
+    - in root call `cmake_build` 
+    - make: in root call `build`
+    - vs19: go to `build/vs19/doc.sln`
+      - compile
   4. add root/build directory to your [path](https://stackoverflow.com/questions/44272416/how-to-add-a-folder-to-path-environment-variable-in-windows-10-with-screensho)
 
 ## troubleshoot
@@ -217,9 +217,6 @@ use `-config` modifier to print config file
   - [ ] make sure all sheets use '-' as space in tags
   - [ ] replace file_io.c/.h with the one in bovengine
   - [ ] more documentation
-    - [ ] docs (finish functionality first)
-      - [ ] custom .sheet
-      - [ ] custom name
     - [ ] make
     - [ ] cmake
     - [ ] stb
