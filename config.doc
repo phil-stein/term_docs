@@ -1,9 +1,13 @@
 
-[syntax] false 
-[syntax] true 
+// activate highlighting
 [syntax] 0
 [syntax] 1
+[syntax] false 
+[syntax] true 
+
+// search sheets/buildin
+[builtin_sheets] false
+[builtin_sheets] true
 
 [sheet_dir_rel] sheets\custom_sheets
-
 // [sheet_dir] C:\workspace\c\term_docs\sheets\custom_sheets_02

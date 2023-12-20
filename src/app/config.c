@@ -91,6 +91,11 @@ void config_read_config_file(const char* path, bool print_config)
     PF("config path");
     DOC_PF_COLOR(PF_WHITE);
     PF(": %s\n", path);
+     
+    DOC_PF_COLOR(PF_CYAN);
+    PF("builtin_sheets");
+    DOC_PF_COLOR(PF_WHITE);
+    PF(": %s\n", STR_BOOL(core_data->builtin_sheets_act));   
     
     int lines = 0;
     doc_count_lines_dir(core_data->sheets_path, &lines);
@@ -144,13 +149,36 @@ void config_handle_argument()
       name_buf[4] == 'a' &&
       name_buf[5] == 'x' )
   {
-
     int value = config_parse_bool();
     if (!(value == 0 || value == 1))
-    { P_ERR("incorrect argument format for [syntax]\n"); return; }
+    { P_ERR("incorrect argument format for [syntax]\n -> 'true', 'false', '1', '0'\n"); return; }
 
     // PF("syntax: %d\n", value);
     core_data->style_act = (bool)value;
+  }
+  
+  // [builtin_sheets]
+  if (name_buf[ 0] == 'b' &&
+      name_buf[ 1] == 'u' &&
+      name_buf[ 2] == 'i' &&
+      name_buf[ 3] == 'l' &&
+      name_buf[ 4] == 't' &&
+      name_buf[ 5] == 'i' &&
+      name_buf[ 6] == 'n' &&
+      name_buf[ 7] == '_' &&
+      name_buf[ 8] == 's' &&
+      name_buf[ 9] == 'h' &&
+      name_buf[10] == 'e' &&
+      name_buf[11] == 'e' &&
+      name_buf[12] == 't' &&
+      name_buf[13] == 's' )
+  {
+    int value = config_parse_bool();
+    if (!(value == 0 || value == 1))
+    { P_ERR("incorrect argument format for [buildin_sheets]\n -> 'true', 'false', '1', '0'\n"); return; }
+    
+    // PF("buildin: %d\n", value);
+    core_data->builtin_sheets_act = (bool)value;
   }
 
   // [sheet_path_rel]
@@ -186,7 +214,7 @@ void config_handle_argument()
     // replace '\' with '/'
     for (u32 i = 0; i < strlen(path); ++i)
     { if (path[i] == '\\') { path[i] = '/'; } }
-    PF("sheet_path: %s\n", path);
+    // PF("sheet_path: %s\n", path);
     
     if (!check_dir_exists(path)) { P_ERR("couldnt find path given for [sheet_dir_rel]: %s\n -> %s\n", value_buf, path); return; }
    

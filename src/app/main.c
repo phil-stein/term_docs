@@ -56,8 +56,8 @@ int main(int argc, char** argv)
   {
       if (core_data->sheets_path[i] == '\\') { core_data->sheets_path[i] = '/'; }
   }
-  strcat(core_data->sheets_path, "sheets/builtin_sheets/");
-  P_STR(core_data->sheets_path);
+  // strcat(core_data->sheets_path, "sheets/builtin_sheets/");
+  // P_STR(core_data->sheets_path);
  
   // ---- commands ----
 
@@ -140,7 +140,7 @@ int main(int argc, char** argv)
       if (config_path[i] == '\\') { config_path[i] = '/'; }
   }
   strcat(config_path, "config.doc");
-  P_STR(config_path);
+  // P_STR(config_path);
   config_read_config_file(config_path, print_config_cmd);
 
   // -- arguments --
@@ -166,7 +166,10 @@ int main(int argc, char** argv)
     // for (int i = 0; i < word_arr_len; ++i)
     // { P_STR(word_arr[i]); }
     
-    doc_search_dir(core_data->sheets_path, word_arr, word_arr_len, &found_count);
+    if (core_data->builtin_sheets_act)
+    { doc_search_dir(core_data->sheets_path, word_arr, word_arr_len, &found_count); }
+    else
+    { DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE); PF(" searching without builtin sheets.\n"); }
     
     // custom doc paths
     for (int i = 0; i < core_data->custom_sheet_paths_len; ++i)
@@ -191,22 +194,21 @@ int main(int argc, char** argv)
     def_search_and_print(dir_name, keyword, &found_count);
   } 
 
-  // check if nothing was found
-  if (core_data->style_act) 
-  { P_INT(found_count); }
-  else
-  { PF("found_count: %d\n", found_count); }
-  
+  // -- check if nothing was found --
+  // DOC_P_INT(found_count);
   if (found_count <= 0)
   { 
     if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
     {
       DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
-      PF(" could not find keyword '"); 
+      PF(" could not find keyword%s '", word_arr_len > 1 ? "s" : ""); 
       DOC_PF_COLOR(PF_PURPLE);
-      for (int i = 1; i < word_arr_len; ++i)
+      for (int i = 0; i < word_arr_len; ++i)
       {
-        PF("%s%s",  word_arr[i], i < argc-1 ? ", " : "");
+        PF("%s",  word_arr[i]);
+        DOC_PF_COLOR(PF_WHITE); 
+        PF("%s",  i < word_arr_len -1 ? "', '" : "");
+        DOC_PF_COLOR(PF_PURPLE);
       }
       DOC_PF_COLOR(PF_WHITE); 
       PF("' in sheets.\n");

@@ -12,20 +12,23 @@ extern "C" {
 
 typedef struct core_data_t
 {
-  bool style_act;                     // use syntax highlighting
-  bool style_deact_cmd;               // -c/-color command
   char exec_path[CORE_PATH_MAX];      // path to executable
   char sheets_path[CORE_PATH_MAX];    // path to sheets folder
+
+  bool style_act;                     // use syntax highlighting
+  bool style_deact_cmd;               // -c/-color command
+  bool builtin_sheets_act;
 
   char custom_sheet_paths[CORE_CUSTOM_SHEETS_MAX][CORE_PATH_MAX];
   int  custom_sheet_paths_len;
 
 }core_data_t;
-#define CORE_DATA_INIT()        \
-{                               \
-  .style_act       = true,      \
-  .style_deact_cmd = false,     \
-  .custom_sheet_paths_len = 0,  \
+#define CORE_DATA_INIT()            \
+{                                   \
+  .style_act              = true,   \
+  .style_deact_cmd        = false,  \
+  .builtin_sheets_act     = true,   \
+  .custom_sheet_paths_len = 0,      \
 }
 
 core_data_t* core_data_get();
