@@ -1,5 +1,5 @@
 @echo off
 
-cd build\make
+cd build/make
 make clean
-cd ..\..
+cd ../..
