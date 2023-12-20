@@ -7,7 +7,7 @@
 c documentation for the terminal <br>
 works offline and is customizable <br>
 also has search utility functions <br>
-most documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
+most c std library documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
 
 |doc    |search  |
 |:-----:|:------:|
@@ -100,11 +100,12 @@ void function(char arg);
 ## instalation
   1. clone git repo
   2. use cmake & make / vs19 to build <br>
-    - in root call `cmake_build` 
-    - make: in root call `build`
-    - vs19: go to `build/vs19/doc.sln`
-      - compile
-  4. add root/build directory to your [path](https://stackoverflow.com/questions/44272416/how-to-add-a-folder-to-path-environment-variable-in-windows-10-with-screensho)
+      - in root call `cmake_build` 
+      - make: in root call `build`
+      - vs19: go to `build/vs19/doc.sln`
+        - compile
+  4. add `root/bin` directory to your [path](https://stackoverflow.com/questions/44272416/how-to-add-a-folder-to-path-environment-variable-in-windows-10-with-screensho)
+      - `root/bin/Debug` or `root/bin/Release` for vs19
 
 ## troubleshoot
   - output text is messed up
@@ -184,13 +185,13 @@ now repeat the [instalation](#instalation) steps
 ### config file
 config file is `root/config.doc` <br>
 ```
+// comment
 [syntax] true
 [syntax] false
 
-// comment
+[builtin_sheets] false
 
 [sheet_dir_rel] src/sheets
-
 [sheet_dir] C:\custom_sheets
 ```
 `[syntax]` enables or disables highlighting <br>
@@ -213,6 +214,7 @@ use `-config` modifier to print config file
     - the : at the end makes it highlight as return, like return 0;
 
 ## todo
+  - [ ] update readme, screenshots, etc.
   - [ ] maybe change -d to just using keyword with () at the end
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references
