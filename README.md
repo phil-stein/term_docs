@@ -195,6 +195,11 @@ config file is `root/config.doc` <br>
 ```
 `[syntax]` enables or disables highlighting <br>
 can be set to `1, true, 0, false` <br>
+true by default <br>
+`[builtin_sheets]` de-/activates searching the default <br>
+sheet dir: "sheets/builtin_sheets" <br>
+can be set to `1, true, 0, false` <br>
+true by default <br>
 `[sheet_dir]` and [sheet_dir_rel] add a new path to check for .sheet files <br>
 `[sheet_dir_rel]` is relative to root dir <br>
 max is 8 right now, view `doc -config` for current max <br>

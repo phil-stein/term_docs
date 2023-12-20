@@ -5,9 +5,10 @@
 [syntax] false 
 [syntax] true 
 
-// search sheets/buildin
+// search sheets/builtin
 [builtin_sheets] false
 [builtin_sheets] true
 
+// custom sheet paths
 [sheet_dir_rel] sheets\custom_sheets
 // [sheet_dir] C:\workspace\c\term_docs\sheets\custom_sheets_02

@@ -138,6 +138,12 @@
   [syntax]: 
     enables or disables highlighting 
     can be set to 1, true, 0, false
+    true by default
+  [builtin_sheets]:
+    de-/activates searching the default 
+    sheet dir: "sheets/builtin_sheets"
+    can be set to 1, true, 0, false
+    true by default
   [sheet_dir] and [sheet_dir_rel]: 
     add a new path to check for .sheet files
     [sheet_dir_rel] is relative to root dir
@@ -152,6 +158,10 @@
     $_$in config.doc:$$
     [syntax] true
     [syntax] false
+    
+    [builtin_sheets] false
+    [builtin_sheets] true
+    
     // comment
     [sheet_dir_rel] src/sheets 
     [sheet_dir] C:\custom_sheets
@@ -162,6 +172,10 @@
     ->
     -> [syntax] false
     -> [syntax] true
+    -> 
+    -> [builtin_sheets] false
+    -> [builtin_sheets] true
+    ->
     -> // comment
     -> [sheet_dir_rel] src/sheets
     -> [sheet_dir] C:\custom_sheets

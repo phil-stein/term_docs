@@ -56,7 +56,7 @@ int main(int argc, char** argv)
   {
       if (core_data->sheets_path[i] == '\\') { core_data->sheets_path[i] = '/'; }
   }
-  // strcat(core_data->sheets_path, "sheets/builtin_sheets/");
+  strcat(core_data->sheets_path, "sheets/builtin_sheets/");
   // P_STR(core_data->sheets_path);
  
   // ---- commands ----
