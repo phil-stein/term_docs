@@ -10,7 +10,7 @@
 
 const char key_types[][KEY_MAX] = 
 { 
-  "unsigned", "const", "extern", "restrict", "volatile", 
+  "unsigned", "const", "extern", "restrict", "volatile", "static", "auto", "register", "signed", 
   "void", "char", "short", "int", "long", "float", "double", "bool", 
   "struct", "enum", "typedef",
   "size_t", "rsize_t", "errno_t", "FILE"

@@ -201,7 +201,8 @@
     long    longest   along
     float   floating  afloat
     double  doubled   adouble
-    unsigned, const, struct, enum, typedef
+    unsigned, const, struct, enum, typedef, signed,
+    auto, register, static, volatile, extern, restrict  
     func(), func(int a, float b), func(int a), func(int,int b), func ()
     
     // correct
@@ -276,6 +277,9 @@
     ? link ? not link
     \? not a link
     \| not a tag
+
+    escaped \? in link:
+    ?< https://www.geeksforgeeks.org/storage-classes-in-c/\?ref=lbp >?
    
     ~ info with escaped \! \? \~ \| \\#
     ! warn with escaped \! \? \~ \| \\#

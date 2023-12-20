@@ -4,6 +4,7 @@ modifiers:
 #
 |c|C|
 |unsigned|type|signed|signdness|
+|keyword|type-qualifier|
     unsigned integer type variables can hold numbers 2x as big 
     as their signed equivalent, but can't hold negative numbers
     ! unsigned number going negative causes overflow
@@ -17,6 +18,7 @@ modifiers:
 #
 |c|C|
 |const|type|constant|
+|keyword|type-qualifier|
     variables marked const cant be modified during runtime
     can be applied to all types and structs
     ~ using const vars can speed up the program
@@ -26,6 +28,174 @@ modifiers:
       const int c = 10;
       int a = c * 2;    // legal
       c = a * 2;        // illegal
+#
+|c|C|
+|extern|
+|variable|
+|keyword|type-modifier|modifier|
+    the extern keyword dictates the following object is defined elsewhere
+    this can be used to access a variable in multiple .c files
+    ~ all function declarations have a 'hidden' extern in front
+    example:
+      $_$in header.h$$
+      extern int var; // declaring var
+      $_$in file_a.c$$
+      \#include "header.h"
+      int a = 0;  // setting value
+      $_$in file_b.c$$
+      \#include "header.h"
+      printf("%d", var);  // accessing
+
+      // same thing
+      $_$in some_header.h$$
+      void func();
+      extern void func();
+
+#
+|c|C|
+|restrict|
+|keyword|type|type-qualifier|
+    the restrict keyword / type qualifier
+    tells the compiler that a pointer is unique
+    so a function isnt passed two pointers
+    to the same memory
+    allowing for optimizations
+    ~ added in C99
+    ~ view memcpy() and memmove() for example
+
+    example:
+      void multiply_arrays(int* dest, int* src1, int* src2, int n)
+      {
+        for(int i = 0; i < n; i++)
+        { dest[i] = src1[i]*src2[i]; }
+      }
+      void multiply_arrays_restrict(int* dest, int* restrict src1, int* restrict src2, int n)
+      {
+        for(int i = 0; i < n; i++)
+        { dest[i] = src1[i]*src2[i]; }
+      }
+
+      \#define LEN 5
+      int arr0[LEN] = { 1, 2, 3, 4, 5 };
+      int arr1[LEN] = { 1, 2, 3, 4, 5 };
+      int dest[LEN];
+
+      // using arr0 for both sr1 and src2 so no restrict
+      muliply_arrays(dest, arr0, arr0 +2, LEN -2);
+      // src1 and src2 are different so we can use restrict
+      muliply_arrays_restrict(dest, arr0, arr1, LEN);
+
+?< https://stackoverflow.com/questions/745870/realistic-usage-of-the-c99-restrict-keyword >?
+#
+|c|C|
+|volatile|
+|keyword|type|type-qualifier|
+    the volatile keyword / type qualifier
+    tells the compiler the variable 
+    may be changed outside the program
+    this may be used for example for hardware registers
+
+    example:
+      volatile int i;
+      volatile struct s_t s;
+      int* p = 0;
+      volatile int* vp = p; // OK: adds qualifiers (int to volatile int)
+      p = vp;               // Error: discards qualifiers (volatile int to int)
+      p = (int*)vp;         // OK: cast
+
+      ar *p = 0;
+      // Error: char* and volatile char* are not compatible types
+      volatile char **vpp = &p;
+      // OK, adds qualifiers (char* to char*volatile)
+      char * volatile *pvp = &p; 
+      
+?< https://en.cppreference.com/w/c/language/volatile >?
+#
+|c|C|
+|static|
+|keyword|type|type-qualifier|
+  the static keyword / type qualifier
+  makes a variable retain its value even if 
+  the variables scope ends and a normal variable
+  would be removed
+  declaring a function static means it is no longer
+  globally accesible and can only be called inside 
+  the file it is defined
+
+  example:
+    void function()
+    {
+      static int call_count = 0;
+      int normal = 0;
+      call_count++;
+      normal++;
+      printf("call_count: %d, normal: %d\n", call_count, normal);
+    }
+    function();
+    ->call_count: 1, normal: 1
+    function();
+    ->call_count: 2, normal: 1
+    function();
+    ->call_count: 3, normal: 1
+
+    $_$in file_a.c:$$
+    void func() { }
+    static void func_static() { }
+    func();         // this is fine
+    func_static();  // this is fine
+
+    $_$in file_b.c:$$
+    func();         // this is fine
+    func_static();  // not allowed
+
+  ?< https://www.geeksforgeeks.org/static-variables-in-c/\?ref=lbp >?
+  ?< https://www.geeksforgeeks.org/what-are-static-functions-in-c/\?ref=lbp >?
+#
+|c|C|
+|auto|
+|keyword|type|type-qualifier|
+  the auto keyword / type qualifier is applied
+  automatically to all scoped variables
+  you can only access these variables inside their $|$\|scope\|$$
+
+  ~ you will probably never have to use this
+
+  example:
+    void function()
+    {
+      // same thing
+      int var = 0;
+      auto int var = 0;
+    }
+
+  ?< https://www.geeksforgeeks.org/storage-classes-in-c/\?ref=lbp >?
+#
+|c|C|
+|register|
+|keyword|type|type-qualifier|
+  the register keyword / type qualifier tells the
+  compiler to put a variable into a register if
+  possible, instead of memory
+
+  ~ register variables cant be accessed via pointer
+  
+  example:
+    register int var = 0;
+   
+  ?< https://www.geeksforgeeks.org/storage-classes-in-c/\?ref=lbp >?
+#
+|c|C|
+|signed|
+|keyword|type|type-qualifier|
+  the signed keyword / type qualifier signifies
+  that an integer type variable is signed
+  and therefore can hold negative numbers
+  see $|$\|unsigned\|$$ for opposite
+
+  example:
+    // same thing
+    int a = -1;
+    signed int a = -1;
 #
 
 data structures:
@@ -319,91 +489,6 @@ non-standard:
      if (ptr \!= NULL) { free(ptr); }
      if (ptr)  { printf("ptr = not null"); }
      if (\!ptr) { printf("ptr = null"); }
-#
-
-keywords:
-
-#
-|c|C|
-|extern|
-|variable|
-    the extern keyword dictates the following object is defined elsewhere
-    this can be used to access a variable in multiple .c files
-    ~ all function declarations have a 'hidden' extern in front
-    example:
-      $_$in header.h$$
-      extern int var; // declaring var
-      $_$in file_a.c$$
-      \#include "header.h"
-      int a = 0;  // setting value
-      $_$in file_b.c$$
-      \#include "header.h"
-      printf("%d", var);  // accessing
-
-      // same thing
-      $_$in some_header.h$$
-      void func();
-      extern void func();
-
-#
-|c|C|
-|restrict|
-|type|type-qualifier|
-    the restrict keyword / type qualifier
-    tells the compiler that a pointer is unique
-    so a function isnt passed two pointers
-    to the same memory
-    allowing for optimizations
-    ~ added in C99
-    ~ view memcpy() and memmove() for example
-
-    example:
-      void multiply_arrays(int* dest, int* src1, int* src2, int n)
-      {
-        for(int i = 0; i < n; i++)
-        { dest[i] = src1[i]*src2[i]; }
-      }
-      void multiply_arrays_restrict(int* dest, int* restrict src1, int* restrict src2, int n)
-      {
-        for(int i = 0; i < n; i++)
-        { dest[i] = src1[i]*src2[i]; }
-      }
-
-      \#define LEN 5
-      int arr0[LEN] = { 1, 2, 3, 4, 5 };
-      int arr1[LEN] = { 1, 2, 3, 4, 5 };
-      int dest[LEN];
-
-      // using arr0 for both sr1 and src2 so no restrict
-      muliply_arrays(dest, arr0, arr0 +2, LEN -2);
-      // src1 and src2 are different so we can use restrict
-      muliply_arrays_restrict(dest, arr0, arr1, LEN);
-
-?< https://stackoverflow.com/questions/745870/realistic-usage-of-the-c99-restrict-keyword >?
-#
-|c|C|
-|volatile|
-|type|type-qualifier|
-    the volatile keyword / type qualifier
-    tells the compiler the variable 
-    may be changed outside the program
-    this may be used for example for hardware registers
-
-    example:
-      volatile int i;
-      volatile struct s_t s;
-      int* p = 0;
-      volatile int* vp = p; // OK: adds qualifiers (int to volatile int)
-      p = vp;               // Error: discards qualifiers (volatile int to int)
-      p = (int*)vp;         // OK: cast
-
-      ar *p = 0;
-      // Error: char* and volatile char* are not compatible types
-      volatile char **vpp = &p;
-      // OK, adds qualifiers (char* to char*volatile)
-      char * volatile *pvp = &p; 
-      
-?< https://en.cppreference.com/w/c/language/volatile >?
 #
 
 operators:
@@ -1148,7 +1233,6 @@ macros:
     \#pragma GCC diagnostic pop
 #
 
-
 flow control:
 
 #
@@ -1377,8 +1461,66 @@ flow control:
     -> c has 1
 #
 
-entry point:
+functions:
 
+#
+|c|C|
+|scope|Scope|
+  a scope is a block of code f.e.
+  a function or an if statement
+
+  example:
+    void function()
+    { // function scope start
+      
+      //declared in function scope
+      // only accessible in function scope
+      int a = 0;  
+      
+      if ()
+      { // if scope start
+
+        //declared in if scope
+        // only accessible in if scope
+        int b = 0;
+      
+      } // if scope end
+    
+    } // function scope end
+#
+|c|C|
+|function|Function|func|Func|
+  a function is a specified block of code
+  that can be invoked from other code
+  function declarations are usually put in
+  header files, .h, but can also be put at the 
+  top of .c files limiting access to that function 
+  to that .c file
+
+  <type> <name>()
+  <type> <name>(<arg-type> <arg-name>)
+
+  example:
+    $_$in app.h$$
+    // declare in header for global access
+    void funtion_a();
+    int  function_b(int arg);
+    void function_c(int arg0, int arg1);
+
+    $_$in app.c:$$
+    void function_d();  // declaration in .c file
+    
+    int main(void)
+    {
+      function_a();
+      int a = function_b(12);
+      function_c(2, 42);
+      function_d();
+    }
+    void function_d()
+    {
+      // do something
+    }
 #
 |c|C|
 |main|

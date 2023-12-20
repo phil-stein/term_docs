@@ -284,7 +284,13 @@ void doc_color_code_section(char* sec, int len)
     {
       BUF_DUMP();
       buf[buf_pos++] = sec[i++];
-      while (sec[i] != '\n' && sec[i] != '?') { buf[buf_pos++] = sec[i++]; }
+      while ((sec[i] != '\n' && sec[i] != '\0') && 
+             (sec[i] != '?' || sec[i -1] == '\\'))
+      {
+        // escaped ?
+        if (sec[i] == '\\' && sec[i +1] == '?') { i++; continue; }
+        buf[buf_pos++] = sec[i++]; 
+      }
       if (sec[i] == '?') { i++; }
       SET_STYLE(PF_DIM, COL_LINK);
       SET_STYLE(PF_ITALIC, COL_LINK);

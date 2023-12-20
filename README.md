@@ -224,7 +224,15 @@ use `-config` modifier to print config file
   - [ ] c-syntax in macros, for numbers, strings, etc.
   - [ ] make sure all sheets use '-' as space in tags
   - [ ] replace file_io.c/.h with the one in bovengine
+  - [ ] make github release
   - [ ] more documentation
+    - [ ] c keywords i dont have yet
+      - [ ] c11/c23 stuff ?
+        - [ ] _Generic
+        - [ ] constexpr
+        - [ ] alignas
+        - [ ] alignof
+        - [ ] nullptr
     - [ ] make
     - [ ] cmake
     - [ ] stb
