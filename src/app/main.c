@@ -38,26 +38,12 @@ int main(int argc, char** argv)
   // -- get executable name --
   // P_STR(_getcwd(NULL, 0));
   GetModuleFileName(NULL, core_data->exec_path, CORE_PATH_MAX);   // get executable location
-  assert(core_data->exec_path != NULL);
+  ERR_CHECK(core_data->exec_path != NULL, "failed getting executable path\n");
 
-  // // -- get the sheet path either based on executable or macro --
-  // 
-  // strncpy(core_data->sheets_path, core_data->exec_path, CORE_PATH_MAX);
-  // assert(core_data->sheets_path != NULL);
-  // int dirs_walk_back = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
-  // for (u32 i = strlen(core_data->sheets_path) -1; i > 0; --i)
-  // {
-  //   if (core_data->sheets_path[i] == '\\' || core_data->sheets_path[i] == '/') 
-  //   { dirs_walk_back--; if (dirs_walk_back <= 0) { break; } }
-  //   core_data->sheets_path[i] = '\0';
-  // }
-  // // replace '\' with '/'
-  // for (u32 i = 0; i < strlen(core_data->sheets_path); ++i)
-  // {
-  //     if (core_data->sheets_path[i] == '\\') { core_data->sheets_path[i] = '/'; }
-  // }
-  // strcat(core_data->sheets_path, "sheets/builtin_sheets/");
-  // // P_STR(core_data->sheets_path);
+
+  // moved this after it stopped beeing used
+  // core_data_init_sheet_path();
+  // P_STR(core_data->sheets_path);
  
   // ---- commands ----
 
@@ -131,23 +117,7 @@ int main(int argc, char** argv)
   
   // -- config file --
   
-  strncpy(core_data->config_path, core_data->exec_path, CORE_PATH_MAX);
-  assert(core_data->config_path != NULL);
-  int dirs_walk_back_02 = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
-  for (u32 i = strlen(core_data->config_path) -1; i > 0; --i)
-  {
-    if (core_data->config_path[i] == '\\' || 
-        core_data->config_path[i] == '/')
-    { dirs_walk_back_02--; if (dirs_walk_back_02 <= 0) { break; } }
-    core_data->config_path[i] = '\0';
-  }
-  // replace '\' with '/'
-  for (u32 i = 0; i < strlen(core_data->config_path); ++i)
-  {
-      if (core_data->config_path[i] == '\\') 
-      { core_data->config_path[i] = '/'; }
-  }
-  strcat(core_data->config_path, "config.doc");
+  core_data_init_config_path();
   // P_STR(config_path);
   config_read_config_file(core_data->config_path, print_config_cmd);
 

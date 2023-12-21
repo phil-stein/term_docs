@@ -35,6 +35,9 @@ typedef struct core_data_t
 }
 
 core_data_t* core_data_get();
+void core_data_init_config_path();
+
+void core_data_init_sheet_path(); // not used
 
 #ifdef __cplusplus
 }   // extern c

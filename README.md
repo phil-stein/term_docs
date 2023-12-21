@@ -220,7 +220,6 @@ use `-config` modifier to print config file <br>
   - [ ] c-syntax in macros, for numbers, strings, etc.
   - [ ] make sure all sheets use '-' as space in tags
   - [ ] replace file_io.c/.h with the one in bovengine
-  - [ ] make builtin_sheets just a [sheet_dir_rel] in config
   - [ ] make github release
   - [ ] more documentation
     - [ ] c keywords i dont have yet

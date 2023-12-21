@@ -5,10 +5,6 @@
 [syntax] false 
 [syntax] true 
 
-// search sheets/builtin
-[builtin_sheets] false
-[builtin_sheets] true
-
 // builtin-sheets
 [sheet_dir_rel] sheets/builtin_sheets/
 

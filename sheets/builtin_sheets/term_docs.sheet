@@ -148,11 +148,6 @@
     enables or disables highlighting 
     can be set to 1, true, 0, false
     true by default
-  [builtin_sheets]:
-    de-/activates searching the default 
-    sheet dir: "sheets/builtin_sheets"
-    can be set to 1, true, 0, false
-    true by default
   [sheet_dir] and [sheet_dir_rel]: 
     add a new path to check for .sheet files
     [sheet_dir_rel] is relative to root dir
@@ -170,8 +165,11 @@
     
     [builtin_sheets] false
     [builtin_sheets] true
+   
+    // builtin sheets
+    [sheet_dir_rel] sheets/builtin_sheets/ 
     
-    // comment
+    // custom sheets
     [sheet_dir_rel] src/sheets 
     [sheet_dir] C:\custom_sheets
 
@@ -181,11 +179,11 @@
     ->
     -> [syntax] false
     -> [syntax] true
-    -> 
-    -> [builtin_sheets] false
-    -> [builtin_sheets] true
     ->
-    -> // comment
+    -> // builtin sheets
+    -> [sheet_dir_rel] sheets/builtin_sheets/ 
+    ->
+    -> // custom sheets
     -> [sheet_dir_rel] src/sheets
     -> [sheet_dir] C:\custom_sheets
     ->
@@ -193,8 +191,9 @@
     -> $C$config path$$: C:/Workspace/C/term_docs/config.doc
     -> $C$syntax$$: true
     -> $r$max sheet paths$$: 8
-    -> $C$path[0]$$: C:/Workspace/C/term_docs/src/sheets/
-    -> $C$path[1]$$: C:/custom_sheets/
+    -> $C$path[0]$$: C:/<path-to-root>/sheets/builtin_sheets/
+    -> $C$path[1]$$: C:/<path-to-root>/src/sheets/
+    -> $C$path[2]$$: C:/custom_sheets/
     -> $p$-------------------------------------------------$$
 
   ?< https://github.com/phil-stein/term_docs/tree/main >?
