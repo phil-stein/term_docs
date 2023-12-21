@@ -199,13 +199,23 @@ void atexit(void (*func)(void))
 |c|C|
 |system|
 |command|command-line|stdlib|stdlib.h|
-int exit(const char* command)   
+|terminal|sys|pause|
+int system(const char* command)   
     gives command to the os's terminal
+    returns 0 on success
     ! available commands depend on current os
     ~ included in <stdlib.h>
     example: 
       system("dir"); // windows
       system("ls");  // unix
+      
+      // pause terminal application
+      system("pause");
+      -> Press any key to continue…
+
+      // print to terminal
+      system("echo Hello, World!");
+      -> Hello, World!
 
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_system.htm >?
 #

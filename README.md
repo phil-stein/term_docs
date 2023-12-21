@@ -47,6 +47,7 @@ doc -h -help    -> help
 doc -c -color   -> disable syntax highlighting
 doc -d          -> search for func defenition
 doc -config     -> print config file
+doc ... -loc    -> print location of documentation
 
 modifier can have arbitrary position
 
@@ -233,6 +234,7 @@ use `-config` modifier to print config file
         - [ ] alignas
         - [ ] alignof
         - [ ] nullptr
+        - [ ] etc.
     - [ ] make
     - [ ] cmake
     - [ ] stb

@@ -76,12 +76,20 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
   int txt_len = 0;
   char* txt = read_text_file_len(path, &txt_len);
 
+  core_data_t* core_data = core_data_get();
+  
   // P_STR(path);
-
+  
   int sections_found_count = 0; // found sections
   int start;
-  for (start = 1; txt[start] != '\0'; ++start)
+  for (start = 0; txt[start] != '\0'; ++start)
   {
+    // with this it cant find calloc, idk
+    // // @UNSURE: this loop wasnt here but still working why ???
+    // // @BUGG: txt[start-1] start might be 0
+    // while (start < txt_len && (txt[start] != '#' || txt[start -1] == '\\')) 
+    // { start++; }
+    
     int end = start +1;
     while (end < txt_len && (txt[end] != '#' || txt[end -1] == '\\')) 
     { end++; }
@@ -99,7 +107,7 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
       for (int section = start; section < end; ++section)
       {
         int  keyword_pos = 0;
-        
+      
         // escaped #, skip the '\'
         if (txt[section] == '\\' && txt[section +1] == '#') 
         { section++; }
@@ -146,6 +154,25 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
     // print if all keywords found
     if (keyword_found_count == keywords_len)
     {
+      // print location
+      if (core_data->print_loc_act)
+      {
+        int lines_count = 1;  // idk has to be 1
+        for (int i = 0; i < txt_len && i <= start; ++i)
+        { if (txt[i] == '\n') { lines_count++;} }
+        DOC_PF_COLOR(PF_CYAN);
+        PF("location");
+        DOC_PF_COLOR(PF_WHITE);
+        PF(":\n -> ");
+        DOC_PF_COLOR(PF_CYAN);
+        PF("file"); 
+        DOC_PF_COLOR(PF_WHITE);
+        PF(": %s\n -> ", path);
+        DOC_PF_COLOR(PF_CYAN);
+        PF("line");
+        DOC_PF_COLOR(PF_WHITE);
+        PF(": %d\n", lines_count);
+      }
       doc_print_section(txt + start, end - start, keywords[0], file);
       sections_found_count++;
     }

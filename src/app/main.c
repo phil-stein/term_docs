@@ -96,6 +96,14 @@ int main(int argc, char** argv)
       cmd_count++;
       color_cmd = true;
     }
+    else if (argv[i][0] == '-'  && 
+             argv[i][1] == 'l'  && 
+             argv[i][2] == 'o'  && 
+             argv[i][3] == 'c'  ) 
+    {
+      cmd_count++;
+      core_data->print_loc_act = true;
+    }
     
     // -- modes --
 
