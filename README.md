@@ -215,7 +215,6 @@ use `-config` modifier to print config file
     - the : at the end makes it highlight as return, like return 0;
 
 ## todo
-  - [ ] cleanup all warnings
   - [ ] update readme, example section, screenshots, etc.
   - [ ] maybe change -d to just using keyword with () at the end
   - [ ] search structure/enum definitions in specified dir

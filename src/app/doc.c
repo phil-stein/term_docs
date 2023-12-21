@@ -100,7 +100,7 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
     int keyword_found_count = 0;
     for (int keyword_idx = 0; keyword_idx < keywords_len; ++keyword_idx)
     {
-      char* keyword = keywords[keyword_idx];
+      const char* keyword = keywords[keyword_idx];
 
       bool keyword_found = false;
       // search for keyword
@@ -378,7 +378,7 @@ void doc_color_code_escape_chars(char* sec, char* buf, int* buf_pos_ptr, int* i_
   #define i         (*i_ptr)
   #define skip_char (*skip_char_ptr)
   
-  core_data_t* core_data = core_data_get();
+  // core_data_t* core_data = core_data_get();
   
   if (sec[i] == '\\' && sec[i +1] == '\\' && sec[i+2] == '#')
   {
@@ -688,7 +688,7 @@ void doc_count_lines_dir(const char* dir_path, int* lines)
 }
 void doc_count_lines_file(const char* path, int* lines)
 {
-  if (!check_file_exists(path)) { return false; }
+  if (!check_file_exists(path)) { return; }
   int txt_len = 0;
   char* txt = read_text_file_len(path, &txt_len);
   

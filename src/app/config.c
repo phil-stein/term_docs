@@ -2,6 +2,7 @@
 #include "app/file_io.h"
 #include "app/core_data.h"
 #include "app/style.h"
+#include "app/doc.h"
 
 #include <ctype.h>
 

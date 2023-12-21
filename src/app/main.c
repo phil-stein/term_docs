@@ -175,7 +175,7 @@ int main(int argc, char** argv)
     // { P_STR(word_arr[i]); }
     
     if (core_data->builtin_sheets_act)
-    { doc_search_dir(core_data->sheets_path, word_arr, word_arr_len, &found_count); }
+    { doc_search_dir(core_data->sheets_path, (const char**)word_arr, word_arr_len, &found_count); }
     else
     { DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE); PF(" searching without builtin sheets.\n"); }
     
@@ -183,7 +183,7 @@ int main(int argc, char** argv)
     for (int i = 0; i < core_data->custom_sheet_paths_len; ++i)
     {
       // P_STR(core_data->custom_sheet_paths[i]);
-      doc_search_dir(core_data->custom_sheet_paths[i], word_arr, word_arr_len, &found_count);
+      doc_search_dir(core_data->custom_sheet_paths[i], (const char**)word_arr, word_arr_len, &found_count);
     }
   }
   else if (HAS_FLAG(mode, SEARCH_DEFINITION))
