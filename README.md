@@ -188,9 +188,9 @@ config file is `root/config.doc` <br>
 ```
 // comment
 [syntax] true
-[syntax] false
 
-[builtin_sheets] false
+// builtin sheets
+[sheet_dir_rel] sheets/builtin_sheets/
 
 [sheet_dir_rel] src/sheets
 [sheet_dir] C:\custom_sheets
@@ -198,16 +198,12 @@ config file is `root/config.doc` <br>
 `[syntax]` enables or disables highlighting <br>
 can be set to `1, true, 0, false` <br>
 true by default <br>
-`[builtin_sheets]` de-/activates searching the default <br>
-sheet dir: "sheets/builtin_sheets" <br>
-can be set to `1, true, 0, false` <br>
-true by default <br>
-`[sheet_dir]` and [sheet_dir_rel] add a new path to check for .sheet files <br>
+`[sheet_dir]` and `[sheet_dir_rel]` add a new path to check for .sheet files <br>
 `[sheet_dir_rel]` is relative to root dir <br>
 max is 8 right now, view `doc -config` for current max <br>
 use `//` for comments <br>
 
-use `-config` modifier to print config file
+use `-config` modifier to print config file <br>
 
 ## buggs
   - [ ] -d doesnt find program_start in bovengine
@@ -216,7 +212,7 @@ use `-config` modifier to print config file
 
 ## todo
   - [ ] update readme, example section, screenshots, etc.
-  - [ ] maybe change -d to just using keyword with () at the end
+  - [ ] maybe change -d to just using keyword with () at the end ?
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
@@ -224,6 +220,7 @@ use `-config` modifier to print config file
   - [ ] c-syntax in macros, for numbers, strings, etc.
   - [ ] make sure all sheets use '-' as space in tags
   - [ ] replace file_io.c/.h with the one in bovengine
+  - [ ] make builtin_sheets just a [sheet_dir_rel] in config
   - [ ] make github release
   - [ ] more documentation
     - [ ] c keywords i dont have yet
@@ -237,7 +234,6 @@ use `-config` modifier to print config file
     - [ ] make
     - [ ] cmake
     - [ ] stb
-      - [x] stb_ds
       - [ ] stb_image
       - [ ] stb_truetype
     - [ ] opengl 
@@ -248,9 +244,10 @@ use `-config` modifier to print config file
       - [ ] everything in input.c
     - [ ] vim cheatsheet
     - [ ] my stuff ?
-      - [x] global.h
       - [ ] serialization
       - [ ] text
       - [ ] math
+      - [ ] bovengine
+        - at least commonly reused stuff file_io etc.
  
 

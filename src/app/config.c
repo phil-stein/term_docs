@@ -93,18 +93,18 @@ void config_read_config_file(const char* path, bool print_config)
     DOC_PF_COLOR(PF_WHITE);
     PF(": %s\n", path);
      
-    DOC_PF_COLOR(PF_CYAN);
-    PF("builtin_sheets");
-    DOC_PF_COLOR(PF_WHITE);
-    PF(": %s\n", STR_BOOL(core_data->builtin_sheets_act));   
+    // DOC_PF_COLOR(PF_CYAN);
+    // PF("builtin_sheets");
+    // DOC_PF_COLOR(PF_WHITE);
+    // PF(": %s\n", STR_BOOL(core_data->builtin_sheets_act));   
     
-    int lines = 0;
-    doc_count_lines_dir(core_data->sheets_path, &lines);
-    DOC_PF_COLOR(PF_CYAN);
-    PF("sheet path");
-    DOC_PF_COLOR(PF_WHITE);
-    PF(": %s\n", core_data->sheets_path);
-    PF(" -> lines: %d\n", lines);
+    // int lines = 0;
+    // doc_count_lines_dir(core_data->sheets_path, &lines);
+    // DOC_PF_COLOR(PF_CYAN);
+    // PF("sheet path");
+    // DOC_PF_COLOR(PF_WHITE);
+    // PF(": %s\n", core_data->sheets_path);
+    // PF(" -> lines: %d\n", lines);
     
     DOC_PF_COLOR(PF_CYAN);
     PF("syntax");
@@ -114,18 +114,18 @@ void config_read_config_file(const char* path, bool print_config)
     DOC_PF_COLOR(PF_RED);
     PF("max sheet paths");
     DOC_PF_COLOR(PF_WHITE);
-    PF(": %d\n", CORE_CUSTOM_SHEETS_MAX);
+    PF(": %d\n", CORE_SHEET_PATHS_MAX);
 
-    for (int i = 0; i < core_data->custom_sheet_paths_len; ++i)
+    for (int i = 0; i < core_data->sheet_paths_len; ++i)
     {
       
-      lines = 0;
-      doc_count_lines_dir(core_data->custom_sheet_paths[i], &lines);
+      int lines = 0;
+      doc_count_lines_dir(core_data->sheet_paths[i], &lines);
       
       DOC_PF_COLOR(PF_CYAN);
       PF("path[%d]", i);
       DOC_PF_COLOR(PF_WHITE);
-      PF(": %s\n", core_data->custom_sheet_paths[i]);
+      PF(": %s\n", core_data->sheet_paths[i]);
       PF(" -> lines: %d\n", lines);
     }
     
@@ -158,29 +158,29 @@ void config_handle_argument()
     core_data->style_act = (bool)value;
   }
   
-  // [builtin_sheets]
-  if (name_buf[ 0] == 'b' &&
-      name_buf[ 1] == 'u' &&
-      name_buf[ 2] == 'i' &&
-      name_buf[ 3] == 'l' &&
-      name_buf[ 4] == 't' &&
-      name_buf[ 5] == 'i' &&
-      name_buf[ 6] == 'n' &&
-      name_buf[ 7] == '_' &&
-      name_buf[ 8] == 's' &&
-      name_buf[ 9] == 'h' &&
-      name_buf[10] == 'e' &&
-      name_buf[11] == 'e' &&
-      name_buf[12] == 't' &&
-      name_buf[13] == 's' )
-  {
-    int value = config_parse_bool();
-    if (!(value == 0 || value == 1))
-    { P_ERR("incorrect argument format for [buildin_sheets]\n -> 'true', 'false', '1', '0'\n"); return; }
-    
-    // PF("buildin: %d\n", value);
-    core_data->builtin_sheets_act = (bool)value;
-  }
+  // // [builtin_sheets]
+  // if (name_buf[ 0] == 'b' &&
+  //     name_buf[ 1] == 'u' &&
+  //     name_buf[ 2] == 'i' &&
+  //     name_buf[ 3] == 'l' &&
+  //     name_buf[ 4] == 't' &&
+  //     name_buf[ 5] == 'i' &&
+  //     name_buf[ 6] == 'n' &&
+  //     name_buf[ 7] == '_' &&
+  //     name_buf[ 8] == 's' &&
+  //     name_buf[ 9] == 'h' &&
+  //     name_buf[10] == 'e' &&
+  //     name_buf[11] == 'e' &&
+  //     name_buf[12] == 't' &&
+  //     name_buf[13] == 's' )
+  // {
+  //   int value = config_parse_bool();
+  //   if (!(value == 0 || value == 1))
+  //   { P_ERR("incorrect argument format for [buildin_sheets]\n -> 'true', 'false', '1', '0'\n"); return; }
+  //   
+  //   // PF("buildin: %d\n", value);
+  //   core_data->builtin_sheets_act = (bool)value;
+  // }
 
   // [sheet_path_rel]
   if (name_buf[ 0] == 's' &&
@@ -219,13 +219,13 @@ void config_handle_argument()
     
     if (!check_dir_exists(path)) { P_ERR("couldnt find path given for [sheet_dir_rel]: %s\n -> %s\n", value_buf, path); return; }
    
-    if (core_data->custom_sheet_paths_len < CORE_CUSTOM_SHEETS_MAX)
+    if (core_data->sheet_paths_len < CORE_SHEET_PATHS_MAX)
     {
-      strncpy(core_data->custom_sheet_paths[core_data->custom_sheet_paths_len], path, strlen(path));
-      // P_STR(core_data->custom_sheet_paths[core_data->custom_sheet_paths_len]);
-      core_data->custom_sheet_paths_len++;
+      strncpy(core_data->sheet_paths[core_data->sheet_paths_len], path, strlen(path));
+      // P_STR(core_data->sheet_paths[core_data->sheet_paths_len]);
+      core_data->sheet_paths_len++;
     }
-    else { P_ERR("cant add additional [sheet_dir] / [sheet_dir_rel] paths, max is %d\n", CORE_CUSTOM_SHEETS_MAX); }
+    else { P_ERR("cant add additional [sheet_dir] / [sheet_dir_rel] paths, max is %d\n", CORE_SHEET_PATHS_MAX); }
   }
   // [sheet_path]
   else if (name_buf[0] == 's' &&
@@ -247,13 +247,13 @@ void config_handle_argument()
     // PF("sheet_path: %s\n", path);
     if (!check_dir_exists(value_buf)) { P_ERR("couldnt find path given for [sheet_dir]: %s\n", value_buf); return; }
    
-    if (core_data->custom_sheet_paths_len < CORE_CUSTOM_SHEETS_MAX)
+    if (core_data->sheet_paths_len < CORE_SHEET_PATHS_MAX)
     {
-      strncpy(core_data->custom_sheet_paths[core_data->custom_sheet_paths_len], value_buf, strlen(value_buf));
-      // P_STR(core_data->custom_sheet_paths[core_data->custom_sheet_paths_len]);
-      core_data->custom_sheet_paths_len++;
+      strncpy(core_data->sheet_paths[core_data->sheet_paths_len], value_buf, strlen(value_buf));
+      // P_STR(core_data->sheet_paths[core_data->sheet_paths_len]);
+      core_data->sheet_paths_len++;
     }
-    else { P_ERR("cant add additional [sheet_dir] / [sheet_dir_rel] paths, max is %d\n", CORE_CUSTOM_SHEETS_MAX); }
+    else { P_ERR("cant add additional [sheet_dir] / [sheet_dir_rel] paths, max is %d\n", CORE_SHEET_PATHS_MAX); }
   }
 
 }

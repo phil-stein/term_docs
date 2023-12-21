@@ -8,29 +8,30 @@ extern "C" {
 #include "global/global.h"
 
 #define CORE_PATH_MAX   256
-#define CORE_CUSTOM_SHEETS_MAX 8
+#define CORE_SHEET_PATHS_MAX 8
 
 typedef struct core_data_t
 {
   char exec_path[CORE_PATH_MAX];      // path to executable
-  char sheets_path[CORE_PATH_MAX];    // path to sheets folder
+  char config_path[CORE_PATH_MAX];    // path to config file
+  // set in config.doc now
+  // char sheets_path[CORE_PATH_MAX];    // path to sheets folder
 
   bool style_act;                     // use syntax highlighting
   bool style_deact_cmd;               // -c/-color command
-  bool builtin_sheets_act;            // [builtin_sheets] in config
+  // bool builtin_sheets_act;            // [builtin_sheets] in config
   bool print_loc_act;                 // -loc command
 
-  char custom_sheet_paths[CORE_CUSTOM_SHEETS_MAX][CORE_PATH_MAX];
-  int  custom_sheet_paths_len;
+  char sheet_paths[CORE_SHEET_PATHS_MAX][CORE_PATH_MAX];
+  int  sheet_paths_len;
 
 }core_data_t;
 #define CORE_DATA_INIT()            \
 {                                   \
   .style_act              = true,   \
   .style_deact_cmd        = false,  \
-  .builtin_sheets_act     = true,   \
   .print_loc_act          = false,  \
-  .custom_sheet_paths_len = 0,      \
+  .sheet_paths_len        = 0,      \
 }
 
 core_data_t* core_data_get();

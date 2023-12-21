@@ -40,24 +40,24 @@ int main(int argc, char** argv)
   GetModuleFileName(NULL, core_data->exec_path, CORE_PATH_MAX);   // get executable location
   assert(core_data->exec_path != NULL);
 
-  // -- get the sheet path either based on executable or macro --
-  
-  strncpy(core_data->sheets_path, core_data->exec_path, CORE_PATH_MAX);
-  assert(core_data->sheets_path != NULL);
-  int dirs_walk_back = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
-  for (u32 i = strlen(core_data->sheets_path) -1; i > 0; --i)
-  {
-    if (core_data->sheets_path[i] == '\\' || core_data->sheets_path[i] == '/') 
-    { dirs_walk_back--; if (dirs_walk_back <= 0) { break; } }
-    core_data->sheets_path[i] = '\0';
-  }
-  // replace '\' with '/'
-  for (u32 i = 0; i < strlen(core_data->sheets_path); ++i)
-  {
-      if (core_data->sheets_path[i] == '\\') { core_data->sheets_path[i] = '/'; }
-  }
-  strcat(core_data->sheets_path, "sheets/builtin_sheets/");
-  // P_STR(core_data->sheets_path);
+  // // -- get the sheet path either based on executable or macro --
+  // 
+  // strncpy(core_data->sheets_path, core_data->exec_path, CORE_PATH_MAX);
+  // assert(core_data->sheets_path != NULL);
+  // int dirs_walk_back = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
+  // for (u32 i = strlen(core_data->sheets_path) -1; i > 0; --i)
+  // {
+  //   if (core_data->sheets_path[i] == '\\' || core_data->sheets_path[i] == '/') 
+  //   { dirs_walk_back--; if (dirs_walk_back <= 0) { break; } }
+  //   core_data->sheets_path[i] = '\0';
+  // }
+  // // replace '\' with '/'
+  // for (u32 i = 0; i < strlen(core_data->sheets_path); ++i)
+  // {
+  //     if (core_data->sheets_path[i] == '\\') { core_data->sheets_path[i] = '/'; }
+  // }
+  // strcat(core_data->sheets_path, "sheets/builtin_sheets/");
+  // // P_STR(core_data->sheets_path);
  
   // ---- commands ----
 
@@ -131,25 +131,25 @@ int main(int argc, char** argv)
   
   // -- config file --
   
-  #define CONFIG_PATH_MAX 256
-  char config_path[CONFIG_PATH_MAX];
-  strncpy(config_path, core_data->exec_path, CORE_PATH_MAX);
-  assert(config_path != NULL);
+  strncpy(core_data->config_path, core_data->exec_path, CORE_PATH_MAX);
+  assert(core_data->config_path != NULL);
   int dirs_walk_back_02 = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
-  for (u32 i = strlen(config_path) -1; i > 0; --i)
+  for (u32 i = strlen(core_data->config_path) -1; i > 0; --i)
   {
-    if (config_path[i] == '\\' || config_path[i] == '/')
+    if (core_data->config_path[i] == '\\' || 
+        core_data->config_path[i] == '/')
     { dirs_walk_back_02--; if (dirs_walk_back_02 <= 0) { break; } }
-    config_path[i] = '\0';
+    core_data->config_path[i] = '\0';
   }
   // replace '\' with '/'
-  for (u32 i = 0; i < strlen(config_path); ++i)
+  for (u32 i = 0; i < strlen(core_data->config_path); ++i)
   {
-      if (config_path[i] == '\\') { config_path[i] = '/'; }
+      if (core_data->config_path[i] == '\\') 
+      { core_data->config_path[i] = '/'; }
   }
-  strcat(config_path, "config.doc");
+  strcat(core_data->config_path, "config.doc");
   // P_STR(config_path);
-  config_read_config_file(config_path, print_config_cmd);
+  config_read_config_file(core_data->config_path, print_config_cmd);
 
   // -- arguments --
   
@@ -174,16 +174,16 @@ int main(int argc, char** argv)
     // for (int i = 0; i < word_arr_len; ++i)
     // { P_STR(word_arr[i]); }
     
-    if (core_data->builtin_sheets_act)
-    { doc_search_dir(core_data->sheets_path, (const char**)word_arr, word_arr_len, &found_count); }
-    else
-    { DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE); PF(" searching without builtin sheets.\n"); }
+    // if (core_data->builtin_sheets_act)
+    // { doc_search_dir(core_data->sheets_path, (const char**)word_arr, word_arr_len, &found_count); }
+    // else
+    // { DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE); PF(" searching without builtin sheets.\n"); }
     
     // custom doc paths
-    for (int i = 0; i < core_data->custom_sheet_paths_len; ++i)
+    for (int i = 0; i < core_data->sheet_paths_len; ++i)
     {
       // P_STR(core_data->custom_sheet_paths[i]);
-      doc_search_dir(core_data->custom_sheet_paths[i], (const char**)word_arr, word_arr_len, &found_count);
+      doc_search_dir(core_data->sheet_paths[i], (const char**)word_arr, word_arr_len, &found_count);
     }
   }
   else if (HAS_FLAG(mode, SEARCH_DEFINITION))
