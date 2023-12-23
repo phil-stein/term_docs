@@ -208,7 +208,7 @@ use `-config` modifier to print config file <br>
 ## buggs
   - [ ] -d doesnt find program_start in bovengine
   - [ ] highlights return in 'returns: ' in opengl.sheet glGetError
-    - the : at the end makes it highlight as return, like return 0;
+  - [ ] GetModuleFileName in main.c only works on windows
 
 ## todo
   - [ ] update readme, example section, screenshots, etc.

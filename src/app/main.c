@@ -37,8 +37,10 @@ int main(int argc, char** argv)
 
   // -- get executable name --
   // P_STR(_getcwd(NULL, 0));
+  // @BUGG: this only works on windows
   GetModuleFileName(NULL, core_data->exec_path, CORE_PATH_MAX);   // get executable location
   ERR_CHECK(core_data->exec_path != NULL, "failed getting executable path\n");
+
 
 
   // moved this after it stopped beeing used

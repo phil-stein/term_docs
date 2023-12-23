@@ -1093,6 +1093,7 @@ macros:
 |c|C|
 |defined|
 |preprocessor|macro|basics|\#|
+|&&|and|or|And|Or|AND|OR|
   turns a macro into a suitable condition for \\#if, \\#elif
 
   example:
@@ -1103,6 +1104,10 @@ macros:
       printf("B");
     \#elif !defined(B)
       printf("not B");
+    \#elif defined(A) && defined(B)
+      printf("A and B");
+    \#elif defined(A) || defined(B)
+      printf("A or B");
     \#endif
     -> A
     -> not B
