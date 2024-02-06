@@ -240,6 +240,9 @@
 |P_LOC_U64|P_LOC_U32|P_LOC_U16|P_LOC_U8|
 |P_LOC_F32|P_LOC_F64|
 |P_LOC_BOOL|P_LOC_CHAR|P_LOC_STR|P_LOC_TXT|P_LOC_PTR|
+|PF_BIN8||PF_BIN16|PF_BIN32|
+|P_BIN8||P_BIN16|P_BIN32|
+|binary|bin|
   macros for printing variables
 
   // @DOC: print the different types, e.g. P_INT(variable), highlights variable name cyan
@@ -280,8 +283,29 @@
   \#define P_LOC_TXT(v)   P_TXT(v);  P_LOCATION()    
   \#define P_LOC_PTR(v)   P_PTR(v);  P_LOCATION()
 
-  example: 
-    int var = 123;
+  \#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+  \#define BYTE_TO_BINARY(byte)   \
+    ((byte) & 0x80 ? '1' : '0'),  \
+    ((byte) & 0x40 ? '1' : '0'),  \
+    ((byte) & 0x20 ? '1' : '0'),  \
+    ((byte) & 0x10 ? '1' : '0'),  \
+    ((byte) & 0x08 ? '1' : '0'),  \
+    ((byte) & 0x04 ? '1' : '0'),  \
+    ((byte) & 0x02 ? '1' : '0'),  \
+    ((byte) & 0x01 ? '1' : '0') 
+
+  \#define PF_BIN8(v)  printf(""BYTE_TO_BINARY_PATTERN"\n", BYTE_TO_BINARY(v)); 
+  \#define P_BIN8(v)   PF_COLOR(PF_CYAN); printf("%s", \\#v); PF_STYLE_RESET(); printf(": "); PF_BIN8(v); PF_IF_LOC();
+
+  \#define PF_BIN16(v)  printf(""BYTE_TO_BINARY_PATTERN"."BYTE_TO_BINARY_PATTERN"\n", \
+    BYTE_TO_BINARY(v>>8), BYTE_TO_BINARY(v)); 
+  \#define P_BIN16(v)   PF_COLOR(PF_CYAN); printf("%s", \\#v); PF_STYLE_RESET(); printf(": "); PF_BIN16(v); PF_IF_LOC();
+
+  \#define PF_BIN32(v)  printf(""BYTE_TO_BINARY_PATTERN"."BYTE_TO_BINARY_PATTERN"."BYTE_TO_BINARY_PATTERN"."BYTE_TO_BINARY_PATTERN"\n", \
+    BYTE_TO_BINARY(v>>24), BYTE_TO_BINARY(v>>16), BYTE_TO_BINARY(v>>8), BYTE_TO_BINARY(v)); 
+  \#define P_BIN32(v)   PF_COLOR(PF_CYAN); printf("%s", \\#v); PF_STYLE_RESET(); printf(": "); PF_BIN32(v); PF_IF_LOC();
+
+  example var = 123;
     P_INT(var);
     ->var: 123
     P_LOC_INT(var);
