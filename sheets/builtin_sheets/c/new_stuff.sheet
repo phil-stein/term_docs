@@ -1,0 +1,89 @@
+
+c99:
+
+#
+|c|C|c99|C99|
+|pragma|macro|
+|_Pragma|_pragma|_PRAGMA|
+|__Pragma|__pragma|
+  the _Pragma directive expands to a \#pragma
+  command and can be used inside macros
+  ! __pragma is exclusive to msvc / visual studio
+  $!$  _Pragma also works there $$
+
+  example:
+    \#define WARN()                       \
+      _Pragma("GCC warning \"hi there\"")
+
+    WARN();
+    -> [WARNING] hi there
+
+  ?< https://stackoverflow.com/questions/45477355/difference-between-pragma-and-pragma-in-c >?
+  ?< https://gcc.gnu.org/onlinedocs/cpp/Pragmas.html >?
+#
+
+
+c11:
+
+#
+|c|C|c11|C11|
+|_Generic|generic|Generic|_generic|GENERIC|
+|keyword|type|var|variable|type-agnostic|
+  the _Generic keyword lets define a list of possible result 
+  which then gets expanded to one of these based on a type of the provided variable
+  ! doesnt work for array types, this includes literal strings / char[]
+
+  example:
+    // expand to function call
+    \#define _acos(X) _Generic((X),  \
+      long double complex: cacosl,  \
+      double complex: cacos,        \
+      float complex: cacosf,        \
+      long double: acosl,           \
+      float: acosf,                 \
+      default: acos                 \
+      )(X)
+
+    float f = 3.0f;
+    _acos(f); -> acosf(f);
+
+    // expand to string
+    \#define typename(x) _Generic((x),                     \
+        _Bool: "_Bool",                                   \
+        char: "char",                                     \
+        signed char: "signed char",                       \
+        unsigned char: "unsigned char",                   \
+        short int: "short int",                           \
+        unsigned short int: "unsigned short int",         \
+        int: "int",                                       \
+        unsigned int: "unsigned int",                     \
+        long int: "long int",                             \
+        unsigned long int: "unsigned long int",           \
+        long long int: "long long int",                   \
+        unsigned long long int: "unsigned long long int", \
+        float: "float",                                   \
+        double: "double",                                 \
+        long double: "long double",                       \
+        char *: "pointer to char",                        \
+        void *: "pointer to void",                        \
+        int *: "pointer to int",                          \
+        default: "other")
+
+      int i = 0;
+      printf("type: %s\n", typename(i));
+      -> type: int
+      // doesnt work for array types, this includes literal strings / char[]
+      int arr[12] = {0};
+      printf("type: %s\n", typename(i));
+      -> type: other
+      int* arr_ptr = &arr;
+      printf("type: %s\n", typename(i));
+      -> type: pointer to int 
+
+ 
+  ?< https://en.cppreference.com/w/c/language/generic >?
+#
+
+#
+|c|C|c11|C11|
+#

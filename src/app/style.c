@@ -13,7 +13,8 @@ const char key_types[][KEY_MAX] =
   "unsigned", "const", "extern", "restrict", "volatile", "static", "auto", "register", "signed", 
   "void", "char", "short", "int", "long", "float", "double", "bool", 
   "struct", "enum", "typedef",
-  "size_t", "rsize_t", "errno_t", "FILE"
+  "size_t", "rsize_t", "errno_t", "FILE",
+  "u8", "u16", "u32", "u64", "u8", "s16", "s32", "s64", "f32", "f64"
 };
 const u32  key_types_len = sizeof(key_types) / sizeof(key_types[0]);   
 

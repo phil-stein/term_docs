@@ -313,6 +313,43 @@
     -> -> file: <file>, line: <line-nr>
 #
 |global|global.h|global_h|
+|P_V|P_V()|STR_TYPE|STR_TYPE()|
+|__P_UNKNOWN|__P_BOOL|__P_UNSIGNED|__P_U64|__P_SIGNED|__P_FLOAT|__P_POINTER|
+|TEST_P_V|TEST_P_V()|
+|type|type-agnoiostic|variable|variable-type|variable-name|
+  the P_V($y$v$$) macro prints the given variable $y$v$$ in a type-agnostic way
+  the STR_TYPE($y$v$$) macro expands to the given variable $y$v$$'s type as string
+  
+  __P_UNKNOWN, __P_BOOL, __P_UNSIGNED, __P_U64, __P_SIGNED, __P_FLOAT, 
+  __P_POINTER are $|$\|INLINE\|$$ functions to achieve this
+  dont use them directly, use $|$\|P_INT\|$$ etc.
+
+  TEST_P_V() macros is just a $|$\|INLINE\|$$ function
+  testing functionality of P_V() and STR_TYPE()
+
+  ! uses global_types.h typedefs, i.e. u32, f32, etc.
+
+  example:
+    s32 i = 1234;
+    f32 f = 1234.567f;
+    P_V(i);
+    -> $y$s32$$\|$c$i$$: 1234
+    P_V(f);
+    -> $y$f32$$\|$c$f$$: 1234.567
+    
+    int   i = 1234;
+    float f = 1234.567f;
+    P_V(i);
+    -> $y$s32$$\|$c$i$$: 1234
+    P_V(f);
+    -> $y$f32$$\|$c$f$$: 1234.567
+
+    P_STR(STR_TYPE(i));
+    -> STR_TYPE(i): s32
+    P_STR(STR_TYPE(f));
+    -> STR_TYPE(f): f32
+#
+|global|global.h|global_h|
 |P_ERR|ASSERT|ERR|ERR_CHECK|P_ERR_CHECK|
 |F32_NAN|P_NAN|
   
