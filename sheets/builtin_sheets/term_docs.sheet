@@ -274,7 +274,24 @@
      still preprocessor      \
      still preprocessor      
     no longer preprocessor
-    
+
+    [[attribute]]
+    [[attribute(xyz)]]
+    [[namespace::attribute]]
+    [[namespace::attribute(xyz)]]
+    [[attribute(xyz), attribute, namespace::attribute(xyz)]]
+    [not attribute]
+    [not attribute(xyz)]
+    [not namespace::attribute]
+    [not namespace::attribute(xyz)]
+    [not attribute(xyz), not attribute, not namespace::attribute(xyz)]]
+    [[attribute]] not part of attribute 
+    not part of attribute
+    [[attribute]  not part of attribute 
+    not part of attribute
+    [[attribute   not part of attribute 
+    not part of attribute
+
     ~ info
     ~ info ~ not info
     \~ not an info

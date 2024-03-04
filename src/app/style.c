@@ -316,6 +316,23 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
   }
+  // attributes
+  else if (txt[i] == '[' && txt[i +1] == '[')
+  {
+    BUF_DUMP();
+    DOC_PF_COLOR(COL_ATTRIBUTE);
+    while ( !(txt[i-2] == ']'  && txt[i-1] == ']' ) &&
+             (txt[i]   != '\n' && txt[i]   != '\0')   )
+    { 
+      bool skip_char_tmp = false;
+      doc_color_code_escape_chars(txt, buf, &buf_pos, &i, &skip_char_tmp);
+      
+      if (!skip_char_tmp) { buf[buf_pos++] = txt[i++]; }
+      else { i++; }
+    }
+    BUF_DUMP();
+    DOC_PF_COLOR(PF_WHITE);
+  }
   
   return false;
 }

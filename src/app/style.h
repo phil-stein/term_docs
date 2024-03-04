@@ -28,6 +28,7 @@ extern "C" {
 #define COL_TYPE              PF_GREEN 
 #define COL_VALUE             PF_YELLOW
 #define COL_MACRO             PF_PURPLE
+#define COL_ATTRIBUTE         PF_PURPLE
 
 #define DOC_PF_COLOR(c)       if (core_data->style_act) { PF_COLOR((c)); }
 #define DOC_PF_STYLE(s, c)    if (core_data->style_act) { PF_STYLE((s), (c)); }
