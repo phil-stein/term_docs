@@ -395,11 +395,31 @@
 
 #
 |global|global.h|global_h|
+|PRAGA_WARNING|PRAGMA_MESSAGE|PRAGMA_ERROR|
+|warning|message|error|
+|Warning|Message|Error|
+|WARNING|MESSAGE|ERROR|
+|compiler|compile-time|compilation|
+  give compile time warnings / messages / errors
+  ! in clang/msvc all three are just messages
+
+  \#define PRAGMA_WARNING(x) 
+  \#define PRAGMA_MESSAGE(x) 
+  \#define PRAGMA_ERROR(x)   
+  
+  example: 
+    PRAGMA_WARNING(this is a warning);
+    PRAGMA_MESSAGE(this is a message);
+    PRAGMA_ERROR(this is an error);
+#
+|global|global.h|global_h|
 |P_C_VERSION|
 
   // @DOC: print the currently in use version of c
-  \#define P_C_VERSION()                     \
-    if (__STDC_VERSION__ >=  201710L)       \
+  \#define P_C_VERSION()                    \
+    if (__STDC_VERSION__ >  201710L)        \
+    { PF("-- using c23 --\n"); }            \
+    else if (__STDC_VERSION__ >=  201710L)  \
     { PF("-- using c18 --\n"); }            \
     else if (__STDC_VERSION__ >= 201112L)   \
     { PF("-- using c11 --\n"); }            \
@@ -409,7 +429,25 @@
     { PF("-- using c89/c90 --\n"); }
 #
 |global|global.h|global_h|
+|P_COMPILER_VERSION|P_COMPILER_VERSION()|
+|compiler|Compiler|COMPILER|
+|MSC_VER_STR|
+  P_COMPILER_VERSION() prints the currently used compiler 
+  and its version to $|$\|stdout\|$$
+  MSC_VER_STR is a string with the name of the version 
+  defined in _MSC_VER
+
+  ! only supports gcc, clang and msvc
+
+  example:
+    P_COMPILER_VERSION();
+      -> using mingw64 gcc version: 10.3.0
+      -> using clang version: 17.0.3
+      -> using msvc version: 17.9 (2022) | _MSC_VER: 1939 | _MSC_FULL_VER: 193933521
+#
+|global|global.h|global_h|
 |SPRINTF|STRCPY|MALLOC|CALLOC|REALLOC|FREE|
+|ARRFREE|HMFREE|SHFREE|
 
   // @DOC: wrappers around standard functions to make the safer, can be compiled out
   \#define SPRINTF(max, ...)        ASSERT(sprintf(__VA_ARGS__) < (max))                   
