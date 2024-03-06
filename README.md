@@ -7,11 +7,12 @@
 c documentation for the terminal <br>
 works offline and is customizable <br>
 also has search utility functions <br>
+works in [neovim](#neovim) <br>
 most c std library documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
 
-|                                                             doc                                                             |                                                             search                                                             |                                                             neovim                                                             |
-|:---------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|
-| <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_doc01.png" alt="logo" width="600"> | <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_search01.png" alt="logo" width="400"> | <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_neovim01.png" alt="logo" width="400"> |
+|                                                             doc                                                             |                                                             search                                                             |
+|:---------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|
+| <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_doc01.png" alt="logo" width="600"> | <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_search01.png" alt="logo" width="400"> |
 
 
 ## table of contents
@@ -207,6 +208,8 @@ use `//` for comments <br>
 use `-config` modifier to print config file <br>
 
 ## neovim
+
+### open in split
 open doc in split, using :Doc ... command <br>
 change split to vsplit for vertical split <br>
 ```lua
@@ -214,43 +217,34 @@ change split to vsplit for vertical split <br>
     function(opts) vim.cmd('split | term '..opts.fargs[1]) end, 
     {  nargs = 1, desc = ''})
 ```
+### open in popup
 open doc documentation in [nui.nvim](https://github.com/MunifTanjim/nui.nvim/tree/main) popup using :Doc ... command <br>
-see above for image <br>
-
+  <details>
+    <summary>image</summary>
+    <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_nvim01.png" alt="logo" width="1000">
+  </details>
+  
+<details>
+  <summary>nvim lua code</summary>
+  
 ```lua
   vim.api.nvim_buf_create_user_command(0, 'Doc',
     function(opts)
       local Popup = require("nui.popup")
       local popup = Popup({
         position = "50%",
-        size = {
-          width  = 0.4,
-          height = 0.65,
-        },
+        size = { width  = 0.4, height = 0.65 },
         enter = true,
         focusable = true,
         zindex = 50,
         relative = "editor",
         border = {
-          padding = {
-            top = 2,
-            bottom = 2,
-            left = 3,
-            right = 3,
-          },
+          padding = {top = 2, bottom = 2, left = 3, right = 3 },
           style = "rounded",
-          text = {
-            top = " doc: "..opts.fargs[1].." ",
-            top_align = "center",
-          },
+          text = { top = " doc: "..opts.fargs[1].." ", top_align = "center" },
         },
-        buf_options = {
-          modifiable = false,
-          readonly = true,
-        },
-        win_options = {
-          winhighlight = "Normal:Normal,FloatBorder:Normal",
-        },
+        buf_options = { modifiable = false, readonly = true },
+        win_options = { winhighlight = "Normal:Normal,FloatBorder:Normal" },
       })
       popup:show()
 
@@ -266,9 +260,10 @@ see above for image <br>
       -- open terminal
       vim.cmd('term doc '..opts.fargs[1])
       vim.cmd('startinsert')
-    end,
-    {  nargs = 1, desc = ''})
+    end, {  nargs = 1, desc = ''})
 ```
+</details>
+
 with this setup you could for example add `vim.keymap.set('n', '<C-h>', ':Doc help<CR>')` <br>
 to open a specific doc documentation via keybind <br>
 
