@@ -99,9 +99,9 @@ c23:
 
   suppress unknown attribute warnings in gcc:
     \#pragma GCC diagnostic ignored_attributes
-    -Wno-attribute
+    gcc ... -Wno-attribute
   
-  $g$syntax$$:
+  $$$g$syntax$$:
     [[attribute-name]]
     [[attribute-name(attribute-argument)]]
     namespaces, e.g. gnu::...
@@ -110,7 +110,7 @@ c23:
     sperate list via comma
     [[attribute-name, attribute-name, ...]]
 
-  $g$standard attributes$$:
+  $$$g$standard attributes$$:
     [[deprecated]]            lets compiler know usage of function is discouraged
     [[deprecated("reason")]]
     [[fallthrough]] 	        indicates that the fall through from the previous case label is intentional and should not be diagnosed by a compiler that warns on fall-through
@@ -122,15 +122,13 @@ c23:
     [[unsequenced]] 	        indicates that a function is stateless, effectless, idempotent and independent
     [[reproducible]] 	        indicates that a function is effectless and idempotent
   
-  $g$gnu / gcc attributes$$:
+  $$$g$gnu / gcc attributes$$:
     attribute syntax:    ?< https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html >?
     variable attributes: ?< https://gcc.gnu.org/onlinedocs/gcc-4.0.0/gcc/Variable-Attributes.html >?
     type attributes:     ?< https://gcc.gnu.org/onlinedocs/gcc-4.0.2/gcc/Type-Attributes.html >?
     function attributes  ?< https://gcc.gnu.org/onlinedocs/gcc-4.7.2/gcc/Function-Attributes.html >?
-    
 
   example:
-
     [[deprecated]]
     void func();
     [[deprecated("reason")]]

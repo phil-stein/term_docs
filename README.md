@@ -9,9 +9,9 @@ works offline and is customizable <br>
 also has search utility functions <br>
 most c std library documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
 
-|doc    |search  |
-|:-----:|:------:|
-| <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_doc01.png" alt="logo" width="600"> | <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_search01.png" alt="logo" width="400"> |
+|                                                             doc                                                             |                                                             search                                                             |                                                             neovim                                                             |
+|:---------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|
+| <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_doc01.png" alt="logo" width="600"> | <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_search01.png" alt="logo" width="400"> | <img src="https://github.com/phil-stein/term_docs/blob/main/files/screenshots/screenshot_neovim01.png" alt="logo" width="400"> |
 
 
 ## table of contents
@@ -23,6 +23,7 @@ most c std library documentation is based on [tutorialspoint](https://www.tutori
     - [custom documentation](#custom-documentation)
     - [custom executable name](#custom-executable-name)
     - [config file](#config-file)
+  - [neovim](#neovim)
   - [todo](#todo)
 
 
@@ -204,6 +205,72 @@ max is 8 right now, view `doc -config` for current max <br>
 use `//` for comments <br>
 
 use `-config` modifier to print config file <br>
+
+## neovim
+open doc in split, using :Doc ... command <br>
+change split to vsplit for vertical split <br>
+```lua
+  vim.api.nvim_buf_create_user_command(0, 'Doc',
+    function(opts) vim.cmd('split | term '..opts.fargs[1]) end, 
+    {  nargs = 1, desc = ''})
+```
+open doc documentation in [nui.nvim](https://github.com/MunifTanjim/nui.nvim/tree/main) popup using :Doc ... command <br>
+see above for image <br>
+
+```lua
+  vim.api.nvim_buf_create_user_command(0, 'Doc',
+    function(opts)
+      local Popup = require("nui.popup")
+      local popup = Popup({
+        position = "50%",
+        size = {
+          width  = 0.4,
+          height = 0.65,
+        },
+        enter = true,
+        focusable = true,
+        zindex = 50,
+        relative = "editor",
+        border = {
+          padding = {
+            top = 2,
+            bottom = 2,
+            left = 3,
+            right = 3,
+          },
+          style = "rounded",
+          text = {
+            top = " doc: "..opts.fargs[1].." ",
+            top_align = "center",
+          },
+        },
+        buf_options = {
+          modifiable = false,
+          readonly = true,
+        },
+        win_options = {
+          winhighlight = "Normal:Normal,FloatBorder:Normal",
+        },
+      })
+      popup:show()
+
+      -- close popup when leaving it
+      local event = require("nui.utils.autocmd").event
+      popup:on({ event.BufLeave, event.BufDelete, event.BufHidden },
+        function()
+          popup:unmount()
+        end, { once = true })
+      -- quit with esc or q
+      popup:map("t", "<esc>", function() vim.cmd('q!') popup:unmount() end)
+      popup:map("t", "q",     function() vim.cmd('q!') popup:unmount() end)
+      -- open terminal
+      vim.cmd('term doc '..opts.fargs[1])
+      vim.cmd('startinsert')
+    end,
+    {  nargs = 1, desc = ''})
+```
+with this setup you could for example add `vim.keymap.set('n', '<C-h>', ':Doc help<CR>')` <br>
+to open a specific doc documentation via keybind <br>
 
 ## buggs
   - [ ] -d doesnt find program_start in bovengine
