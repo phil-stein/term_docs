@@ -1,0 +1,3 @@
+C:/Workspace/C/term_docs/build/vs19/CMakeFiles/doc.dir
+C:/Workspace/C/term_docs/build/vs19/CMakeFiles/ALL_BUILD.dir
+C:/Workspace/C/term_docs/build/vs19/CMakeFiles/ZERO_CHECK.dir
