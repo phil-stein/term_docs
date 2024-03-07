@@ -5,6 +5,9 @@
 [syntax] false 
 [syntax] true 
 
+[utf8]  true 
+[icons] true
+
 // builtin-sheets
 [sheet_dir_rel] sheets/builtin_sheets/
 

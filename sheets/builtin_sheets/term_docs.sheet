@@ -363,6 +363,17 @@
     \#define MACRO "string"
     \\#not a macro
 
+    '', '', '', '' -> seperators
+    '', '', '', '' -> seperators
+    ─│─│╭╮╯╰           -> rounded window corners
+    ─│─│┌┐┘└           -> window corners
+    ✗, ➜, ✓, ◍         -> useful random nerdfont chars
+    , ,  , , , , , , , ,  -> dapui chars
+    🛑, , , ,
+    ✹, ✚, ✭, ➜, ═, ✖, ✗, ✔, ☒,
+
+    $icon::bash$
+
   ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
 |term_docs|

@@ -18,6 +18,7 @@
 #include <ctype.h>
 #include <direct.h>
 #include <dirent/dirent.h>
+#include <Windows.h>  // SetConsoleOutputCP(CP_UTF8)
 
 typedef enum
 {
@@ -33,6 +34,15 @@ bool color_cmd = false;
 
 int main(int argc, char** argv)
 {
+  // printf("");
+  // printf("\n");
+  // // wchar_t c = L"";
+  // // wprintf(&c);
+  // // printf("%s\n", \uf071);
+  // printf("\uf071 \n");
+  // abort();
+  // abort();
+
   core_data_t* core_data = core_data_get();
 
   // -- get executable name --
@@ -123,13 +133,16 @@ int main(int argc, char** argv)
   // P_STR(config_path);
   config_read_config_file(core_data->config_path, print_config_cmd);
 
+  if (core_data->use_utf8)
+  { SetConsoleOutputCP(CP_UTF8); }
+
   // -- arguments --
   
   // too few arguments, at least 1, i.e. 2 because doc counts
   // not enough arguments for documentation or definition
   if (word_arr_len < 1) 
   { 
-    DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
+    DOC_PF_COLOR(PF_RED); PF("[%s]", ERROR_ICON); DOC_PF_COLOR(PF_WHITE);  
     PF(" provide keyword to search or command, i.e. '"); 
     DOC_PF_COLOR(PF_CYAN); PF("-h"); DOC_PF_COLOR(PF_WHITE);
     PF("' for help.\n"); 

@@ -21,6 +21,8 @@ typedef struct core_data_t
   bool style_deact_cmd;               // -c/-color command
   // bool builtin_sheets_act;            // [builtin_sheets] in config
   bool print_loc_act;                 // -loc command
+  bool use_utf8;
+  bool use_icons;
 
   char sheet_paths[CORE_SHEET_PATHS_MAX][CORE_PATH_MAX];
   int  sheet_paths_len;
@@ -31,6 +33,8 @@ typedef struct core_data_t
   .style_act              = true,   \
   .style_deact_cmd        = false,  \
   .print_loc_act          = false,  \
+  .use_utf8               = false,  \
+  .use_icons              = false,  \
   .sheet_paths_len        = 0,      \
 }
 

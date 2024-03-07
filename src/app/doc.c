@@ -268,7 +268,10 @@ void doc_color_code_section(char* sec, int len)
       BUF_DUMP();
       SET_STYLE(PF_ITALIC, COL_WARNING);
       SET_DEFAULT_STYLE(PF_ITALIC, COL_WARNING);
-      buf[buf_pos++] = sec[i++];
+      // buf[buf_pos++] = sec[i++]; 
+      i++;
+      buf[buf_pos++] = ERROR_ICON;  
+      buf[buf_pos++] = ERROR_ICON +1;  
       while (sec[i] != '\n' && sec[i] != '!') 
       { 
         bool skip_char_tmp = false;

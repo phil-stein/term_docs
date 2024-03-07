@@ -8,7 +8,7 @@ copy /y compile_commands.json ..\..\compile_commands.json
 
 :: --- build vs19 ---
 copy /y CMakeLists.txt ../vs19/CMakeLists.txt
-cd ../vs19
-cmake -G "Visual Studio 16 2019" ../vs19 
+cd ..\vs22
+cmake -S..\make -B . -G "Visual Studio 17 2022"  
 
 cd ../..

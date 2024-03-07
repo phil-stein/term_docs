@@ -106,12 +106,21 @@ void config_read_config_file(const char* path, bool print_config)
     // PF(": %s\n", core_data->sheets_path);
     // PF(" -> lines: %d\n", lines);
     
-    DOC_PF_COLOR(PF_CYAN);
-    PF("syntax");
-    DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_COLOR(PF_CYAN); PF("syntax"); DOC_PF_COLOR(PF_WHITE);
     PF(": %s\n", STR_BOOL(core_data->style_act));
+    
+    DOC_PF_COLOR(PF_CYAN); PF("utf8"); DOC_PF_COLOR(PF_WHITE);
+    PF(": %s\n", STR_BOOL(core_data->use_utf8));
+    
+    DOC_PF_COLOR(PF_CYAN); PF("icons"); DOC_PF_COLOR(PF_WHITE);
+    PF(": %s\n", STR_BOOL(core_data->use_icons));
+    if (!core_data->use_utf8 && core_data->use_icons)
+    { 
+      DOC_PF_COLOR(PF_RED); PF("[ERROR]"); DOC_PF_COLOR(PF_WHITE); 
+      PF(" cant activate [icons] without also setting [utf8]\n");
+    }
 
-    DOC_PF_COLOR(PF_RED);
+    DOC_PF_COLOR(PF_YELLOW);
     PF("max sheet paths");
     DOC_PF_COLOR(PF_WHITE);
     PF(": %d\n", CORE_SHEET_PATHS_MAX);
@@ -157,30 +166,34 @@ void config_handle_argument()
     // PF("syntax: %d\n", value);
     core_data->style_act = (bool)value;
   }
-  
-  // // [builtin_sheets]
-  // if (name_buf[ 0] == 'b' &&
-  //     name_buf[ 1] == 'u' &&
-  //     name_buf[ 2] == 'i' &&
-  //     name_buf[ 3] == 'l' &&
-  //     name_buf[ 4] == 't' &&
-  //     name_buf[ 5] == 'i' &&
-  //     name_buf[ 6] == 'n' &&
-  //     name_buf[ 7] == '_' &&
-  //     name_buf[ 8] == 's' &&
-  //     name_buf[ 9] == 'h' &&
-  //     name_buf[10] == 'e' &&
-  //     name_buf[11] == 'e' &&
-  //     name_buf[12] == 't' &&
-  //     name_buf[13] == 's' )
-  // {
-  //   int value = config_parse_bool();
-  //   if (!(value == 0 || value == 1))
-  //   { P_ERR("incorrect argument format for [buildin_sheets]\n -> 'true', 'false', '1', '0'\n"); return; }
-  //   
-  //   // PF("buildin: %d\n", value);
-  //   core_data->builtin_sheets_act = (bool)value;
-  // }
+
+  // [utf8]
+  if (name_buf[0] == 'u' &&
+      name_buf[1] == 't' &&
+      name_buf[2] == 'f' &&
+      name_buf[3] == '8' )
+  {
+    int value = config_parse_bool();
+    if (!(value == 0 || value == 1))
+    { P_ERR("incorrect argument format for [utf8]\n -> 'true', 'false', '1', '0'\n"); return; }
+
+    // PF("syntax: %d\n", value);
+    core_data->use_utf8 = (bool)value;
+  }
+  // [icons]
+  if (name_buf[0] == 'i' &&
+      name_buf[1] == 'c' &&
+      name_buf[2] == 'o' &&
+      name_buf[3] == 'n' &&
+      name_buf[4] == 's' )
+  {
+    int value = config_parse_bool();
+    if (!(value == 0 || value == 1))
+    { P_ERR("incorrect argument format for [icons]\n -> 'true', 'false', '1', '0'\n"); return; }
+
+    // PF("syntax: %d\n", value);
+    core_data->use_icons = (bool)value;
+  }
 
   // [sheet_path_rel]
   if (name_buf[ 0] == 's' &&

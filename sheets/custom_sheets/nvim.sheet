@@ -1,0 +1,57 @@
+#
+|nvim|neovim|vim|
+|keybind|key|hotkey|mapping|mappings|
+|keymapping|keymappings|
+  my personal neovim keymappings
+  ~ remove [sheet_dir_rel] sheets\custom_sheets 
+  $~$  in config.doc, if you dont want this$$
+ 
+  $g$_$commands$$: $syn$
+  - :Lazy             -> open plugin manager ui
+  - :Mason            -> open mason ui
+  - :checkhealth      -> check plug-in errors & warnings
+  - :LspInfo          -> info about current lsp, including id
+  - :LspRestart [id]  -> restart lsp, can give id
+  $$ 
+  $g$_$hotkeys$$: $syn$
+  - telescope
+  	- \? (normal)     -> help / key mappings
+  	- <C-s>           -> open in horizontal split
+  	- <C-x>           -> open in vertical split
+  	- <C-t>           -> open in tab
+  	- <leader>f       -> search files
+  	- <leader>\?      -> search recently opened
+  	- <leader><space> -> search open buffers
+  	- <leader>/       -> search keyword, fuzzyfind
+  	- <leader>gf      -> search git files
+  	- <C-d>           -> file broswer
+  - lsp
+  	- <leader>rn      -> rename
+  	- gd              -> goto defenition
+  	- GD              -> open defenition in vsplit
+  	- gD              -> goto declaration
+  	- gI              -> goto implementation
+  	- <leader>D-> goto type defenition
+  - float-term 
+  	- <C-t>           -> toggle terminal
+  	- <C-b>           -> run build   
+  - code-completion
+  	- <CR>            -> accept completion
+  	- <Tab>           -> cycle through completions
+  - hover
+  	- K               -> hover documentation
+  	- gK              -> hover documentation selection
+  	- <C-n>           -> next
+  	- <C-p>           -> previous
+  - dap \| debugging
+    - <F5>            -> run debuggger
+    - <F9>            -> step into
+    - <F10>           -> step over
+    - <F12>           -> step out
+    - <leader>b       -> toggle breakpoint,
+    - <leader>dr      -> open repl,
+    - <leader>d       -> open debug ui, opens automatically
+  $$
+
+  ?< https://github.com/phil-stein/term_docs >?
+#
