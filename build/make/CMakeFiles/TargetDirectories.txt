@@ -1,3 +1,0 @@
-C:/Workspace/C/term_docs/build/make/CMakeFiles/doc.dir
-C:/Workspace/C/term_docs/build/make/CMakeFiles/edit_cache.dir
-C:/Workspace/C/term_docs/build/make/CMakeFiles/rebuild_cache.dir

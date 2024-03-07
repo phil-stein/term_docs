@@ -13,13 +13,14 @@
 *.zip
 
 # build folder
-_build/*
-!_build/*/*.bat   
-!_build/*.bat     
-!_build/*/CMakeLists.txt
-!_build/*/*/CMakeLists.txt
-!_build/*/*.cmake
-!_build/*/*/*.cmake
+build/*
+!build/*/*.bat   
+!build/*.bat     
+!build/*/CMakeLists.txt
+!build/*/*/CMakeLists.txt
+!build/*.cmake
+!build/*/*.cmake
+!build/*/*/*.cmake
 
 # .cache folder 
 .cache/*

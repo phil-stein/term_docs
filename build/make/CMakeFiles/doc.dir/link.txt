@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\doc.dir/objects.a
-C:\MinGW64\mingw64\bin\ar.exe qc CMakeFiles\doc.dir/objects.a @CMakeFiles\doc.dir\objects1.rsp
-C:\MinGW64\mingw64\bin\gcc.exe  -g -Wall -std=gnu99 -Wl,--whole-archive CMakeFiles\doc.dir/objects.a -Wl,--no-whole-archive -o C:\Workspace\C\term_docs\bin\doc.exe -Wl,--out-implib,libdoc.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\doc.dir\linkLibs.rsp
