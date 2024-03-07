@@ -270,8 +270,7 @@ void doc_color_code_section(char* sec, int len)
       SET_DEFAULT_STYLE(PF_ITALIC, COL_WARNING);
       // buf[buf_pos++] = sec[i++]; 
       i++;
-      buf[buf_pos++] = ERROR_ICON;  
-      buf[buf_pos++] = ERROR_ICON +1;  
+      _PF(core_data->warning_icon);
       while (sec[i] != '\n' && sec[i] != '!') 
       { 
         bool skip_char_tmp = false;
@@ -293,7 +292,9 @@ void doc_color_code_section(char* sec, int len)
       BUF_DUMP();
       SET_STYLE(PF_ITALIC, COL_INFO);
       SET_DEFAULT_STYLE(PF_ITALIC, COL_INFO);
-      buf[buf_pos++] = sec[i++];
+      // buf[buf_pos++] = sec[i++];
+      i++;
+      _PF(core_data->info_icon);
       while (sec[i] != '\n' && sec[i] != '~') 
       {
         bool skip_char_tmp = false;
@@ -313,7 +314,11 @@ void doc_color_code_section(char* sec, int len)
     if (sec[i] == '?' && sec[i -1] != '\\')
     {
       BUF_DUMP();
-      buf[buf_pos++] = sec[i++];
+      SET_STYLE(PF_DIM, COL_LINK);
+      SET_STYLE(PF_ITALIC, COL_LINK);
+      // buf[buf_pos++] = sec[i++];
+      i++;
+      _PF(core_data->link_icon);
       while ((sec[i] != '\n' && sec[i] != '\0') && 
              (sec[i] != '?' || sec[i -1] == '\\'))
       {
@@ -322,9 +327,8 @@ void doc_color_code_section(char* sec, int len)
         buf[buf_pos++] = sec[i++]; 
       }
       if (sec[i] == '?') { i++; }
-      SET_STYLE(PF_DIM, COL_LINK);
-      SET_STYLE(PF_ITALIC, COL_LINK);
       BUF_DUMP();
+      RESET_DEFAULT_STYLE();
       SET_COLOR(PF_WHITE);
     }
     else if (sec[i] == '?' && sec[i -1] == '\\') { buf_pos -= 1; BUF_DUMP(); } // skip '\'

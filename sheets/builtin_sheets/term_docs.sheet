@@ -138,17 +138,39 @@
   ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
 |term_docs|
-|config|config-file|confic.doc|
+|config|config-file|config.doc|
 |syntax|sheet_dir|sheet_dir_rel|
 |[syntax]|[sheet_dir]|[sheet_dir_rel]|
+|utf8|icons|error_icon|warning_icon|info_icon|link_icon|
+|[utf8]|[icons]|[error_icon]|[warning_icon]|[info_icon]|[link_icon]|
 
   config file is "root/config.doc"
- 
-  [syntax]: 
+  $$ 
+  $p$[syntax]$$
     enables or disables highlighting 
     can be set to 1, true, 0, false
     true by default
-  [sheet_dir] and [sheet_dir_rel]: 
+  $p$[utf8] $$
+    enables or disables using utf8 character 
+    can be set to 1, true, 0, false
+    false by default 
+  $p$[icons] $$
+    enables or disables using ?< nerdfont-icons: https://www.nerdfonts.com/ >?
+    can be set to 1, true, 0, false
+    false by default
+  $p$[error_icon] $$
+    set a string to replace \! in error messages 
+    can be set to string, currently max length is 8
+  $p$[warning_icon] $$
+    set a string to replace \! in docs
+    can be set to string, currently max length is 8
+  $p$[info_icon] $$
+    set a string to replace \~ in docs
+    can be set to string, currently max length is 8
+  $p$[link_icon] $$
+    set a string to replace \? in docs
+    can be set to string, currently max length is 8
+  $p$[sheet_dir]$$ and $p$[sheet_dir_rel]$$
     add a new path to check for .sheet files
     [sheet_dir_rel] is relative to root dir
     max is 8 right now
@@ -163,15 +185,20 @@
     [syntax] true
     [syntax] false
     
-    [builtin_sheets] false
-    [builtin_sheets] true
-   
-    // builtin sheets
-    [sheet_dir_rel] sheets/builtin_sheets/ 
+    [utf8]  true 
+    [icons] true
     
-    // custom sheets
-    [sheet_dir_rel] src/sheets 
-    [sheet_dir] C:\custom_sheets
+    [error_icon]   
+    [warning_icon] 
+    [info_icon]    
+    [link_icon]    
+    
+    // builtin-sheets
+    [sheet_dir_rel] sheets/builtin_sheets/
+    
+    // custom sheet paths
+    [sheet_dir_rel] sheets\custom_sheets
+    // [sheet_dir] C:\workspace\c\term_docs\sheets\custom_sheets_02
 
     $_$in terminal:$$
     >doc -config

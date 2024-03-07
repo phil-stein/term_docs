@@ -212,12 +212,26 @@ config file is `root/config.doc` <br>
 `[icons]` enables or disables using [nerdfont-icons](https://www.nerdfonts.com/) <br>
         can be set to `1, true, 0, false` <br>
         false by default <br>
+`[error_icon]` set a string to replace ! in error messages <br>
+             can be set to string, currently max length is 8<br>
+             ! by default <br>
+`[warning_icon]` set a string to replace ! in docs<br>
+               can be set to string, currently max length is 8<br>
+               ! by default <br>
+`[info_icon]` set a string to replace ~ in docs<br>
+            can be set to string, currently max length is 8<br>
+            ~ by default <br>
+`[link_icon]` set a string to replace ? in docs<br>
+            can be set to string, currently max length is 8<br>
+            ? by default <br>
 `[sheet_dir]` and `[sheet_dir_rel]` add a new path to check for .sheet files <br>
 `[sheet_dir_rel]` is relative to root dir <br>
                 max is 8 right now, view `doc -config` for current max <br>
                 use `//` for comments <br>
 
 use `-config` modifier to print config file <br>
+run `>doc config-file` for more help <br>
+
 
 ## neovim
 add either one to your `nvim/init.lua` to add the command <br>
@@ -313,6 +327,8 @@ to open a specific doc documentation via keybind <br>
     - [ ] https://dev.to/rdentato/utf-8-strings-in-c-1-3-42a4, https://dev.to/rdentato/utf-8-strings-in-c-2-3-3kp1, https://dev.to/rdentato/utf-8-strings-in-c-3-3-2pc7
   - [ ] make tabs be two spaces
   - [ ] convert image to terminal output ?
+  - [ ] make string values in config.doc be abled to have "..." or '...'
+  - [ ] add [print] or print() to config.doc
   - [ ] more documentation
     - [ ] c keywords i dont have yet
       - [ ] c11/c23 stuff ?

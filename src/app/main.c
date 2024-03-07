@@ -18,7 +18,6 @@
 #include <ctype.h>
 #include <direct.h>
 #include <dirent/dirent.h>
-#include <Windows.h>  // SetConsoleOutputCP(CP_UTF8)
 
 typedef enum
 {
@@ -133,16 +132,13 @@ int main(int argc, char** argv)
   // P_STR(config_path);
   config_read_config_file(core_data->config_path, print_config_cmd);
 
-  if (core_data->use_utf8)
-  { SetConsoleOutputCP(CP_UTF8); }
-
   // -- arguments --
   
   // too few arguments, at least 1, i.e. 2 because doc counts
   // not enough arguments for documentation or definition
   if (word_arr_len < 1) 
   { 
-    DOC_PF_COLOR(PF_RED); PF("[%s]", ERROR_ICON); DOC_PF_COLOR(PF_WHITE);  
+    DOC_PF_COLOR(PF_RED); PF("[%s]", core_data->error_icon); DOC_PF_COLOR(PF_WHITE);  
     PF(" provide keyword to search or command, i.e. '"); 
     DOC_PF_COLOR(PF_CYAN); PF("-h"); DOC_PF_COLOR(PF_WHITE);
     PF("' for help.\n"); 

@@ -6,6 +6,7 @@
 
 #include <ctype.h>
 
+#include <Windows.h>  // SetConsoleOutputCP(CP_UTF8)
 
 #define BUF_MAX 256
 char name_buf[BUF_MAX];
@@ -54,15 +55,16 @@ void config_read_config_file(const char* path, bool print_config)
       while (c < txt_len && isspace(txt[c])) { c++; }
 
       while (c < txt_len && 
-             (
-              isalnum(txt[c])  || 
-              txt[c] == '/'    ||
-              txt[c] == '\\'   ||
-              txt[c] == '-'   ||
-              txt[c] == '_'   ||
-              txt[c] == ':'   ||
-              txt[c] == '.'    
-             )
+             // (
+             //  isalnum(txt[c])  || 
+             //  txt[c] == '/'    ||
+             //  txt[c] == '\\'   ||
+             //  txt[c] == '-'   ||
+             //  txt[c] == '_'   ||
+             //  txt[c] == ':'   ||
+             //  txt[c] == '.'    
+             // )
+             ( !isspace(txt[c]) )
             ) 
       { value_buf[value_buf_pos++] = txt[c++]; }
       value_buf[value_buf_pos] = '\0';
@@ -73,6 +75,9 @@ void config_read_config_file(const char* path, bool print_config)
   
   // -c/-color command overrides config settings
   if (core_data->style_deact_cmd) { core_data->style_act = false; }
+  // set console to use utf8, windows-specific
+  if (core_data->use_utf8)
+  { SetConsoleOutputCP(CP_UTF8); }
   
   if (print_config)
   {
@@ -109,25 +114,33 @@ void config_read_config_file(const char* path, bool print_config)
     DOC_PF_COLOR(PF_CYAN); PF("syntax"); DOC_PF_COLOR(PF_WHITE);
     PF(": %s\n", STR_BOOL(core_data->style_act));
     
-    DOC_PF_COLOR(PF_CYAN); PF("utf8"); DOC_PF_COLOR(PF_WHITE);
-    PF(": %s\n", STR_BOOL(core_data->use_utf8));
-    
-    DOC_PF_COLOR(PF_CYAN); PF("icons"); DOC_PF_COLOR(PF_WHITE);
-    PF(": %s\n", STR_BOOL(core_data->use_icons));
     if (!core_data->use_utf8 && core_data->use_icons)
     { 
       DOC_PF_COLOR(PF_RED); PF("[ERROR]"); DOC_PF_COLOR(PF_WHITE); 
       PF(" cant activate [icons] without also setting [utf8]\n");
+      core_data->use_icons = false;
     }
+    DOC_PF_COLOR(PF_CYAN); PF("utf8"); DOC_PF_COLOR(PF_WHITE);
+    PF(": %s\n", STR_BOOL(core_data->use_utf8));
+    DOC_PF_COLOR(PF_CYAN); PF("icons"); DOC_PF_COLOR(PF_WHITE);
+    PF(": %s\n", STR_BOOL(core_data->use_icons));
+    
+    DOC_PF_COLOR(PF_YELLOW); PF("max icon name len"); DOC_PF_COLOR(PF_WHITE);
+    PF(": %d\n", CORE_ICONS_MAX);
+    DOC_PF_COLOR(PF_CYAN); PF("error_icon"); DOC_PF_COLOR(PF_WHITE);
+    PF(": '%s'\n", core_data->error_icon);
+    DOC_PF_COLOR(PF_CYAN); PF("warning_icon"); DOC_PF_COLOR(PF_WHITE);
+    PF(": '%s'\n", core_data->warning_icon);
+    DOC_PF_COLOR(PF_CYAN); PF("info_icon"); DOC_PF_COLOR(PF_WHITE);
+    PF(": '%s'\n", core_data->info_icon);
+    DOC_PF_COLOR(PF_CYAN); PF("link_icon"); DOC_PF_COLOR(PF_WHITE);
+    PF(": '%s'\n", core_data->link_icon);
 
-    DOC_PF_COLOR(PF_YELLOW);
-    PF("max sheet paths");
-    DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_COLOR(PF_YELLOW); PF("max sheet paths"); DOC_PF_COLOR(PF_WHITE);
     PF(": %d\n", CORE_SHEET_PATHS_MAX);
 
     for (int i = 0; i < core_data->sheet_paths_len; ++i)
     {
-      
       int lines = 0;
       doc_count_lines_dir(core_data->sheet_paths[i], &lines);
       
@@ -168,10 +181,10 @@ void config_handle_argument()
   }
 
   // [utf8]
-  if (name_buf[0] == 'u' &&
-      name_buf[1] == 't' &&
-      name_buf[2] == 'f' &&
-      name_buf[3] == '8' )
+  else if (name_buf[0] == 'u' &&
+           name_buf[1] == 't' &&
+           name_buf[2] == 'f' &&
+           name_buf[3] == '8' )
   {
     int value = config_parse_bool();
     if (!(value == 0 || value == 1))
@@ -181,11 +194,11 @@ void config_handle_argument()
     core_data->use_utf8 = (bool)value;
   }
   // [icons]
-  if (name_buf[0] == 'i' &&
-      name_buf[1] == 'c' &&
-      name_buf[2] == 'o' &&
-      name_buf[3] == 'n' &&
-      name_buf[4] == 's' )
+  else if (name_buf[0] == 'i' &&
+           name_buf[1] == 'c' &&
+           name_buf[2] == 'o' &&
+           name_buf[3] == 'n' &&
+           name_buf[4] == 's' )
   {
     int value = config_parse_bool();
     if (!(value == 0 || value == 1))
@@ -194,21 +207,101 @@ void config_handle_argument()
     // PF("syntax: %d\n", value);
     core_data->use_icons = (bool)value;
   }
+  // [error_icon]
+  else if (name_buf[0] == 'e' &&
+           name_buf[1] == 'r' &&
+           name_buf[2] == 'r' &&
+           name_buf[3] == 'o' &&
+           name_buf[4] == 'r' &&
+           name_buf[5] == '_' &&
+           name_buf[6] == 'i' &&
+           name_buf[7] == 'c' &&
+           name_buf[8] == 'o' &&
+           name_buf[9] == 'n' )
+  {
+    if ( strlen(value_buf) > CORE_ICONS_MAX)
+    { 
+      P_ERR("string given to [error_icon] is too long\n -> len: '%llu', max: '%d'\n", 
+            strlen(value_buf), CORE_ICONS_MAX); return; 
+    }
+    else
+    { STRCPY(core_data->error_icon, value_buf); }
+  }
+  // [warning_icon]
+  else if (name_buf[ 0] == 'w' &&
+           name_buf[ 1] == 'a' &&
+           name_buf[ 2] == 'r' &&
+           name_buf[ 3] == 'n' &&
+           name_buf[ 4] == 'i' &&
+           name_buf[ 5] == 'n' &&
+           name_buf[ 6] == 'g' &&
+           name_buf[ 7] == '_' &&
+           name_buf[ 8] == 'i' &&
+           name_buf[ 9] == 'c' &&
+           name_buf[10] == 'o' &&
+           name_buf[11] == 'n' )
+  {
+    if ( strlen(value_buf) > CORE_ICONS_MAX)
+    { 
+      P_ERR("string given to [warning_icon] is too long\n -> len: '%llu', max: '%d'\n", 
+            strlen(value_buf), CORE_ICONS_MAX); return; 
+    }
+    else
+    { STRCPY(core_data->warning_icon, value_buf); }
+  }
+  // [info_icon]
+  else if (name_buf[0] == 'i' &&
+           name_buf[1] == 'n' &&
+           name_buf[2] == 'f' &&
+           name_buf[3] == 'o' &&
+           name_buf[4] == '_' &&
+           name_buf[5] == 'i' &&
+           name_buf[6] == 'c' &&
+           name_buf[7] == 'o' &&
+           name_buf[8] == 'n' )
+  {
+    if ( strlen(value_buf) > CORE_ICONS_MAX)
+    { 
+      P_ERR("string given to [info_icon] is too long\n -> len: '%llu', max: '%d'\n", 
+            strlen(value_buf), CORE_ICONS_MAX); return; 
+    }
+    else
+    { STRCPY(core_data->info_icon, value_buf); }
+  }
+  // [link_icon]
+  else if (name_buf[0] == 'l' &&
+           name_buf[1] == 'i' &&
+           name_buf[2] == 'n' &&
+           name_buf[3] == 'k' &&
+           name_buf[4] == '_' &&
+           name_buf[5] == 'i' &&
+           name_buf[6] == 'c' &&
+           name_buf[7] == 'o' &&
+           name_buf[8] == 'n' )
+  {
+    if ( strlen(value_buf) > CORE_ICONS_MAX)
+    { 
+      P_ERR("string given to [link_icon] is too long\n -> len: '%llu', max: '%d'\n", 
+            strlen(value_buf), CORE_ICONS_MAX); return; 
+    }
+    else
+    { STRCPY(core_data->link_icon, value_buf); }
+  }
 
   // [sheet_path_rel]
-  if (name_buf[ 0] == 's' &&
-      name_buf[ 1] == 'h' &&
-      name_buf[ 2] == 'e' &&
-      name_buf[ 3] == 'e' &&
-      name_buf[ 4] == 't' &&
-      name_buf[ 5] == '_' &&
-      name_buf[ 6] == 'd' &&
-      name_buf[ 7] == 'i' &&
-      name_buf[ 8] == 'r' &&
-      name_buf[ 9] == '_' &&
-      name_buf[10] == 'r' &&
-      name_buf[11] == 'e' &&
-      name_buf[12] == 'l' )
+  else if (name_buf[ 0] == 's' &&
+           name_buf[ 1] == 'h' &&
+           name_buf[ 2] == 'e' &&
+           name_buf[ 3] == 'e' &&
+           name_buf[ 4] == 't' &&
+           name_buf[ 5] == '_' &&
+           name_buf[ 6] == 'd' &&
+           name_buf[ 7] == 'i' &&
+           name_buf[ 8] == 'r' &&
+           name_buf[ 9] == '_' &&
+           name_buf[10] == 'r' &&
+           name_buf[11] == 'e' &&
+           name_buf[12] == 'l' )
   {
     // get path relative to executable
     char path[CORE_PATH_MAX];
@@ -242,14 +335,14 @@ void config_handle_argument()
   }
   // [sheet_path]
   else if (name_buf[0] == 's' &&
-      name_buf[1] == 'h' &&
-      name_buf[2] == 'e' &&
-      name_buf[3] == 'e' &&
-      name_buf[4] == 't' &&
-      name_buf[5] == '_' &&
-      name_buf[6] == 'd' &&
-      name_buf[7] == 'i' &&
-      name_buf[8] == 'r' )
+           name_buf[1] == 'h' &&
+           name_buf[2] == 'e' &&
+           name_buf[3] == 'e' &&
+           name_buf[4] == 't' &&
+           name_buf[5] == '_' &&
+           name_buf[6] == 'd' &&
+           name_buf[7] == 'i' &&
+           name_buf[8] == 'r' )
   {
     if (value_buf[value_buf_pos-1] != '/' &&
         value_buf[value_buf_pos-1] != '\\')

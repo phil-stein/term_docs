@@ -8,6 +8,12 @@
 [utf8]  true 
 [icons] true
 
+[error_icon]   
+// [warning_icon] 
+[warning_icon] 
+[info_icon]    
+[link_icon]    
+
 // builtin-sheets
 [sheet_dir_rel] sheets/builtin_sheets/
 

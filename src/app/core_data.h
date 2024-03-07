@@ -10,6 +10,8 @@ extern "C" {
 #define CORE_PATH_MAX   256
 #define CORE_SHEET_PATHS_MAX 8
 
+#define CORE_ICONS_MAX 8
+
 typedef struct core_data_t
 {
   char exec_path[CORE_PATH_MAX];      // path to executable
@@ -24,6 +26,11 @@ typedef struct core_data_t
   bool use_utf8;
   bool use_icons;
 
+  char error_icon[CORE_ICONS_MAX];
+  char warning_icon[CORE_ICONS_MAX];
+  char info_icon[CORE_ICONS_MAX];
+  char link_icon[CORE_ICONS_MAX];
+
   char sheet_paths[CORE_SHEET_PATHS_MAX][CORE_PATH_MAX];
   int  sheet_paths_len;
 
@@ -35,6 +42,10 @@ typedef struct core_data_t
   .print_loc_act          = false,  \
   .use_utf8               = false,  \
   .use_icons              = false,  \
+  .error_icon             = "!",    \
+  .warning_icon           = "!",    \
+  .info_icon              = "~",    \
+  .link_icon              = "?",    \
   .sheet_paths_len        = 0,      \
 }
 

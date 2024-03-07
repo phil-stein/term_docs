@@ -41,6 +41,8 @@ extern "C" {
 
 #define ERROR_ICON ( core_data->use_icons ? "" : "!" )
 
+#define WARNING_ICON ( core_data->use_icons ? "" : "!" )
+
 // pass the txt to be modified as well as the buffer the sections from txt
 // are written to, also pointers to the buffer position and i (iterator)
 // of the for loop in which this should be called
