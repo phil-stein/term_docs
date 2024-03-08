@@ -1,22 +1,32 @@
 
 // activate highlighting
-[syntax] 0
-[syntax] 1
 [syntax] false 
 [syntax] true 
+
+[location] false 
 
 [utf8]  true 
 [icons] true
 
-[error_icon]   
-// [warning_icon] 
-[warning_icon] 
-[info_icon]    
-[link_icon]    
+// black, red, green, yellow, blue, purple, cyan, white
+[title_color] red 
+[border] "" // ascii: " " "-" "_" "." nerdfont: "" "" "" "" "󰥛" "󱑻" "󱑼
+[seperator_left]  ""
+[seperator_right] ""
+// [seperator_left]  ""
+// [seperator_right] ""
+[title_spacing] 0.05
+
+[error_icon] "" // "" "" "󰬟" ""
+[warning_icon] "" //    
+[info_icon]    "" //   
+[link_icon]    "" //      
 
 // builtin-sheets
-[sheet_dir_rel] sheets/builtin_sheets/
+[sheet_dir_rel] "sheets/builtin_sheets/"
 
 // custom sheet paths
-[sheet_dir_rel] sheets\custom_sheets
-// [sheet_dir] C:\workspace\c\term_docs\sheets\custom_sheets_02
+[sheet_dir_rel] "sheets\custom_sheets"
+
+// [sheet_dir] "C:\workspace\c\term_docs\sheets\custom_sheets_02"
+// [sheet_dir] "\workspace\c\term_docs\sheets\custom_sheets_02"

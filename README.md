@@ -193,41 +193,46 @@ config file is `root/config.doc` <br>
 ```
 // comment
 [syntax] true
-
+[location] true
 [utf8]  true
 [icons] true
 
-// builtin sheets
-[sheet_dir_rel] sheets/builtin_sheets/
+// black, red, green, yellow, blue, purple, cyan, white
+[title_color] red 
+// [border] ascii: " " "-" "_" "." nerdfont: "" "" "" "" "󰥛" "󱑻" "󱑼
+[border] ""
+[seperator_left]  ""
+[seperator_right] ""
+// [seperator_left]  ""
+// [seperator_right] ""
+[title_spacing] 0.1
 
-[sheet_dir_rel] src/sheets
-[sheet_dir] C:\custom_sheets
+// builtin sheets
+[sheet_dir_rel] "sheets/builtin_sheets/"
+[sheet_dir_rel] "src/sheets"
+[sheet_dir] "C:\custom_sheets"
 ```
-`[syntax]` enables or disables highlighting <br>
-         can be set to `1, true, 0, false` <br>
-         true by default <br>
-`[utf8]` enables or disables using utf8 character <br>
-       can be set to `1, true, 0, false` <br>
-       false by default <br>
-`[icons]` enables or disables using [nerdfont-icons](https://www.nerdfonts.com/) <br>
-        can be set to `1, true, 0, false` <br>
-        false by default <br>
-`[error_icon]` set a string to replace ! in error messages <br>
-             can be set to string, currently max length is 8<br>
-             ! by default <br>
-`[warning_icon]` set a string to replace ! in docs<br>
-               can be set to string, currently max length is 8<br>
-               ! by default <br>
-`[info_icon]` set a string to replace ~ in docs<br>
-            can be set to string, currently max length is 8<br>
-            ~ by default <br>
-`[link_icon]` set a string to replace ? in docs<br>
-            can be set to string, currently max length is 8<br>
-            ? by default <br>
-`[sheet_dir]` and `[sheet_dir_rel]` add a new path to check for .sheet files <br>
-`[sheet_dir_rel]` is relative to root dir <br>
+boolean: can be true or false, TRUE or FALSE
+  `[syntax]` enables or disables highlighting <br>
+  `[location]` enables or disables printing location of .sheet file and line <br>
+  `[utf8]` enables or disables using utf8 character <br>
+  `[icons]` enables or disables using [nerdfont-icons](https://www.nerdfonts.com/) <br>
+colors: can be black, red, green, yellow, blue, purple, cyan, white
+  `[title_color]` color of the title
+number: 
+  [title_spacing] 0.0 means title is left, 0.5 center, 1.0 right, etc.
+string: -> "..."
+  ´[border]` char used to draw border above below docs, can be " "
+  ´[seperator_left]` char used at left of title 
+  ´[seperator_right]` char used at right of title
+  `[error_icon]` set a string to replace ! in error messages, ! by default <br>
+  `[warning_icon]` set a string to replace ! in docs, ! by default <br>
+  `[info_icon]` set a string to replace ~ in docs, ~ by default <br>
+  `[link_icon]` set a string to replace ? in docs, ? by default <br>
+  `[sheet_dir]` add a new path to check for .sheet files <br>
+  `[sheet_dir_rel]` is relative to root dir <br>
                 max is 8 right now, view `doc -config` for current max <br>
-                use `//` for comments <br>
+use `//` for comments <br>
 
 use `-config` modifier to print config file <br>
 run `>doc config-file` for more help <br>
@@ -291,7 +296,8 @@ closes using `:q`, just pressing `q` or `esc`, can be remapped <br>
 ```
 </details>
 
-with this setup you could for example add `vim.keymap.set('n', '<C-h>', ':Doc my-vim-mappings<CR>')` <br>
+with this setup you could for example add <br>
+`vim.keymap.set('n', '<C-h>', ':Doc neovim-mappings<CR>', {silent = true, desc = "show neovim mappings"})` <br>
 to open a specific doc documentation via keybind <br>
 
 ## buggs
@@ -322,9 +328,9 @@ to open a specific doc documentation via keybind <br>
   - [ ] add $text$ ... $$ that just outputs raw text, no escaping or highlighting
     - have to change search for that
   - [ ] set background color 
-  - [ ] add nerdfont/devicon support -> `$icon:'✖':x$`
-    - [ ] https://www.nerdfonts.com/cheat-sheet
-    - [ ] https://dev.to/rdentato/utf-8-strings-in-c-1-3-42a4, https://dev.to/rdentato/utf-8-strings-in-c-2-3-3kp1, https://dev.to/rdentato/utf-8-strings-in-c-3-3-2pc7
+  - [x] add nerdfont/devicon support -> `$icon:'✖':x$`
+    - https://www.nerdfonts.com/cheat-sheet
+    - https://dev.to/rdentato/utf-8-strings-in-c-1-3-42a4, https://dev.to/rdentato/utf-8-strings-in-c-2-3-3kp1, https://dev.to/rdentato/utf-8-strings-in-c-3-3-2pc7
   - [ ] make tabs be two spaces
   - [ ] convert image to terminal output ?
   - [ ] make string values in config.doc be abled to have "..." or '...'

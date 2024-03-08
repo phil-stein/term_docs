@@ -139,38 +139,56 @@
 #
 |term_docs|
 |config|config-file|config.doc|
-|syntax|sheet_dir|sheet_dir_rel|
-|[syntax]|[sheet_dir]|[sheet_dir_rel]|
+|syntax|location|sheet_dir|sheet_dir_rel|
+|[syntax]|[location]|[sheet_dir]|[sheet_dir_rel]|
 |utf8|icons|error_icon|warning_icon|info_icon|link_icon|
 |[utf8]|[icons]|[error_icon]|[warning_icon]|[info_icon]|[link_icon]|
 
   config file is "root/config.doc"
   $$ 
-  $p$[syntax]$$
+  $g$$_$boolean$$: true, false, TRUE, FALSE
+  $g$$_$number$$: 1.0, 0.0, etc.
+  $g$$_$color$$: black, red, green, yellow, blue, purple, cyan, white
+         BLACK, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE
+  $g$$_$string$$: "..." 
+
+  $p$[syntax]$$ : $g$$_$boolean$$
     enables or disables highlighting 
-    can be set to 1, true, 0, false
     true by default
-  $p$[utf8] $$
+  $p$[location]$$ : $g$$_$boolean$$
+    enables or disables printing location of .sheet file and line
+    false by default
+  $p$[utf8]$$ : $g$$_$boolean$$
     enables or disables using utf8 character 
     can be set to 1, true, 0, false
     false by default 
-  $p$[icons] $$
+  $p$[icons]$$ : $g$$_$boolean$$
     enables or disables using ?< nerdfont-icons: https://www.nerdfonts.com/ >?
     can be set to 1, true, 0, false
     false by default
-  $p$[error_icon] $$
+  $p$[title_color]$$  : $g$$_$color$$
+    color of the title
+  $p$[title_spacing]$$  : $g$$_$number$$
+    0.0 means title is left, 0.5 center, 1.0 right, etc.
+  $p$[border]$$ : $g$$_$string$$
+    char used to draw border above below docs, can be " "
+  $p$[seperator_left]$$ : $g$$_$string$$
+    char used at left of title 
+  $p$[seperator_right]$$ : $g$$_$string$$ 
+    char used at right of title
+  $p$[error_icon]$$ : $g$$_$string$$
     set a string to replace \! in error messages 
     can be set to string, currently max length is 8
-  $p$[warning_icon] $$
+  $p$[warning_icon]$$ : $g$$_$string$$
     set a string to replace \! in docs
     can be set to string, currently max length is 8
-  $p$[info_icon] $$
+  $p$[info_icon]$$ : $g$$_$string$$
     set a string to replace \~ in docs
     can be set to string, currently max length is 8
-  $p$[link_icon] $$
+  $p$[link_icon]$$ : $g$$_$string$$
     set a string to replace \? in docs
     can be set to string, currently max length is 8
-  $p$[sheet_dir]$$ and $p$[sheet_dir_rel]$$
+  $p$[sheet_dir]$$ and $p$[sheet_dir_rel]$$ : $g$$_$string$$
     add a new path to check for .sheet files
     [sheet_dir_rel] is relative to root dir
     max is 8 right now
@@ -183,41 +201,69 @@
   example:
     $_$in config.doc:$$
     [syntax] true
-    [syntax] false
-    
+    [location] true
     [utf8]  true 
     [icons] true
     
-    [error_icon]   
-    [warning_icon] 
-    [info_icon]    
-    [link_icon]    
+    [error_icon] "" // "" "" "󰬟" ""
+    [warning_icon] "" //    
+    [info_icon]    "" //   
+    [link_icon]    "" //      
+
+    [title_color] red 
+    // [border] "" "" "" "" "󰥛" "󱑻" "󱑼
+    [border] "" // ascii: " " "-" "_" "." nerdfont: "" "" "" "" "󰥛" "󱑻" "󱑼
+    [seperator_left]  "" // ""
+    [seperator_right] "" // ""
+    [title_spacing] 0.05
     
     // builtin-sheets
-    [sheet_dir_rel] sheets/builtin_sheets/
+    [sheet_dir_rel] "sheets/builtin_sheets/"
     
     // custom sheet paths
-    [sheet_dir_rel] sheets\custom_sheets
-    // [sheet_dir] C:\workspace\c\term_docs\sheets\custom_sheets_02
+    [sheet_dir_rel] "sheets\custom_sheets"
+    // [sheet_dir] "C:\workspace\c\term_docs\sheets\custom_sheets_02"
 
     $_$in terminal:$$
     >doc -config
     -> $p$config.doc --------------------------------------$$
     ->
-    -> [syntax] false
     -> [syntax] true
-    ->
-    -> // builtin sheets
-    -> [sheet_dir_rel] sheets/builtin_sheets/ 
-    ->
-    -> // custom sheets
-    -> [sheet_dir_rel] src/sheets
-    -> [sheet_dir] C:\custom_sheets
+    -> [location] true
+    -> [utf8]  true 
+    -> [icons] true
+    -> 
+    -> [error_icon] "" // "" "" "󰬟" ""
+    -> [warning_icon] "" //    
+    -> [info_icon]    "" //   
+    -> [link_icon]    "" //      
+
+    -> [title_color] red 
+    -> // [border] "" "" "" "" "󰥛" "󱑻" "󱑼
+    -> [border] "" // ascii: " " "-" "_" "." nerdfont: "" "" "" "" "󰥛" "󱑻" "󱑼
+    -> [seperator_left]  "" // ""
+    -> [seperator_right] "" // ""
+    -> [title_spacing] 0.05
+    -> 
+    -> // builtin-sheets
+    -> [sheet_dir_rel] "sheets/builtin_sheets/"
+    -> 
+    -> // custom sheet paths
+    -> [sheet_dir_rel] "sheets\custom_sheets"
+    -> // [sheet_dir] "C:\workspace\c\term_docs\sheets\custom_sheets_02"
     ->
     -> $dim$-------------------------------------------------$$
     -> $C$config path$$: C:/Workspace/C/term_docs/config.doc
     -> $C$syntax$$: true
-    -> $r$max sheet paths$$: 8
+    -> $C$location$$: false
+    -> $C$utf8$$: true
+    -> $C$icons$$: true
+    -> $y$max icon name len$$: 8
+    -> $C$error_icon: ''
+    -> $C$warning_icon: ''
+    -> $C$info_icon: ''
+    -> $C$link_icon: ''
+    -> $y$max sheet paths$$: 8
     -> $C$path[0]$$: C:/<path-to-root>/sheets/builtin_sheets/
     -> $C$path[1]$$: C:/<path-to-root>/src/sheets/
     -> $C$path[2]$$: C:/custom_sheets/

@@ -3,6 +3,7 @@
 #include "app/style.h"
 #include "app/core_data.h"
 #include "global/global.h"
+#include "global/global_print.h"
 
 #include <ctype.h>
 #include <direct.h>
@@ -154,12 +155,12 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
     // print if all keywords found
     if (keyword_found_count == keywords_len)
     {
+      int lines_count = 1;  // idk has to be 1
+      for (int i = 0; i < txt_len && i <= start; ++i)
+      { if (txt[i] == '\n') { lines_count++;} }
       // print location
       if (core_data->print_loc_act)
       {
-        int lines_count = 1;  // idk has to be 1
-        for (int i = 0; i < txt_len && i <= start; ++i)
-        { if (txt[i] == '\n') { lines_count++;} }
         DOC_PF_COLOR(PF_CYAN);
         PF("location");
         DOC_PF_COLOR(PF_WHITE);
@@ -173,7 +174,7 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
         DOC_PF_COLOR(PF_WHITE);
         PF(": %d\n", lines_count);
       }
-      doc_print_section(txt + start, end - start, keywords[0], file);
+      doc_print_section(txt + start, end - start, keywords, keywords_len, file, lines_count);
       sections_found_count++;
     }
 
@@ -187,19 +188,22 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
 }
 
 
-void doc_print_section(char* sec, int sec_len, const char* keyword, const char* file)
+void doc_print_section(char* sec, int sec_len, const char** keywords, int keywords_len, const char* file, const int line)
 {
   core_data_t* core_data = core_data_get();
   
-  DOC_PF_COLOR(PF_PURPLE);
-  P_LINE_STR("%s|%s ", file, keyword); 
-  DOC_PF_COLOR(PF_WHITE);
+  char _keywords[128];
+  for (int i = 0; i < keywords_len; ++i)
+  { strcat(_keywords, " "); strcat(_keywords, keywords[i]); }
+
+  char title[256];
+  SPRINTF(64, title, "    %s[%d] |%s    ", file, line, _keywords);
+
+  style_draw_title(title);
   
   doc_color_code_section(sec, sec_len);
    
-  DOC_PF_COLOR(PF_PURPLE);
-  P_LINE(); 
-  DOC_PF_COLOR(PF_WHITE);
+  style_draw_line();
 }
 
   
