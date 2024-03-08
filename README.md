@@ -24,7 +24,7 @@ most c std library documentation is based on [tutorialspoint](https://www.tutori
     - [custom documentation](#custom-documentation)
     - [custom executable name](#custom-executable-name)
     - [config file](#config-file)
-  - [vim | neovim](#vim-|-neovim)
+  - [vim | neovim](#vim--neovim)
   - [todo](#todo)
 
 
@@ -216,7 +216,7 @@ config file is `root/config.doc` <br>
 [sheet_dir_rel] "src/sheets"
 [sheet_dir] "C:\custom_sheets"
 ```
-__boolean__: can be true or false, TRUE or FALSE <br>
+__boolean__: can be `true` or `false`, `TRUE` or `FALSE` <br>
   `[syntax]` enables or disables highlighting <br>
   `[location]` enables or disables printing location of .sheet file and line <br>
   `[utf8]` enables or disables using utf8 character <br>
@@ -226,9 +226,9 @@ __colors__: can be black, red, green, yellow, blue, purple, cyan, white <br>
 __number__:  <br>
   [title_spacing] 0.0 means title is left, 0.5 center, 1.0 right, etc. <br>
 __string__: -> "..." <br>
-  ´[border]` char used to draw border above below docs, can be " " <br>
-  ´[seperator_left]` char used at left of title  <br>
-  ´[seperator_right]` char used at right of title <br>
+  `[border]` char used to draw border above below docs, can be " " <br>
+  `[seperator_left]` char used at left of title  <br>
+  `[seperator_right]` char used at right of title <br>
   `[error_icon]` set a string to replace ! in error messages, ! by default <br>
   `[warning_icon]` set a string to replace ! in docs, ! by default <br>
   `[info_icon]` set a string to replace ~ in docs, ~ by default <br>
@@ -244,8 +244,11 @@ run `>doc config-file` for more help <br>
 
 ## vim | neovim
 ### vim
-in .vimrc / _vimrc add __i havent tested this__ [link](https://dev.to/dlains/create-your-own-vim-commands-415b)<br>
-`command -nargs=1 -complete=file -bar Doc :split | :term <args>`
+ __i havent tested this__ <br>
+in .vimrc / _vimrc add, view reference [link](https://dev.to/dlains/create-your-own-vim-commands-415b)<br>
+`command -nargs=1 -complete=file -bar Doc :split | :term <args>` <br>
+
+### neovim
 add either one to your `nvim/init.lua` to add the command <br>
 ### open in split
 open doc in split, using :Doc ... command <br>
