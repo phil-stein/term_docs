@@ -73,6 +73,7 @@ const u32  key_comment_len = sizeof(key_comment) / sizeof(key_comment[0]);
       while (j < (n)) { buf[buf_pos++] = txt[i++]; j++; }   \
       BUF_DUMP();                                           \
       PF_COLOR(PF_WHITE);                                   \
+      DOC_PF_MODE_RESET();                                  \
     } else                                                  \
     {                                                       \
       BUF_DUMP();                                           \
@@ -190,6 +191,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     while (j > 0) { buf[buf_pos++] = txt[i++]; j--; }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
   }
  
   // -- values --
@@ -205,6 +207,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     while (j > 0) { buf[buf_pos++] = txt[i++]; j--; }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
   }
   else if (txt[i] == '"')                        // strings
   {
@@ -215,6 +218,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     buf[buf_pos++] = txt[i++]; // i++
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
     i--;
     return true;
   }
@@ -224,6 +228,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
     buf[buf_pos++] = txt[i++];
     BUF_DUMP(); DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
   }
   else if (txt[i] == '\'' && txt[i+1] == '\\' && txt[i +3] == '\'')  // escaped chars
   {
@@ -231,6 +236,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
     BUF_DUMP(); DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
   }
   else if (txt[i] == '\'' && txt[i+1] == 'u' && txt[i +6] == '\'')  // unicode chars
   {
@@ -240,6 +246,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     buf[buf_pos++] = txt[i++]; buf[buf_pos++] = txt[i++];
     buf[buf_pos++] = txt[i++];
     BUF_DUMP(); DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
   }
 
   // -- comments --
@@ -267,6 +274,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
   }
   else if (txt[i] == '/' && txt[i +1] == '*')
   {
@@ -284,6 +292,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
   } 
 
   // -- macros --
@@ -315,6 +324,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
   }
   // attributes
   else if (txt[i] == '[' && txt[i +1] == '[')
@@ -332,6 +342,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
+    DOC_PF_MODE_RESET();
   }
   
   return false;
@@ -364,10 +375,10 @@ void style_highlight_c_comment(char* txt, char* buf, int* buf_pos_ptr, int* i_pt
       
       while (c > 0) { buf[buf_pos++] = txt[i++]; c--; }   \
       
-        BUF_DUMP(); 
+      BUF_DUMP(); 
       DOC_PF_STYLE(PF_ITALIC, COL_COMMENT);
       DOC_PF_STYLE(PF_DIM, COL_COMMENT);
-      return;;
+      return;
     }
   }
 }

@@ -190,7 +190,7 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
 
 void doc_print_section(char* sec, int sec_len, const char** keywords, int keywords_len, const char* file, const int line)
 {
-  core_data_t* core_data = core_data_get();
+  // core_data_t* core_data = core_data_get();
   
   char _keywords[128];
   for (int i = 0; i < keywords_len; ++i)
@@ -219,14 +219,18 @@ void doc_print_section(char* sec, int sec_len, const char** keywords, int keywor
 
 #define DUMP_COLORED(n, col)                              \
     { BUF_DUMP();                                         \
-    SET_COLOR(col);                                        \
+    SET_COLOR(col);                                       \
     int j = 0;                                            \
     while (j < (n)) { buf[buf_pos++] = sec[i++]; j++; }   \
     BUF_DUMP();                                           \
-    SET_COLOR(PF_WHITE); }
+    SET_COLOR(PF_WHITE);                                  \
+    DOC_PF_MODE_RESET();                                  \
+    }
 
 #define SET_STYLE(m, c) if (core_data->style_act) { PF_STYLE((m), (c)); cur_pf_style = (m); cur_pf_color = (c); }
 #define SET_COLOR(c)    if (core_data->style_act) { PF_COLOR((c)); cur_pf_color = (c); }
+
+#define RESET_STYLE() if (core_data->style_act) { PF_MODE_RESET(); RESET_DEFAULT_STYLE(); cur_pf_style = PF_NORMAL; cur_pf_color = PF_WHITE; }
 
 #define SET_DEFAULT_STYLE(m, c)   if (core_data->style_act) { default_pf_style = (m); default_pf_color = (c); }
 #define RESET_DEFAULT_STYLE()     if (core_data->style_act) { default_pf_style = PF_NORMAL; default_pf_color = PF_WHITE; }
@@ -286,7 +290,9 @@ void doc_color_code_section(char* sec, int len)
       if (sec[i] == '!') { i++; }
       BUF_DUMP();
       RESET_DEFAULT_STYLE();
-      SET_COLOR(PF_WHITE);
+      // SET_COLOR(PF_WHITE);
+      // DOC_PF_MODE_RESET();
+      RESET_STYLE();
     }
     else if (sec[i] == '!' && sec[i -1] == '\\') { buf_pos -= 1; BUF_DUMP(); } // skip '\'
 
@@ -310,7 +316,9 @@ void doc_color_code_section(char* sec, int len)
       if (sec[i] == '~') { i++; }
       BUF_DUMP();
       RESET_DEFAULT_STYLE();
-      SET_COLOR(PF_WHITE);
+      // SET_COLOR(PF_WHITE);
+      // DOC_PF_MODE_RESET();
+      RESET_STYLE();
     }
     else if (sec[i] == '~' && sec[i -1] == '\\') { buf_pos -= 1; BUF_DUMP(); } // skip '\'
 
@@ -333,7 +341,9 @@ void doc_color_code_section(char* sec, int len)
       if (sec[i] == '?') { i++; }
       BUF_DUMP();
       RESET_DEFAULT_STYLE();
-      SET_COLOR(PF_WHITE);
+      // SET_COLOR(PF_WHITE);
+      // DOC_PF_MODE_RESET();
+      RESET_STYLE();
     }
     else if (sec[i] == '?' && sec[i -1] == '\\') { buf_pos -= 1; BUF_DUMP(); } // skip '\'
 
@@ -371,7 +381,10 @@ void doc_color_code_section(char* sec, int len)
       if (sec[i] != '\n' || sec[i] == '\0') { buf[buf_pos++] = sec[i++]; }
       
       BUF_DUMP();
-      SET_COLOR(PF_WHITE);
+      RESET_DEFAULT_STYLE();
+      // SET_COLOR(PF_WHITE);
+      // DOC_PF_MODE_RESET();
+      RESET_STYLE();
     }
 
   }
@@ -426,7 +439,10 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
   core_data_t* core_data = core_data_get();
 
   if (sec[i] == '$' && sec[i+1] == '$')                             // reset to normal
-  { BUF_DUMP(); SET_STYLE(default_pf_style, default_pf_color); (*syntax) = true; skip_char = true; i++; }
+  { 
+    BUF_DUMP(); RESET_STYLE();  SET_STYLE(default_pf_style, default_pf_color); 
+    (*syntax) = true; skip_char = true; i++; 
+  }
   // white
   if (i+6 < sec_len    &&
        sec[i]   == '$' && 
@@ -630,6 +646,44 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
       (sec[i+3] == 'n' || sec[i+3] == 'N') &&                         
        sec[i+4] == '$')    
   { BUF_DUMP(); (*syntax) = !(*syntax); skip_char = true; i += 4; }  // $$ resets it
+  
+  // icons -> $icon::bash$
+  if (i+5 < sec_len   &&
+       sec[i]   == '$' && 
+       (sec[i+1] == 'i' || sec[i+1] == 'I') && 
+       (sec[i+2] == 'c' || sec[i+2] == 'C') && 
+       (sec[i+3] == 'o' || sec[i+3] == 'O') && 
+       (sec[i+4] == 'n' || sec[i+4] == 'N') && 
+       sec[i+5] == ':' )
+  { 
+    BUF_DUMP(); 
+    // SET_STYLE(PF_UNDERLINE, cur_pf_color);  
+    
+    i += 6; // skip $icon: 
+    if (core_data->use_utf8 && core_data->use_icons)
+    {
+      // print icon 
+      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != ':')
+      { buf[buf_pos++] = sec[i++]; }
+      BUF_DUMP(); 
+      // skip :text$
+      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$')
+      { i++; }
+    }
+    else // no icons
+    {
+      // skip icon f.e. :
+      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != ':')
+      { i++; }
+      i++; // skip the ':'
+      // print text after :
+      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$')
+      { buf[buf_pos++] = sec[i++]; }
+      BUF_DUMP(); 
+    }
+
+    skip_char = true; 
+  }
 
   #undef buf_pos
   #undef i     

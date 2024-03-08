@@ -5,13 +5,13 @@
 
 [location] false 
 
-[utf8]  true 
+[utf8]  true // test
 [icons] true
 
 // black, red, green, yellow, blue, purple, cyan, white
 [title_color] red 
 [border] "" // ascii: " " "-" "_" "." nerdfont: "" "" "" "" "󰥛" "󱑻" "󱑼
-[seperator_left]  ""
+[seperator_left]  "" // test
 [seperator_right] ""
 // [seperator_left]  ""
 // [seperator_right] ""
@@ -23,7 +23,7 @@
 [link_icon]    "" //      
 
 // builtin-sheets
-[sheet_dir_rel] "sheets/builtin_sheets/"
+[sheet_dir_rel] "sheets/builtin_sheets/" // test
 
 // custom sheet paths
 [sheet_dir_rel] "sheets\custom_sheets"

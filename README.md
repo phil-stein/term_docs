@@ -119,8 +119,8 @@ void function(char arg);
 
     - disable [utf8] and [icons] in config.doc see [config-file](#config-file) <br>
       
-  - documentation doesnt show up, check if its surrounded by `#`<br>
-    and the tags are surrounded in `|`
+  - custom documentation doesnt show up, check if its surrounded by `#`<br>
+    and the tags are surrounded in `|` <br>
 
 ## customization
 
@@ -178,6 +178,10 @@ to color/style text use `$...$` command and `$$` to reset
     $|$set tag style$$ normal again
     $|$not_tag$|$ $$ $not_tag$ finds this
     $|$\|tag-name\|$$ -> |tag-name|
+```
+to include icons properly use:
+```
+  $icon::icon-text$ -> tunrns to '' if [icons] and [utf8] in config.doc are true, else 'icon-text'
 ```
 
 for more help on custom sheets or general usage use command ``doc -h`` in terminal, <br>
@@ -307,16 +311,15 @@ to open a specific doc documentation via keybind <br>
 
 ## todo
   - [ ] update readme, example section, screenshots, etc.
-  - [ ] maybe change -d to just using keyword with () at the end ?
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
   - [ ] load keys for style.c from file, for custamization
   - [ ] c-syntax in macros, for numbers, strings, etc.
-  - [ ] make sure all sheets use '-' as space in tags
+  - [x] make sure all sheets use '-' as space in tags
   - [ ] replace file_io.c/.h with the one in bovengine
   - [ ] make github release
-  - [ ] have $g_$ for gree and underscore
+  - [ ] have $g_$ for green and underscore
   - [ ] convert into some style format and then print that rather than directly print
     - i.e. use numbers not useb by ascii for styling
     - could then use in non terminal applications

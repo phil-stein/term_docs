@@ -35,7 +35,8 @@ extern "C" {
 #define DOC_PF_STYLE(s, c)        if (core_data->style_act) { PF_STYLE((s), (c)); }
 #define DOC_PF_MODE(s, _fg, _bg)  if (core_data->style_act) { PF_MODE((s), (_fg), (_bg)); }
 #define DOC_PF_MODE_RESET()       if (core_data->style_act) { PF_MODE_RESET();  } 
-#define DOC_PF_STYLE_RESET()      if (core_data->style_act) { PF_STYLE_RESET(); }
+// #define DOC_PF_STYLE_RESET()      if (core_data->style_act) { PF_STYLE_RESET(); }
+#define DOC_PF_STYLE_RESET()      if (core_data->style_act) { PF_MODE_RESET(); }
 
 #define DOC_P_INT(var)                        \
   if (core_data->style_act) { P_INT(var); }   \

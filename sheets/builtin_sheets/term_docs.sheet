@@ -82,6 +82,21 @@
   ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
 |term_docs|
+|troubleshoot|trouble-shoot|
+  $g$output text is messed up$$:
+    try adding '-c' to your command to disable syntax highlighting, 
+    some terminals don't support it, like command prompt on windows 
+    on windows the new windows terminal, found in microsoft store, supports it
+    see $|$\|config-file\|$$ to permanently disable highlighting
+
+    disable [utf8] and [icons] in config.doc see $|$\|config-file\|$$
+      
+  $g$custom documentation doesnt show up$$:
+    check if its surrounded by `\\#`
+    and the tags are surrounded in `\|`
+
+#
+|term_docs|
 |custom-sheet|custom-sheets|sheet|sheets|
 |custom-docs|custom-doc|custom|
   documentation is stored in the .sheet files in the sheet folder
@@ -133,6 +148,7 @@
     $~$  use \ to escape \\# inside of tags$$
 
   $_$config file:$$
+    use of colors can be disabled, utf8 and icons can be enabled
     view $|$\|config-file\|$$
   
   ?< https://github.com/phil-stein/term_docs/tree/main >?
@@ -205,7 +221,7 @@
     [utf8]  true 
     [icons] true
     
-    [error_icon] "" // "" "" "󰬟" ""
+    [error_icon]   "" // "" "" "󰬟" ""
     [warning_icon] "" //    
     [info_icon]    "" //   
     [link_icon]    "" //      
@@ -445,7 +461,16 @@
     🛑, , , ,
     ✹, ✚, ✭, ➜, ═, ✖, ✗, ✔, ☒,
 
-    $icon::bash$
+
+    $g$$_$icons$$:
+      $icon::bash$
+      $icon::text$
+      $icon::hello$
+      $icon:icon text:normal text$
+      in text, $icon::icon-text$, continuing text
+      highlighted $r$ $icon::icon-text$ red-text$$ text
+      highlighted $r$$icon::icon-text$red-text$$ text
+      highlighted $r$$icon::icon-text$$$ text
 
   ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
