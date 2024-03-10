@@ -522,9 +522,15 @@ void config_handle_argument(argument_t* arg)
   {
     if (arg->type != ARGUMENT_TYPE_NUMBER)
     { _P_ERR("incorrect argument format for [title_spacing]\n -> number: 0.5, 1.0, ...\n"); return; }
-    else if ( arg->number > 1.0f || arg->number < 0.0f )
+    // else if ( arg->number > 1.0f || arg->number < 0.0f )
+    // { 
+    //   _P_ERR("number given to [title_spacing] isnt between 0.0 and 1.0\n -> %f\n", 
+    //          arg->number); 
+    //   return; 
+    // }
+    else if ( arg->number < 0.0f )
     { 
-      _P_ERR("number given to [title_spacing] isnt between 0.0 and 1.0\n -> %f\n", 
+      _P_ERR("number given to [title_spacing] isnt less than 0.0 \n -> %f\n", 
              arg->number); 
       return; 
     }

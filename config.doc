@@ -15,7 +15,8 @@
 [seperator_right] ""
 // [seperator_left]  ""
 // [seperator_right] ""
-[title_spacing] 0.05
+// [title_spacing] 0.05 // 5% left 95% right
+[title_spacing] 8   // 8 chars left, rest right
 
 [error_icon] "" // "" "" "󰬟" ""
 [warning_icon] "" //    

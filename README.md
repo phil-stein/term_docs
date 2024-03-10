@@ -352,6 +352,7 @@ to open a specific doc documentation via keybind <br>
         - [ ] alignof
         - [ ] nullptr
         - [ ] etc.
+    - [ ] <stdint.h> 
     - [ ] make
     - [ ] cmake
     - [ ] stb

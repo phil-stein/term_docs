@@ -55,8 +55,18 @@ INLINE void style_draw_title(char* title)
   { 
     int width = 0;
     width += strlen(title) +2;
-    int space_l = (f32)(w - width) * core_data->title_spacing; 
-    int space_r = (f32)(w - width) * (1.0f - core_data->title_spacing); 
+    int space_l;
+    int space_r;
+    if (core_data->title_spacing <= 1.0f)
+    {
+      space_l = (f32)(w - width) * core_data->title_spacing; 
+      space_r = (f32)(w - width) * (1.0f - core_data->title_spacing); 
+    }
+    else
+    {
+      space_l = core_data->title_spacing;
+      space_r = (w - width) - core_data->title_spacing;
+    }
     _PF("\n");
     DOC_PF_MODE(PF_NORMAL, fg, PF_BG_BLACK);
     for (int i = 0; i < space_l; ++i) { _PF("%s", core_data->border); }
