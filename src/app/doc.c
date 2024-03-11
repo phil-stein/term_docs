@@ -709,10 +709,50 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
     while (path_len > 0 && path[path_len] != '\\' && path[path_len] != '/') { path_len--; }
     path_len++;
     char* name = path + path_len; // points to path given in sheet inside 'path'
-    while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$')
+    while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$' && sec[i] != ':')
     // { buf[buf_pos++] = sec[i++]; }
     { path[path_len++] = sec[i++]; }
     path[path_len] = '\0';
+    int name_len = strlen(name);
+
+    int  box_width  = core_data->text_box_width;
+    int  box_height = core_data->text_box_height;
+    #define BOX_INDENT_MAX 32
+    char box_indent[BOX_INDENT_MAX];
+    int  box_indent_pos = 0;
+    STRCPY(box_indent, core_data->text_box_indent);
+    // indent, width, height, defined
+    if (sec[i] == ':')
+    {
+      char tmp[64];
+      int  tmp_pos = 0;
+      i++; // skip ':'
+      // read indent
+      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$' && sec[i] != ':')
+      { tmp[tmp_pos++] = sec[i++]; }
+      tmp[tmp_pos] = '\0';
+      int indent_count = atoi(tmp);
+      if (indent_count > BOX_INDENT_MAX) 
+      { P_ERR("$file:<path>:<indent>:<width>:<height>$, max indent is: %d\n", BOX_INDENT_MAX); indent_count = BOX_INDENT_MAX -1; }
+      for (; indent_count > 0; --indent_count) { box_indent[box_indent_pos++] = ' '; }
+      box_indent[box_indent_pos] = '\0';
+      
+      // read width 
+      tmp_pos = 0;
+      i++; // skip ':'
+      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$' && sec[i] != ':')
+      { tmp[tmp_pos++] = sec[i++]; }
+      tmp[tmp_pos] = '\0';
+      box_width = atoi(tmp);
+      
+      // read height 
+      tmp_pos = 0;
+      i++; // skip ':'
+      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$' && sec[i] != ':')
+      { tmp[tmp_pos++] = sec[i++]; }
+      tmp[tmp_pos] = '\0';
+      box_height = atoi(tmp);
+    }
 
     // load file
     char* file;
@@ -740,14 +780,30 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
     // print file
     {
       // PF("%s", file);
-      #define SPACES_10 "~~~~~~~~~~" 
-      char* spaces  = SPACES_10 SPACES_10 SPACES_10 SPACES_10 SPACES_10;
-      int border_width = core_data->text_box_width -1 +2 +1;
+      #define SPACES_10 "          " 
+      #define SPACES_50 SPACES_10 SPACES_10 SPACES_10 SPACES_10 SPACES_10
+      char spaces[]  = SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50;
+      u32 spaces_len = sizeof(spaces) / sizeof(spaces[0]);
+      ERR_CHECK(box_width < spaces_len, 
+                "box_width: %d is max rn bc. spaces string\n", spaces_len);
+      int border_width = box_width -1 +2 +1;
       int file_lines = 0;
       int lines = 0;
-      PF("\n%s╭", core_data->text_box_indent);
-      for (int w = border_width; w > 0; --w) { PF("─"); }
+
+      PF("\r%s╭", box_indent); 
+      for (int w = name_len +3; w > 0; --w) { PF("─"); } 
       PF("╮\n");
+      PF("%s│ %s: │\n", box_indent, name);
+      PF("%s├", box_indent);
+      for (int w = 0; w < border_width; ++w) 
+      { PF(w == name_len+3 ? "┴" : "─"); }
+      if (border_width < name_len+3)
+      {
+        PF("┬");
+        for (int w = (name_len +3) - border_width -1; w > 0; --w) { PF("─"); } 
+        PF("╯\n");
+      }
+      else { PF("╮\n"); }
 
       int width = 0;
       int last_pos = 0;
@@ -756,24 +812,24 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
         if (file[t] == '\n')
         {
           lines++;
-          if (lines >= core_data->text_box_height)  // check if max lines exceeded
+          if (lines >= box_height)  // check if max lines exceeded
           {
-            PF("%s│ ...", core_data->text_box_indent); 
-            PF("%.*s │", core_data->text_box_width +1 -4, spaces);
+            PF("%s│ ...", box_indent); 
+            PF("%.*s │", box_width +1 -4, spaces);
             PF("\n");
             break;
           }
           else
           {
-            bool includes_newline = width <= core_data->text_box_width;
+            bool includes_newline = width <= box_width;
             file_lines += includes_newline;
-            int real_width = width > core_data->text_box_width ? core_data->text_box_width : width;
-            width = width < core_data->text_box_width ? width : core_data->text_box_width;
+            int real_width = width > box_width ? box_width : width;
+            width = width < box_width ? width : box_width;
             if (includes_newline) { width -= 2; }
 
-            // PF("width: %d, cd->w-w: %d\n", width, core_data->text_box_width -width);
-            PF("%s│ %.*s", core_data->text_box_indent, width, file +last_pos); 
-            PF("%.*s │", core_data->text_box_width -width, spaces);
+            // PF("width: %d, cd->w-w: %d\n", width, box_width -width);
+            PF("%s│ %.*s", box_indent, width, file +last_pos); 
+            PF("%.*s │", box_width -width, spaces);
             PF("\n");
             // if (includes_newline) { width += 2; }
             
@@ -795,7 +851,7 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
         }
         width++;
       }
-      PF("%s╰", core_data->text_box_indent);
+      PF("%s╰", box_indent);
       for (int w = border_width; w > 0; --w) { PF("─"); }
       PF("╯\n");
       P_V(lines);
