@@ -344,6 +344,8 @@ to open a specific doc documentation via keybind <br>
   - [ ] convert image to terminal output ?
   - [ ] make string values in config.doc be abled to have "..." or '...'
   - [ ] add [print] or print() to config.doc
+  - [ ] add $file:path/to/file.txt$ to print out contents of file
+  - [ ] add $sheet:tag$ to print contents of sheet
   - [ ] more documentation
     - [ ] c keywords i dont have yet
       - [ ] c11/c23 stuff ?

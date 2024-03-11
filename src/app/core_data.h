@@ -39,6 +39,9 @@ typedef struct core_data_t
   char sheet_paths[CORE_SHEET_PATHS_MAX][CORE_PATH_MAX];
   int  sheet_paths_len;
 
+  char text_box_indent[CORE_ICONS_MAX];
+  int  text_box_width;
+  int  text_box_height;
 }core_data_t;
 #define CORE_DATA_INIT()                \
 {                                       \
@@ -57,6 +60,9 @@ typedef struct core_data_t
   .seperator_right        = "",        \
   .border                 = "",        \
   .sheet_paths_len        = 0,          \
+  .text_box_indent        = "    ",     \
+  .text_box_width         = 80,         \
+  .text_box_height        = 40,         \
 }
   // .border                 = "",    \x
 

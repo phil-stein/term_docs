@@ -15,6 +15,9 @@ u32 cur_pf_style = PF_NORMAL;
 u32 default_pf_color = PF_WHITE; 
 u32 default_pf_style = PF_NORMAL;
 
+#define CUR_FILE_PATH_MAX 256
+char cur_file_path[CUR_FILE_PATH_MAX];
+
 // @TODO: make keword an array and check all keywords are in section
 void doc_search_dir(const char* dir_path, const char** keywords, int keywords_len, int* n)
 {
@@ -174,6 +177,7 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
         DOC_PF_COLOR(PF_WHITE);
         PF(": %d\n", lines_count);
       }
+      STRCPY(cur_file_path, path);
       doc_print_section(txt + start, end - start, keywords, keywords_len, file, lines_count);
       sections_found_count++;
     }
@@ -681,7 +685,132 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
       { buf[buf_pos++] = sec[i++]; }
       BUF_DUMP(); 
     }
+  }
 
+  // file -> $file:path/to/file.txt$
+  if (i+5 < sec_len   &&
+       sec[i]   == '$' && 
+       (sec[i+1] == 'f' || sec[i+1] == 'F') && 
+       (sec[i+2] == 'i' || sec[i+2] == 'I') && 
+       (sec[i+3] == 'l' || sec[i+3] == 'L') && 
+       (sec[i+4] == 'e' || sec[i+4] == 'E') && 
+       sec[i+5] == ':' )
+  { 
+    BUF_DUMP(); 
+    // SET_STYLE(PF_UNDERLINE, cur_pf_color);  
+    
+    i += 6; // skip $file: 
+    
+    // get path 
+    char path[256];
+    int  path_len = 0;
+    STRCPY(path, cur_file_path);
+    path_len = strlen(path);
+    while (path_len > 0 && path[path_len] != '\\' && path[path_len] != '/') { path_len--; }
+    path_len++;
+    char* name = path + path_len; // points to path given in sheet inside 'path'
+    while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$')
+    // { buf[buf_pos++] = sec[i++]; }
+    { path[path_len++] = sec[i++]; }
+    path[path_len] = '\0';
+
+    // load file
+    char* file;
+    int file_len;
+    {
+      FILE* f;
+      f = fopen(path, "rb");
+      if (f == NULL) { goto ERROR_LABEL; }
+      // get len of file
+      fseek(f, 0, SEEK_END);
+      file_len = ftell(f);
+      if (file_len <= 0) { goto ERROR_LABEL; }
+      fseek(f, 0, SEEK_SET);
+      file_len++;   // for null-terminator
+      // alloc memory 
+      file = calloc(1, file_len);
+      if (file == NULL) { goto ERROR_LABEL; }
+      // fill text buffer
+      fread(file, sizeof(char), file_len, f);
+      if (strlen(file) <= 0) { FREE(file); goto ERROR_LABEL; }
+      fclose(f);
+      file[file_len -1] = '\0';
+    }
+
+    // print file
+    {
+      // PF("%s", file);
+      #define SPACES_10 "~~~~~~~~~~" 
+      char* spaces  = SPACES_10 SPACES_10 SPACES_10 SPACES_10 SPACES_10;
+      int border_width = core_data->text_box_width -1 +2 +1;
+      int file_lines = 0;
+      int lines = 0;
+      PF("\n%s╭", core_data->text_box_indent);
+      for (int w = border_width; w > 0; --w) { PF("─"); }
+      PF("╮\n");
+
+      int width = 0;
+      int last_pos = 0;
+      for (int t = 0; t < file_len; ++t)
+      {
+        if (file[t] == '\n')
+        {
+          lines++;
+          if (lines >= core_data->text_box_height)  // check if max lines exceeded
+          {
+            PF("%s│ ...", core_data->text_box_indent); 
+            PF("%.*s │", core_data->text_box_width +1 -4, spaces);
+            PF("\n");
+            break;
+          }
+          else
+          {
+            bool includes_newline = width <= core_data->text_box_width;
+            file_lines += includes_newline;
+            int real_width = width > core_data->text_box_width ? core_data->text_box_width : width;
+            width = width < core_data->text_box_width ? width : core_data->text_box_width;
+            if (includes_newline) { width -= 2; }
+
+            // PF("width: %d, cd->w-w: %d\n", width, core_data->text_box_width -width);
+            PF("%s│ %.*s", core_data->text_box_indent, width, file +last_pos); 
+            PF("%.*s │", core_data->text_box_width -width, spaces);
+            PF("\n");
+            // if (includes_newline) { width += 2; }
+            
+            // last_pos += real_width +1;
+            last_pos += real_width;
+            if (includes_newline) { last_pos = t +1; }
+            else 
+            { 
+              // last_pos -= 1; 
+              t = last_pos -1;
+            }
+            // if (includes_newline) { last_pos += 2; }
+            
+            // last_pos += real_width + (includes_newline ? 2 : 0);
+            // t = last_pos -1;
+            // t = last_pos;
+          }
+          width = 0;
+        }
+        width++;
+      }
+      PF("%s╰", core_data->text_box_indent);
+      for (int w = border_width; w > 0; --w) { PF("─"); }
+      PF("╯\n");
+      P_V(lines);
+    }
+    
+    FREE(file);
+    goto  END_LABEL;
+
+  ERROR_LABEL:;
+    PF_COLOR(PF_RED);
+    PF("[ERROR] coudnt find $file:%s$\n", name);
+    PF_COLOR(cur_pf_color);
+
+  END_LABEL:;
+    // BUF_DUMP(); 
     skip_char = true; 
   }
 

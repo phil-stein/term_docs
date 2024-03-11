@@ -472,6 +472,9 @@
       highlighted $r$$icon::icon-text$red-text$$ text
       highlighted $r$$icon::icon-text$$$ text
 
+    $file:../test_01.txt$
+    $file:../doesnt_exist.txt$
+
   ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
 |term_docs|
