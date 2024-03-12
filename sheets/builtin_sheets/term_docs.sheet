@@ -472,18 +472,22 @@
       highlighted $r$$icon::icon-text$red-text$$ text
       highlighted $r$$icon::icon-text$$$ text
 
-    $file:../test_01.txt$
+    $file:"../test_01.txt"$
     
-    $file:../test_01.txt:2:40:5$
-    $file:../test_01.txt:2:40:5$
+    $file:"../test_01.txt":2:40:5$
+    $file:"../test_01.txt":2:40:5$
     
-    $file:../test_01.txt:8:10:10$
+    $file:"../test_01.txt":8:10:10$
     
-    $file:../test_02.txt$
+    $file:"../test_02.txt"$
     
-    $file:../test_02.txt:4:40:40$
+    $file:"../test_02.txt":4:40:40$
     
-    $file:../doesnt_exist.txt$
+    $file:"../doesnt_exist.txt"$
+    
+    $file:"../test_01.txt":2:120:5$
+
+    $doc:"calloc"$
 
   ?< https://github.com/phil-stein/term_docs/tree/main >?
 #

@@ -54,5 +54,7 @@
     - <leader>d       -> open debug ui, opens automatically
   $$
 
+  $file:"C:/Users/Lillifee/AppData/Local/nvim/README.md":2:80:999$
+
   ?< https://github.com/phil-stein/term_docs >?
 #

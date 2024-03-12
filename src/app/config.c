@@ -20,7 +20,7 @@ int   c = 0;  // current char in txt[c]
 
 void config_read_config_file(const char* path, bool print_config)
 {
-  core_data_t* core_data = core_data_get();
+  // core_data_t* core_data = core_data_get();
 
   if (!check_file_exists(path)) { _P_ERR("couldnt find config file\n"); return; }
   txt = read_text_file_len(path, &txt_len);
@@ -203,7 +203,7 @@ void config_read_config_file(const char* path, bool print_config)
 
 void config_handle_argument(argument_t* arg)
 {
-  core_data_t* core_data = core_data_get();
+  // core_data_t* core_data = core_data_get();
 
   // P_STR(name_buf);
   // P_STR(value_buf);

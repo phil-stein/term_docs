@@ -80,7 +80,7 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
   int txt_len = 0;
   char* txt = read_text_file_len(path, &txt_len);
 
-  core_data_t* core_data = core_data_get();
+  // core_data_t* core_data = core_data_get();
   
   // P_STR(path);
   
@@ -138,10 +138,10 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
           
           if (keyword_found) 
           {
-            // // PF("in loop: "); P_BOOL(keyword_found);
+            // // DOC_PF("in loop: "); P_BOOL(keyword_found);
             // for (int c = 0; c  < strlen(keyword); ++c)
-            // { PF("%c", txt[section +c]); }
-            // PF("\n");
+            // { DOC_PF("%c", txt[section +c]); }
+            // DOC_PF("\n");
   
             keyword_found_count++; 
             
@@ -165,17 +165,17 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
       if (core_data->print_loc_act)
       {
         DOC_PF_COLOR(PF_CYAN);
-        PF("location");
+        DOC_PF("location");
         DOC_PF_COLOR(PF_WHITE);
-        PF(":\n -> ");
+        DOC_PF(":\n -> ");
         DOC_PF_COLOR(PF_CYAN);
-        PF("file"); 
+        DOC_PF("file"); 
         DOC_PF_COLOR(PF_WHITE);
-        PF(": %s\n -> ", path);
+        DOC_PF(": %s\n -> ", path);
         DOC_PF_COLOR(PF_CYAN);
-        PF("line");
+        DOC_PF("line");
         DOC_PF_COLOR(PF_WHITE);
-        PF(": %d\n", lines_count);
+        DOC_PF(": %d\n", lines_count);
       }
       STRCPY(cur_file_path, path);
       doc_print_section(txt + start, end - start, keywords, keywords_len, file, lines_count);
@@ -196,7 +196,7 @@ void doc_print_section(char* sec, int sec_len, const char** keywords, int keywor
 {
   // core_data_t* core_data = core_data_get();
   
-  char _keywords[128];
+  char _keywords[128] = "";
   for (int i = 0; i < keywords_len; ++i)
   { strcat(_keywords, " "); strcat(_keywords, keywords[i]); }
 
@@ -213,12 +213,12 @@ void doc_print_section(char* sec, int sec_len, const char** keywords, int keywor
   
 #define BUF_DUMP()        \
     buf[buf_pos] = '\0';  \
-    PF("%s", buf);        \
+    DOC_PF("%s", buf);        \
     buf_pos = 0;
 
 #define BUF_DUMP_OFFSET(offset) \
     buf[buf_pos] = '\0';        \
-    PF("%s", buf +(offset));    \
+    DOC_PF("%s", buf +(offset));    \
     buf_pos = 0;
 
 #define DUMP_COLORED(n, col)                              \
@@ -232,7 +232,7 @@ void doc_print_section(char* sec, int sec_len, const char** keywords, int keywor
     }
 
 #define SET_STYLE(m, c) if (core_data->style_act) { PF_STYLE((m), (c)); cur_pf_style = (m); cur_pf_color = (c); }
-#define SET_COLOR(c)    if (core_data->style_act) { PF_COLOR((c)); cur_pf_color = (c); }
+#define SET_COLOR(c)    if (core_data->style_act) { DOC_PF_COLOR((c)); cur_pf_color = (c); }
 
 #define RESET_STYLE() if (core_data->style_act) { PF_MODE_RESET(); RESET_DEFAULT_STYLE(); cur_pf_style = PF_NORMAL; cur_pf_color = PF_WHITE; }
 
@@ -241,17 +241,17 @@ void doc_print_section(char* sec, int sec_len, const char** keywords, int keywor
 
 void doc_color_code_section(char* sec, int len)
 {
-  core_data_t* core_data = core_data_get();
+  // core_data_t* core_data = core_data_get();
   // @NOTE: no syntax highlighting
   // if (!core_data->style_act)
   // {
-  //   // PF("%s\n", sec);
+  //   // DOC_PF("%s\n", sec);
   //   u32 i = 0;
   //   while (sec[i] != '\0')
   //   {
-  //     if (sec[i] == '\r') { PF("CR"); }
-  //     if (sec[i] == '\n') { PF("*"); }
-  //     PF("%c", sec[i++]);
+  //     if (sec[i] == '\r') { DOC_PF("CR"); }
+  //     if (sec[i] == '\n') { DOC_PF("*"); }
+  //     DOC_PF("%c", sec[i++]);
   //   }
   //   return;
   // }
@@ -393,9 +393,9 @@ void doc_color_code_section(char* sec, int len)
 
   }
   buf[buf_pos] = '\0';
-  PF("%s", buf);
-  PF("\n");
-  PF("\n");   // twice bc. cutting off in for (len -1)
+  DOC_PF("%s", buf);
+  DOC_PF("\n");
+  DOC_PF("\n");   // twice bc. cutting off in for (len -1)
   free(buf);
 
 }
@@ -437,283 +437,300 @@ void doc_color_code_escape_chars(char* sec, char* buf, int* buf_pos_ptr, int* i_
 void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_ptr, int* i_ptr, bool* skip_char_ptr, bool* syntax)
 {
   #define buf_pos   (*buf_pos_ptr)
-  #define i         (*i_ptr)
+  #define sec_pos   (*i_ptr)
   #define skip_char (*skip_char_ptr)
   
-  core_data_t* core_data = core_data_get();
+  
+  // core_data_t* core_data = core_data_get();
 
-  if (sec[i] == '$' && sec[i+1] == '$')                             // reset to normal
+  if (sec[sec_pos] == '$' && sec[sec_pos+1] == '$')                             // reset to normal
   { 
     BUF_DUMP(); RESET_STYLE();  SET_STYLE(default_pf_style, default_pf_color); 
-    (*syntax) = true; skip_char = true; i++; 
+    (*syntax) = true; skip_char = true; sec_pos++; 
   }
   // white
-  if (i+6 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'w' || sec[i+1] == 'W') && 
-      (sec[i+2] == 'h' || sec[i+2] == 'H') && 
-      (sec[i+3] == 'i' || sec[i+3] == 'I') && 
-      (sec[i+4] == 't' || sec[i+4] == 'T') && 
-      (sec[i+5] == 'e' || sec[i+5] == 'E') && 
-       sec[i+6] == '$' )   // set color to white
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_WHITE); skip_char = true; i += 6; }
-  if (i+2 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'w' || sec[i+1] == 'W') && 
-       sec[i+2] == '$' )   // set color to white
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_WHITE); skip_char = true; i += 2; }
+  if (sec_pos+6 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'w' || sec[sec_pos+1] == 'W') && 
+      (sec[sec_pos+2] == 'h' || sec[sec_pos+2] == 'H') && 
+      (sec[sec_pos+3] == 'i' || sec[sec_pos+3] == 'I') && 
+      (sec[sec_pos+4] == 't' || sec[sec_pos+4] == 'T') && 
+      (sec[sec_pos+5] == 'e' || sec[sec_pos+5] == 'E') && 
+       sec[sec_pos+6] == '$' )   // set color to white
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_WHITE); skip_char = true; sec_pos += 6; }
+  if (sec_pos+2 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'w' || sec[sec_pos+1] == 'W') && 
+       sec[sec_pos+2] == '$' )   // set color to white
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_WHITE); skip_char = true; sec_pos += 2; }
   // red
-  if (i+4 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'r' || sec[i+1] == 'R') &&                         
-      (sec[i+2] == 'e' || sec[i+2] == 'E') && 
-      (sec[i+3] == 'd' || sec[i+3] == 'D') && 
-       sec[i+4] == '$')    // set color to red
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_RED); skip_char = true; i += 4; }
-  if (i+2 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'r' || sec[i+1] == 'R') &&                         
-       sec[i+2] == '$')    // set color to red
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_RED); skip_char = true; i += 2; }
+  if (sec_pos+4 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'r' || sec[sec_pos+1] == 'R') &&                         
+      (sec[sec_pos+2] == 'e' || sec[sec_pos+2] == 'E') && 
+      (sec[sec_pos+3] == 'd' || sec[sec_pos+3] == 'D') && 
+       sec[sec_pos+4] == '$')    // set color to red
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_RED); skip_char = true; sec_pos += 4; }
+  if (sec_pos+2 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'r' || sec[sec_pos+1] == 'R') &&                         
+       sec[sec_pos+2] == '$')    // set color to red
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_RED); skip_char = true; sec_pos += 2; }
   // black 
-  if (i+6 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'b' || sec[i+1] == 'B') && 
-      (sec[i+2] == 'l' || sec[i+2] == 'L') && 
-      (sec[i+3] == 'a' || sec[i+3] == 'A') && 
-      (sec[i+4] == 'c' || sec[i+4] == 'C') && 
-      (sec[i+5] == 'k' || sec[i+5] == 'K') && 
-       sec[i+6] == '$' )   // set color to black
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_BLACK); skip_char = true; i += 6; }
+  if (sec_pos+6 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'b' || sec[sec_pos+1] == 'B') && 
+      (sec[sec_pos+2] == 'l' || sec[sec_pos+2] == 'L') && 
+      (sec[sec_pos+3] == 'a' || sec[sec_pos+3] == 'A') && 
+      (sec[sec_pos+4] == 'c' || sec[sec_pos+4] == 'C') && 
+      (sec[sec_pos+5] == 'k' || sec[sec_pos+5] == 'K') && 
+       sec[sec_pos+6] == '$' )   // set color to black
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_BLACK); skip_char = true; sec_pos += 6; }
   // green
-  if (i+6 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'g' || sec[i+1] == 'G') && 
-      (sec[i+2] == 'r' || sec[i+2] == 'R') && 
-      (sec[i+3] == 'e' || sec[i+3] == 'E') && 
-      (sec[i+4] == 'e' || sec[i+4] == 'E') && 
-      (sec[i+5] == 'n' || sec[i+5] == 'N') && 
-       sec[i+6] == '$' )   // set color to green
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_GREEN); skip_char = true; i += 6; }
-  if (i+2 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'g' || sec[i+1] == 'G') && 
-       sec[i+2] == '$' )   // set color to green
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_GREEN); skip_char = true; i += 2; }
+  if (sec_pos+6 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'g' || sec[sec_pos+1] == 'G') && 
+      (sec[sec_pos+2] == 'r' || sec[sec_pos+2] == 'R') && 
+      (sec[sec_pos+3] == 'e' || sec[sec_pos+3] == 'E') && 
+      (sec[sec_pos+4] == 'e' || sec[sec_pos+4] == 'E') && 
+      (sec[sec_pos+5] == 'n' || sec[sec_pos+5] == 'N') && 
+       sec[sec_pos+6] == '$' )   // set color to green
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_GREEN); skip_char = true; sec_pos += 6; }
+  if (sec_pos+2 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'g' || sec[sec_pos+1] == 'G') && 
+       sec[sec_pos+2] == '$' )   // set color to green
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_GREEN); skip_char = true; sec_pos += 2; }
   // yellow
-  if (i+7 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'y' || sec[i+1] == 'Y') && 
-      (sec[i+2] == 'e' || sec[i+2] == 'E') && 
-      (sec[i+3] == 'l' || sec[i+3] == 'L') && 
-      (sec[i+4] == 'l' || sec[i+4] == 'L') && 
-      (sec[i+5] == 'o' || sec[i+5] == 'O') && 
-      (sec[i+6] == 'w' || sec[i+6] == 'W') && 
-       sec[i+7] == '$' )   // set color to yellow
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_YELLOW); skip_char = true; i += 7; }
-  if (i+2 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'y' || sec[i+1] == 'Y') && 
-       sec[i+2] == '$' )   // set color to yellow
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_YELLOW); skip_char = true; i += 2; }
+  if (sec_pos+7 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'y' || sec[sec_pos+1] == 'Y') && 
+      (sec[sec_pos+2] == 'e' || sec[sec_pos+2] == 'E') && 
+      (sec[sec_pos+3] == 'l' || sec[sec_pos+3] == 'L') && 
+      (sec[sec_pos+4] == 'l' || sec[sec_pos+4] == 'L') && 
+      (sec[sec_pos+5] == 'o' || sec[sec_pos+5] == 'O') && 
+      (sec[sec_pos+6] == 'w' || sec[sec_pos+6] == 'W') && 
+       sec[sec_pos+7] == '$' )   // set color to yellow
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_YELLOW); skip_char = true; sec_pos += 7; }
+  if (sec_pos+2 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'y' || sec[sec_pos+1] == 'Y') && 
+       sec[sec_pos+2] == '$' )   // set color to yellow
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_YELLOW); skip_char = true; sec_pos += 2; }
   // blue
-  if (i+5 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'b' || sec[i+1] == 'B') && 
-      (sec[i+2] == 'l' || sec[i+2] == 'L') && 
-      (sec[i+3] == 'u' || sec[i+3] == 'U') && 
-      (sec[i+4] == 'e' || sec[i+4] == 'E') && 
-       sec[i+5] == '$' )   // set color to blue
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_BLUE); skip_char = true; i += 5; }
-  if (i+2 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'b' || sec[i+1] == 'B') && 
-       sec[i+2] == '$' )   // set color to blue
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_BLUE); skip_char = true; i += 2; }
+  if (sec_pos+5 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'b' || sec[sec_pos+1] == 'B') && 
+      (sec[sec_pos+2] == 'l' || sec[sec_pos+2] == 'L') && 
+      (sec[sec_pos+3] == 'u' || sec[sec_pos+3] == 'U') && 
+      (sec[sec_pos+4] == 'e' || sec[sec_pos+4] == 'E') && 
+       sec[sec_pos+5] == '$' )   // set color to blue
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_BLUE); skip_char = true; sec_pos += 5; }
+  if (sec_pos+2 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'b' || sec[sec_pos+1] == 'B') && 
+       sec[sec_pos+2] == '$' )   // set color to blue
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_BLUE); skip_char = true; sec_pos += 2; }
   // purple
-  if (i+7 < sec_len   &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'p' || sec[i+1] == 'P') && 
-      (sec[i+2] == 'u' || sec[i+2] == 'U') && 
-      (sec[i+3] == 'r' || sec[i+3] == 'R') && 
-      (sec[i+4] == 'p' || sec[i+4] == 'P') && 
-      (sec[i+5] == 'l' || sec[i+5] == 'L') && 
-      (sec[i+6] == 'e' || sec[i+6] == 'E') && 
-       sec[i+7] == '$' )   // set color to purple
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_PURPLE); skip_char = true; i += 7; }
-  if (i+2 < sec_len   &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'p' || sec[i+1] == 'P') && 
-       sec[i+2] == '$' )   // set color to purple
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_PURPLE); skip_char = true; i += 2; }
+  if (sec_pos+7 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'p' || sec[sec_pos+1] == 'P') && 
+      (sec[sec_pos+2] == 'u' || sec[sec_pos+2] == 'U') && 
+      (sec[sec_pos+3] == 'r' || sec[sec_pos+3] == 'R') && 
+      (sec[sec_pos+4] == 'p' || sec[sec_pos+4] == 'P') && 
+      (sec[sec_pos+5] == 'l' || sec[sec_pos+5] == 'L') && 
+      (sec[sec_pos+6] == 'e' || sec[sec_pos+6] == 'E') && 
+       sec[sec_pos+7] == '$' )   // set color to purple
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_PURPLE); skip_char = true; sec_pos += 7; }
+  if (sec_pos+2 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'p' || sec[sec_pos+1] == 'P') && 
+       sec[sec_pos+2] == '$' )   // set color to purple
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_PURPLE); skip_char = true; sec_pos += 2; }
   // cyan
-  if (i+5 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'c' || sec[i+1] == 'C') && 
-      (sec[i+2] == 'y' || sec[i+2] == 'Y') && 
-      (sec[i+3] == 'a' || sec[i+3] == 'A') && 
-      (sec[i+4] == 'n' || sec[i+4] == 'N') && 
-       sec[i+5] == '$' )   // set color to cyan
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_CYAN); skip_char = true; i += 5; }
-  if (i+2 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'c' || sec[i+1] == 'C') && 
-       sec[i+2] == '$' )   // set color to cyan
-  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_CYAN); skip_char = true; i += 2; }
+  if (sec_pos+5 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'c' || sec[sec_pos+1] == 'C') && 
+      (sec[sec_pos+2] == 'y' || sec[sec_pos+2] == 'Y') && 
+      (sec[sec_pos+3] == 'a' || sec[sec_pos+3] == 'A') && 
+      (sec[sec_pos+4] == 'n' || sec[sec_pos+4] == 'N') && 
+       sec[sec_pos+5] == '$' )   // set color to cyan
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_CYAN); skip_char = true; sec_pos += 5; }
+  if (sec_pos+2 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'c' || sec[sec_pos+1] == 'C') && 
+       sec[sec_pos+2] == '$' )   // set color to cyan
+  { BUF_DUMP(); SET_STYLE(cur_pf_style, PF_CYAN); skip_char = true; sec_pos += 2; }
 
   // -- modes -- 
 
   // italic
-  if (i+7 < sec_len   &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'i' || sec[i+1] == 'I') && 
-      (sec[i+2] == 't' || sec[i+2] == 'T') && 
-      (sec[i+3] == 'a' || sec[i+3] == 'A') && 
-      (sec[i+4] == 'l' || sec[i+4] == 'L') && 
-      (sec[i+5] == 'i' || sec[i+5] == 'I') && 
-      (sec[i+6] == 'c' || sec[i+6] == 'C') && 
-       sec[i+7] == '$' )
-  { BUF_DUMP(); SET_STYLE(PF_ITALIC, cur_pf_color); skip_char = true; i += 7; }
-  if (i+2 < sec_len   &&
-       sec[i]   == '$' && 
-       sec[i+1] == '/' && 
-       sec[i+2] == '$' )
-  { BUF_DUMP(); SET_STYLE(PF_ITALIC, cur_pf_color); skip_char = true; i += 2; }
+  if (sec_pos+7 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'i' || sec[sec_pos+1] == 'I') && 
+      (sec[sec_pos+2] == 't' || sec[sec_pos+2] == 'T') && 
+      (sec[sec_pos+3] == 'a' || sec[sec_pos+3] == 'A') && 
+      (sec[sec_pos+4] == 'l' || sec[sec_pos+4] == 'L') && 
+      (sec[sec_pos+5] == 'i' || sec[sec_pos+5] == 'I') && 
+      (sec[sec_pos+6] == 'c' || sec[sec_pos+6] == 'C') && 
+       sec[sec_pos+7] == '$' )
+  { BUF_DUMP(); SET_STYLE(PF_ITALIC, cur_pf_color); skip_char = true; sec_pos += 7; }
+  if (sec_pos+2 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+       sec[sec_pos+1] == '/' && 
+       sec[sec_pos+2] == '$' )
+  { BUF_DUMP(); SET_STYLE(PF_ITALIC, cur_pf_color); skip_char = true; sec_pos += 2; }
   // dim
-  if (i+4 < sec_len   &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 'd' || sec[i+1] == 'D') && 
-      (sec[i+2] == 'i' || sec[i+2] == 'I') && 
-      (sec[i+3] == 'm' || sec[i+3] == 'M') && 
-       sec[i+4] == '$' )
-  { BUF_DUMP(); SET_STYLE(PF_DIM, cur_pf_color); skip_char = true; i += 4; }
+  if (sec_pos+4 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 'd' || sec[sec_pos+1] == 'D') && 
+      (sec[sec_pos+2] == 'i' || sec[sec_pos+2] == 'I') && 
+      (sec[sec_pos+3] == 'm' || sec[sec_pos+3] == 'M') && 
+       sec[sec_pos+4] == '$' )
+  { BUF_DUMP(); SET_STYLE(PF_DIM, cur_pf_color); skip_char = true; sec_pos += 4; }
   // underline
-  if (i+10 < sec_len   &&
-       sec[i]   == '$' && 
-      (sec[i+ 1] == 'u' || sec[i+1] == 'U') && 
-      (sec[i+ 2] == 'n' || sec[i+2] == 'N') && 
-      (sec[i+ 3] == 'd' || sec[i+3] == 'D') && 
-      (sec[i+ 4] == 'e' || sec[i+4] == 'E') && 
-      (sec[i+ 5] == 'r' || sec[i+5] == 'R') && 
-      (sec[i+ 6] == 'l' || sec[i+6] == 'L') && 
-      (sec[i+ 7] == 'i' || sec[i+7] == 'I') && 
-      (sec[i+ 8] == 'n' || sec[i+8] == 'N') && 
-      (sec[i+ 9] == 'e' || sec[i+9] == 'E') && 
-       sec[i+10] == '$' )
-  { BUF_DUMP(); SET_STYLE(PF_UNDERLINE, cur_pf_color);  skip_char = true; i += 10; }
-  if (i+2 < sec_len   &&
-       sec[i]   == '$' && 
-       sec[i+1] == '_' && 
-       sec[i+2] == '$' )
-  { BUF_DUMP(); SET_STYLE(PF_UNDERLINE, cur_pf_color);  skip_char = true; i += 2; }
+  if (sec_pos+10 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+ 1] == 'u' || sec[sec_pos+1] == 'U') && 
+      (sec[sec_pos+ 2] == 'n' || sec[sec_pos+2] == 'N') && 
+      (sec[sec_pos+ 3] == 'd' || sec[sec_pos+3] == 'D') && 
+      (sec[sec_pos+ 4] == 'e' || sec[sec_pos+4] == 'E') && 
+      (sec[sec_pos+ 5] == 'r' || sec[sec_pos+5] == 'R') && 
+      (sec[sec_pos+ 6] == 'l' || sec[sec_pos+6] == 'L') && 
+      (sec[sec_pos+ 7] == 'i' || sec[sec_pos+7] == 'I') && 
+      (sec[sec_pos+ 8] == 'n' || sec[sec_pos+8] == 'N') && 
+      (sec[sec_pos+ 9] == 'e' || sec[sec_pos+9] == 'E') && 
+       sec[sec_pos+10] == '$' )
+  { BUF_DUMP(); SET_STYLE(PF_UNDERLINE, cur_pf_color);  skip_char = true; sec_pos += 10; }
+  if (sec_pos+2 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+       sec[sec_pos+1] == '_' && 
+       sec[sec_pos+2] == '$' )
+  { BUF_DUMP(); SET_STYLE(PF_UNDERLINE, cur_pf_color);  skip_char = true; sec_pos += 2; }
 
 
   // -- info / warning / tag / link --
-  if (i+2 < sec_len    &&
-      sec[i]   == '$' && 
-      sec[i+1] == '~' &&                         
-      sec[i+2] == '$')    
+  if (sec_pos+2 < sec_len    &&
+      sec[sec_pos]   == '$' && 
+      sec[sec_pos+1] == '~' &&                         
+      sec[sec_pos+2] == '$')    
   { 
     BUF_DUMP(); SET_STYLE(STYLE_INFO, COL_INFO);  
-    (*syntax) = false; skip_char = true; i += 2; 
+    (*syntax) = false; skip_char = true; sec_pos += 2; 
   }
-  if (i+2 < sec_len    &&
-      sec[i]   == '$' && 
-      sec[i+1] == '!' &&                         
-      sec[i+2] == '$')    
+  if (sec_pos+2 < sec_len    &&
+      sec[sec_pos]   == '$' && 
+      sec[sec_pos+1] == '!' &&                         
+      sec[sec_pos+2] == '$')    
   { 
     BUF_DUMP(); SET_STYLE(STYLE_WARNING, COL_WARNING);  
-    (*syntax) = false; skip_char = true; i += 2; 
+    (*syntax) = false; skip_char = true; sec_pos += 2; 
   }
-  if (i+2 < sec_len    &&
-      sec[i]   == '$' && 
-      sec[i+1] == '|' &&                         
-      sec[i+2] == '$')   
+  if (sec_pos+2 < sec_len    &&
+      sec[sec_pos]   == '$' && 
+      sec[sec_pos+1] == '|' &&                         
+      sec[sec_pos+2] == '$')   
   { 
     BUF_DUMP(); SET_STYLE(STYLE_TAG, COL_TAG);  
-    (*syntax) = false; skip_char = true; i += 2; 
+    (*syntax) = false; skip_char = true; sec_pos += 2; 
   }
-  if (i+2 < sec_len    &&
-      sec[i]   == '$' && 
-      sec[i+1] == '?' &&                         
-      sec[i+2] == '$')    
+  if (sec_pos+2 < sec_len    &&
+      sec[sec_pos]   == '$' && 
+      sec[sec_pos+1] == '?' &&                         
+      sec[sec_pos+2] == '$')    
   { 
     BUF_DUMP(); SET_STYLE(STYLE_LINK, COL_LINK);  
-    (*syntax) = false; skip_char = true; i += 2; 
+    (*syntax) = false; skip_char = true; sec_pos += 2; 
   }
 
   // -- syntax highlighting --
-  if (i+4 < sec_len    &&
-       sec[i]   == '$' && 
-      (sec[i+1] == 's' || sec[i+1] == 'S') &&                         
-      (sec[i+2] == 'y' || sec[i+2] == 'Y') &&                         
-      (sec[i+3] == 'n' || sec[i+3] == 'N') &&                         
-       sec[i+4] == '$')    
-  { BUF_DUMP(); (*syntax) = !(*syntax); skip_char = true; i += 4; }  // $$ resets it
+  if (sec_pos+4 < sec_len    &&
+       sec[sec_pos]   == '$' && 
+      (sec[sec_pos+1] == 's' || sec[sec_pos+1] == 'S') &&                         
+      (sec[sec_pos+2] == 'y' || sec[sec_pos+2] == 'Y') &&                         
+      (sec[sec_pos+3] == 'n' || sec[sec_pos+3] == 'N') &&                         
+       sec[sec_pos+4] == '$')    
+  { BUF_DUMP(); (*syntax) = !(*syntax); skip_char = true; sec_pos += 4; }  // $$ resets it
   
   // icons -> $icon::bash$
-  if (i+5 < sec_len   &&
-       sec[i]   == '$' && 
-       (sec[i+1] == 'i' || sec[i+1] == 'I') && 
-       (sec[i+2] == 'c' || sec[i+2] == 'C') && 
-       (sec[i+3] == 'o' || sec[i+3] == 'O') && 
-       (sec[i+4] == 'n' || sec[i+4] == 'N') && 
-       sec[i+5] == ':' )
+  if (sec_pos+5 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+       (sec[sec_pos+1] == 'i' || sec[sec_pos+1] == 'I') && 
+       (sec[sec_pos+2] == 'c' || sec[sec_pos+2] == 'C') && 
+       (sec[sec_pos+3] == 'o' || sec[sec_pos+3] == 'O') && 
+       (sec[sec_pos+4] == 'n' || sec[sec_pos+4] == 'N') && 
+       sec[sec_pos+5] == ':' )
   { 
     BUF_DUMP(); 
     // SET_STYLE(PF_UNDERLINE, cur_pf_color);  
     
-    i += 6; // skip $icon: 
+    sec_pos += 6; // skip $icon: 
     if (core_data->use_utf8 && core_data->use_icons)
     {
       // print icon 
-      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != ':')
-      { buf[buf_pos++] = sec[i++]; }
+      while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != ':')
+      { buf[buf_pos++] = sec[sec_pos++]; }
       BUF_DUMP(); 
       // skip :text$
-      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$')
-      { i++; }
+      while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != '$')
+      { sec_pos++; }
     }
     else // no icons
     {
       // skip icon f.e. :
-      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != ':')
-      { i++; }
-      i++; // skip the ':'
+      while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != ':')
+      { sec_pos++; }
+      sec_pos++; // skip the ':'
       // print text after :
-      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$')
-      { buf[buf_pos++] = sec[i++]; }
+      while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != '$')
+      { buf[buf_pos++] = sec[sec_pos++]; }
       BUF_DUMP(); 
     }
   }
 
   // file -> $file:path/to/file.txt$
-  if (i+5 < sec_len   &&
-       sec[i]   == '$' && 
-       (sec[i+1] == 'f' || sec[i+1] == 'F') && 
-       (sec[i+2] == 'i' || sec[i+2] == 'I') && 
-       (sec[i+3] == 'l' || sec[i+3] == 'L') && 
-       (sec[i+4] == 'e' || sec[i+4] == 'E') && 
-       sec[i+5] == ':' )
+  if (sec_pos+5 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+       (sec[sec_pos+1] == 'f' || sec[sec_pos+1] == 'F') && 
+       (sec[sec_pos+2] == 'i' || sec[sec_pos+2] == 'I') && 
+       (sec[sec_pos+3] == 'l' || sec[sec_pos+3] == 'L') && 
+       (sec[sec_pos+4] == 'e' || sec[sec_pos+4] == 'E') && 
+       sec[sec_pos+5] == ':' )
   { 
     BUF_DUMP(); 
     // SET_STYLE(PF_UNDERLINE, cur_pf_color);  
     
-    i += 6; // skip $file: 
+    sec_pos += 6; // skip $file: 
     
     // get path 
-    char path[256];
-    int  path_len = 0;
-    STRCPY(path, cur_file_path);
-    path_len = strlen(path);
-    while (path_len > 0 && path[path_len] != '\\' && path[path_len] != '/') { path_len--; }
-    path_len++;
-    char* name = path + path_len; // points to path given in sheet inside 'path'
-    while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$' && sec[i] != ':')
+    char path_buf[256];
+    int  path_buf_pos = 0;
+    char* name; 
+    char* path;
+    int name_len = 0; 
+    STRCPY(path_buf, cur_file_path);
+    path_buf_pos = strlen(path_buf);
+    while (path_buf_pos > 0 && path_buf[path_buf_pos] != '\\' && path_buf[path_buf_pos] != '/') { path_buf_pos--; }
+    path_buf_pos++;
+  
+    sec_pos++; // skip '"'
+    name = path_buf + path_buf_pos; // points to path given in sheet inside 'path'
+    while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != '"')// && sec[i] != '$' && sec[i] != ':')
     // { buf[buf_pos++] = sec[i++]; }
-    { path[path_len++] = sec[i++]; }
-    path[path_len] = '\0';
-    int name_len = strlen(name);
+    { path_buf[path_buf_pos++] = sec[sec_pos] == '\\' ? '/' : sec[sec_pos]; sec_pos++; }
+    path_buf[path_buf_pos] = '\0';
+    sec_pos++; // skip '"'
+    name_len = strlen(name);
+
+    path = path_buf;
+    // absolute path
+    if (name[0] == '/' || name[0] == '\\' || 
+        name[0] == '%' || name[0] == '~' || name[1] == ':')
+    {
+      path = name;
+    }
+    // P_STR(name);
+    // P_STR(path);
 
     int  box_width  = core_data->text_box_width;
     int  box_height = core_data->text_box_height;
@@ -722,14 +739,14 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
     int  box_indent_pos = 0;
     STRCPY(box_indent, core_data->text_box_indent);
     // indent, width, height, defined
-    if (sec[i] == ':')
+    if (sec[sec_pos] == ':')
     {
       char tmp[64];
       int  tmp_pos = 0;
-      i++; // skip ':'
+      sec_pos++; // skip ':'
       // read indent
-      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$' && sec[i] != ':')
-      { tmp[tmp_pos++] = sec[i++]; }
+      while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != '$' && sec[sec_pos] != ':')
+      { tmp[tmp_pos++] = sec[sec_pos++]; }
       tmp[tmp_pos] = '\0';
       int indent_count = atoi(tmp);
       if (indent_count > BOX_INDENT_MAX) 
@@ -739,140 +756,137 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
       
       // read width 
       tmp_pos = 0;
-      i++; // skip ':'
-      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$' && sec[i] != ':')
-      { tmp[tmp_pos++] = sec[i++]; }
+      sec_pos++; // skip ':'
+      while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != '$' && sec[sec_pos] != ':')
+      { tmp[tmp_pos++] = sec[sec_pos++]; }
       tmp[tmp_pos] = '\0';
       box_width = atoi(tmp);
       
       // read height 
       tmp_pos = 0;
-      i++; // skip ':'
-      while (i < sec_len && sec[i] != '\n' && sec[i] != '\0' && sec[i] != '$' && sec[i] != ':')
-      { tmp[tmp_pos++] = sec[i++]; }
+      sec_pos++; // skip ':'
+      while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != '$')
+      { tmp[tmp_pos++] = sec[sec_pos++]; }
       tmp[tmp_pos] = '\0';
       box_height = atoi(tmp);
     }
+    doc_color_code_color_codes_print_file(box_indent, box_width, box_height, true, name, name_len, path);
 
-    // load file
-    char* file;
-    int file_len;
-    {
-      FILE* f;
-      f = fopen(path, "rb");
-      if (f == NULL) { goto ERROR_LABEL; }
-      // get len of file
-      fseek(f, 0, SEEK_END);
-      file_len = ftell(f);
-      if (file_len <= 0) { goto ERROR_LABEL; }
-      fseek(f, 0, SEEK_SET);
-      file_len++;   // for null-terminator
-      // alloc memory 
-      file = calloc(1, file_len);
-      if (file == NULL) { goto ERROR_LABEL; }
-      // fill text buffer
-      fread(file, sizeof(char), file_len, f);
-      if (strlen(file) <= 0) { FREE(file); goto ERROR_LABEL; }
-      fclose(f);
-      file[file_len -1] = '\0';
-    }
+    skip_char = true; 
+  }
 
-    // print file
-    {
-      // PF("%s", file);
-      #define SPACES_10 "          " 
-      #define SPACES_50 SPACES_10 SPACES_10 SPACES_10 SPACES_10 SPACES_10
-      char spaces[]  = SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50 SPACES_50;
-      u32 spaces_len = sizeof(spaces) / sizeof(spaces[0]);
-      ERR_CHECK(box_width < spaces_len, 
-                "box_width: %d is max rn bc. spaces string\n", spaces_len);
-      int border_width = box_width -1 +2 +1;
-      int file_lines = 0;
-      int lines = 0;
-
-      PF("\r%s╭", box_indent); 
-      for (int w = name_len +3; w > 0; --w) { PF("─"); } 
-      PF("╮\n");
-      PF("%s│ %s: │\n", box_indent, name);
-      PF("%s├", box_indent);
-      for (int w = 0; w < border_width; ++w) 
-      { PF(w == name_len+3 ? "┴" : "─"); }
-      if (border_width < name_len+3)
-      {
-        PF("┬");
-        for (int w = (name_len +3) - border_width -1; w > 0; --w) { PF("─"); } 
-        PF("╯\n");
-      }
-      else { PF("╮\n"); }
-
-      int width = 0;
-      int last_pos = 0;
-      for (int t = 0; t < file_len; ++t)
-      {
-        if (file[t] == '\n')
-        {
-          lines++;
-          if (lines >= box_height)  // check if max lines exceeded
-          {
-            PF("%s│ ...", box_indent); 
-            PF("%.*s │", box_width +1 -4, spaces);
-            PF("\n");
-            break;
-          }
-          else
-          {
-            bool includes_newline = width <= box_width;
-            file_lines += includes_newline;
-            int real_width = width > box_width ? box_width : width;
-            width = width < box_width ? width : box_width;
-            if (includes_newline) { width -= 2; }
-
-            // PF("width: %d, cd->w-w: %d\n", width, box_width -width);
-            PF("%s│ %.*s", box_indent, width, file +last_pos); 
-            PF("%.*s │", box_width -width, spaces);
-            PF("\n");
-            // if (includes_newline) { width += 2; }
-            
-            // last_pos += real_width +1;
-            last_pos += real_width;
-            if (includes_newline) { last_pos = t +1; }
-            else 
-            { 
-              // last_pos -= 1; 
-              t = last_pos -1;
-            }
-            // if (includes_newline) { last_pos += 2; }
-            
-            // last_pos += real_width + (includes_newline ? 2 : 0);
-            // t = last_pos -1;
-            // t = last_pos;
-          }
-          width = 0;
-        }
-        width++;
-      }
-      PF("%s╰", box_indent);
-      for (int w = border_width; w > 0; --w) { PF("─"); }
-      PF("╯\n");
-      P_V(lines);
-    }
+  // doc -> $doc:path/to/file.txt$
+  if (sec_pos+5 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+       (sec[sec_pos+1] == 'd' || sec[sec_pos+1] == 'D') && 
+       (sec[sec_pos+2] == 'o' || sec[sec_pos+2] == 'O') && 
+       (sec[sec_pos+3] == 'c' || sec[sec_pos+3] == 'C') && 
+       sec[sec_pos+4] == ':' )
+  { 
+    BUF_DUMP(); 
+    // SET_STYLE(PF_UNDERLINE, cur_pf_color);  
     
-    FREE(file);
-    goto  END_LABEL;
+    sec_pos += 5; // skip $doc: 
+    
+    // get path 
+    char cmd_buf[256];
+    int  cmd_buf_pos = 0;
+    sec_pos++; // skip '"'
+    while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != '"')
+    { cmd_buf[cmd_buf_pos++] = sec[sec_pos] == '\\' ? '/' : sec[sec_pos]; sec_pos++; }
+    cmd_buf[cmd_buf_pos] = '\0';
+    sec_pos++; // skip '"'
+    // P_STR(cmd_buf);
+ 
+    // FILE* doc_file = tmpfile();
+    // FILE* doc_file = tmpnam("./doc_cmd.txt");
+    FILE* doc_file = fopen("bin/doc_cmd.tmp", "w+");
+    if (doc_file == NULL) { P_ERR("failed executing $doc:\"%s\"$ output\n", cmd_buf);  goto ERROR_LABEL;}
+    core_data->pf_out = doc_file;
+    int found_count = 0;  // counts found matches for keyword
+    const char* keywords[] = { (const char*)cmd_buf };
+    int keywords_len = 1;
+    P_STR(keywords[0]);
+    core_data->style_act = false;
+    core_data->use_icons = false;
+    for (int i = 0; i < core_data->sheet_paths_len; ++i)
+    {
+      doc_search_dir(core_data->sheet_paths[i], keywords, keywords_len, &found_count);
+    }
+    if (found_count <= 0) { DOC_PF("not find nothing\n"); goto ERROR_LABEL; }
+    core_data->pf_out = stdout;
+    core_data->style_act = true;
+    core_data->use_icons = true;
 
-  ERROR_LABEL:;
-    PF_COLOR(PF_RED);
-    PF("[ERROR] coudnt find $file:%s$\n", name);
-    PF_COLOR(cur_pf_color);
+    fseek(doc_file, 0, SEEK_END);
+    int output_len = ftell(doc_file);
+    fseek(doc_file, 0, SEEK_SET);
+    output_len++;   // for null-terminator
+    // alloc memory 
+    char* output = calloc(1, output_len);
+    if (output == NULL) { P_ERR("failed reading $doc:\"%s\"$ output\n", cmd_buf);  goto ERROR_LABEL;}
+    // fill text buffer
+    fread(output, sizeof(char), output_len, doc_file);
+    if (strlen(output) <= 0) { FREE(output); P_ERR("failed reading $doc:\"%s\"$ output\n", cmd_buf); goto ERROR_LABEL; }
+    fclose(doc_file);
+    output[output_len -1] = '\0';
 
-  END_LABEL:;
-    // BUF_DUMP(); 
+    P_STR(output);
+    int  box_width  = core_data->text_box_width;
+    int  box_height = core_data->text_box_height;
+    #define BOX_INDENT_MAX 32
+    char box_indent[BOX_INDENT_MAX];
+    int  box_indent_pos = 0;
+    STRCPY(box_indent, core_data->text_box_indent);
+    style_print_text_box(box_indent, box_width, box_height, false, output, output_len, cmd_buf, cmd_buf_pos);
+    // style_print_text_box(box_indent, box_width, box_height, file, file_len, cmd_buf, cmd_buf_pos)
+    // doc_color_code_color_codes_print_file(box_indent, box_width, box_height, name, name_len, path);
+    
+    FREE(output);
+    ERROR_LABEL:;
     skip_char = true; 
   }
 
   #undef buf_pos
   #undef i     
   #undef skip_char
+}
+void doc_color_code_color_codes_print_file(const char* box_indent, int box_width, int box_height, bool print_line_nr, const char* name, int name_len, const char* path)
+{
+  // load file
+  char* file;
+  int file_len;
+  {
+    FILE* f;
+    f = fopen(path, "rb");
+    if (f == NULL) { goto ERROR_LABEL; }
+    // get len of file
+    fseek(f, 0, SEEK_END);
+    file_len = ftell(f);
+    if (file_len <= 0) { goto ERROR_LABEL; }
+    fseek(f, 0, SEEK_SET);
+    file_len++;   // for null-terminator
+    // alloc memory 
+    file = calloc(1, file_len);
+    if (file == NULL) { goto ERROR_LABEL; }
+    // fill text buffer
+    fread(file, sizeof(char), file_len, f);
+    if (strlen(file) <= 0) { FREE(file); goto ERROR_LABEL; }
+    fclose(f);
+    file[file_len -1] = '\0';
+  }
+
+  style_print_text_box(box_indent, box_width, box_height, print_line_nr, file, file_len, name, name_len);
+  
+  FREE(file);
+  goto  END_LABEL;
+
+ERROR_LABEL:;
+  DOC_PF_COLOR(PF_RED);
+  DOC_PF("[ERROR] coudnt find $file:\"%s\"$\n", name);
+  DOC_PF_COLOR(cur_pf_color);
+
+END_LABEL:;
 }
 
 #undef BUF_DUMP
@@ -950,7 +964,7 @@ void doc_count_lines_file(const char* path, int* lines)
   }
 
   (*lines) += lines_count;
-  // PF("\"%s\": %d - %d\n", path, lines_count, (*lines));
+  // DOC_PF("\"%s\": %d - %d\n", path, lines_count, (*lines));
   FREE(txt);
 }
 

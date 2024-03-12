@@ -19,6 +19,11 @@ typedef struct core_data_t
   // set in config.doc now
   // char sheets_path[CORE_PATH_MAX];    // path to sheets folder
 
+  // where DOC_PF(), DOC_PF_COLOR(), etc. print to usually stdout
+  // gets initially set in main.c, afterwards used to call doc from 
+  // within doc for $doc:"malloc"$
+  FILE* pf_out;   
+
   bool style_act;                     // use syntax highlighting
   bool style_deact_cmd;               // -c/-color command
   bool print_loc_act;                 // -loc command
@@ -43,30 +48,32 @@ typedef struct core_data_t
   int  text_box_width;
   int  text_box_height;
 }core_data_t;
-#define CORE_DATA_INIT()                \
-{                                       \
-  .style_act              = true,       \
-  .style_deact_cmd        = false,      \
-  .print_loc_act          = false,      \
-  .use_utf8               = false,      \
-  .use_icons              = false,      \
-  .error_icon             = "!",        \
-  .warning_icon           = "!",        \
-  .info_icon              = "~",        \
-  .link_icon              = "?",        \
-  .title_color            = PF_PURPLE,  \
-  .title_spacing          = 0.5f,       \
-  .seperator_left         = "",        \
-  .seperator_right        = "",        \
-  .border                 = "",        \
-  .sheet_paths_len        = 0,          \
-  .text_box_indent        = "    ",     \
-  .text_box_width         = 80,         \
-  .text_box_height        = 40,         \
+#define CORE_DATA_INIT()                  \
+{                                         \
+  .pf_out /*getssetinmain*/ =NULL,        \
+  .style_act                = true,       \
+  .style_deact_cmd          = false,      \
+  .print_loc_act            = false,      \
+  .use_utf8                 = false,      \
+  .use_icons                = false,      \
+  .error_icon               = "!",        \
+  .warning_icon             = "!",        \
+  .info_icon                = "~",        \
+  .link_icon                = "?",        \
+  .title_color              = PF_PURPLE,  \
+  .title_spacing            = 0.5f,       \
+  .seperator_left           = "",        \
+  .seperator_right          = "",        \
+  .border                   = "",        \
+  .sheet_paths_len          = 0,          \
+  .text_box_indent          = "    ",     \
+  .text_box_width           = 80,         \
+  .text_box_height          = 40,         \
 }
   // .border                 = "",    \x
 
-core_data_t* core_data_get();
+extern core_data_t* core_data;
+// core_data_t* core_data_get();
 
 void core_data_init_config_path();
 
