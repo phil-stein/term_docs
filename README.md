@@ -8,7 +8,7 @@ c documentation for the terminal <br>
 works offline and is customizable <br>
 also has search utility functions <br>
 works in [neovim](#neovim) <br>
-most c std library documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm)
+most c std library documentation is based on [tutorialspoint](https://www.tutorialspoint.co://www.tutorialspoint.com/c_standard_library/index.htm) and [cppreference](https://en.cppreference.com)
 
 |                                                             doc                                                             |                                                             search                                                             |
 |:---------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|

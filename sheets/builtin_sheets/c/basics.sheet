@@ -973,6 +973,39 @@ macros:
     -> int: 12
     -> multiple args given
 #
+|__VA_OPTS__|__VA_ARGS__|
+|variadic_arguments|variadic|preprocessor|macro|basics|
+|FOR_EACH|FOR_EACH()|
+  __VA_OPT__(x) lets you access a specific variable in __VA_ARGS__
+
+  example: 
+    // taken from: https://www.scs.stanford.edu/~dm/blog/va-opt.html
+    \#define PARENS ()
+    \#define EXPAND(...)  EXPAND4(EXPAND4(EXPAND4(EXPAND4(__VA_ARGS__))))
+    \#define EXPAND4(...) EXPAND3(EXPAND3(EXPAND3(EXPAND3(__VA_ARGS__))))
+    \#define EXPAND3(...) EXPAND2(EXPAND2(EXPAND2(EXPAND2(__VA_ARGS__))))
+    \#define EXPAND2(...) EXPAND1(EXPAND1(EXPAND1(EXPAND1(__VA_ARGS__))))
+    \#define EXPAND1(...) __VA_ARGS__
+    // @DOC: execute macro for every var in __VA_ARGS__
+    \#define FOR_EACH(macro, ...)                                    \
+    \  __VA_OPT__(EXPAND(FOR_EACH_HELPER(macro, __VA_ARGS__)))
+    \#define FOR_EACH_HELPER(macro, a1, ...)                         \
+    \  macro(a1)                                                     \
+    \  __VA_OPT__(FOR_EACH_AGAIN PARENS (macro, __VA_ARGS__))
+    \#define FOR_EACH_AGAIN() FOR_EACH_HELPER
+
+    enum my_enum { A, B, C };
+    \#define CASE(e) case e: printf("%s\n", \#e);
+    \#define SWITCH(x, ...)         \
+      switch (x)                    \
+      {                             \
+        FOR_EACH(CASE, __VA_ARGS__) \
+      }
+    
+    my_enum e = B;
+    SWITCH(e, A, B, C)
+    -> B
+#
 |c|C|
 |defined|
 |preprocessor|macro|basics|\#|
