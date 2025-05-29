@@ -228,13 +228,13 @@ void doc_print_section(char* sec, int sec_len, const char** keywords, int keywor
     while (j < (n)) { buf[buf_pos++] = sec[i++]; j++; }   \
     BUF_DUMP();                                           \
     SET_COLOR(PF_WHITE);                                  \
-    DOC_PF_MODE_RESET();                                  \
+    DOC_PF_STYLE_RESET();                                 \
     }
 
 #define SET_STYLE(m, c) if (core_data->style_act) { PF_STYLE((m), (c)); cur_pf_style = (m); cur_pf_color = (c); }
 #define SET_COLOR(c)    if (core_data->style_act) { DOC_PF_COLOR((c)); cur_pf_color = (c); }
 
-#define RESET_STYLE() if (core_data->style_act) { PF_MODE_RESET(); RESET_DEFAULT_STYLE(); cur_pf_style = PF_NORMAL; cur_pf_color = PF_WHITE; }
+#define RESET_STYLE() if (core_data->style_act) { PF_STYLE_RESET(); RESET_DEFAULT_STYLE(); cur_pf_style = PF_NORMAL; cur_pf_color = PF_WHITE; }
 
 #define SET_DEFAULT_STYLE(m, c)   if (core_data->style_act) { default_pf_style = (m); default_pf_color = (c); }
 #define RESET_DEFAULT_STYLE()     if (core_data->style_act) { default_pf_style = PF_NORMAL; default_pf_color = PF_WHITE; }

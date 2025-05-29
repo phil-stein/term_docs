@@ -66,12 +66,12 @@ const u32  key_comment_len = sizeof(key_comment) / sizeof(key_comment[0]);
     if (core_data->style_act)                                     \
     {                                                             \
       BUF_DUMP();                                                 \
-      DOC_PF_COLOR(col);                                              \
+      DOC_PF_COLOR(col);                                          \
       int j = 0;                                                  \
       while (j < (n)) { buf[buf_pos++] = txt[txt_pos++]; j++; }   \
       BUF_DUMP();                                                 \
-      DOC_PF_COLOR(PF_WHITE);                                         \
-      DOC_PF_MODE_RESET();                                        \
+      DOC_PF_COLOR(PF_WHITE);                                     \
+      DOC_PF_STYLE_RESET();                                       \
     } else                                                        \
     {                                                             \
       BUF_DUMP();                                                 \
@@ -191,7 +191,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     while (j > 0) { buf[buf_pos++] = txt[txt_pos++]; j--; }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
   }
  
   // -- values --
@@ -207,7 +207,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     while (j > 0) { buf[buf_pos++] = txt[txt_pos++]; j--; }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
   }
   else if (txt[txt_pos] == '"')                        // strings
   {
@@ -218,7 +218,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     buf[buf_pos++] = txt[txt_pos++]; // i++
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
     txt_pos--;
     return true;
   }
@@ -228,7 +228,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     buf[buf_pos++] = txt[txt_pos++]; buf[buf_pos++] = txt[txt_pos++];
     buf[buf_pos++] = txt[txt_pos++];
     BUF_DUMP(); DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
   }
   else if (txt[txt_pos] == '\'' && txt[txt_pos+1] == '\\' && txt[txt_pos +3] == '\'')  // escaped chars
   {
@@ -236,7 +236,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     buf[buf_pos++] = txt[txt_pos++]; buf[buf_pos++] = txt[txt_pos++];
     buf[buf_pos++] = txt[txt_pos++]; buf[buf_pos++] = txt[txt_pos++];
     BUF_DUMP(); DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
   }
   else if (txt[txt_pos] == '\'' && txt[txt_pos+1] == 'u' && txt[txt_pos +6] == '\'')  // unicode chars
   {
@@ -246,7 +246,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     buf[buf_pos++] = txt[txt_pos++]; buf[buf_pos++] = txt[txt_pos++];
     buf[buf_pos++] = txt[txt_pos++];
     BUF_DUMP(); DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
   }
 
   // -- comments --
@@ -274,7 +274,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
   }
   else if (txt[txt_pos] == '/' && txt[txt_pos +1] == '*')
   {
@@ -292,7 +292,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
   } 
 
   // -- macros --
@@ -324,7 +324,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
   }
   // attributes
   else if (txt[txt_pos] == '[' && txt[txt_pos +1] == '[')
@@ -342,7 +342,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     }
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
-    DOC_PF_MODE_RESET();
+    DOC_PF_STYLE_RESET();
   }
   
   return false;
