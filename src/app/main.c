@@ -152,9 +152,10 @@ int main(int argc, char** argv)
     // { DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE); PF(" searching without builtin sheets.\n"); }
     
     // custom doc paths
+    // P_V(core_data->sheet_paths_len);
     for (int i = 0; i < core_data->sheet_paths_len; ++i)
     {
-      // P_STR(core_data->custom_sheet_paths[i]);
+      // PF("sheet_path[%d]: %s\n", i, core_data->sheet_paths[i]);
       doc_search_dir(core_data->sheet_paths[i], (const char**)word_arr, word_arr_len, &found_count);
     }
   }

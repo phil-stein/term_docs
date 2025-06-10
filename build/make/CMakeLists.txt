@@ -39,7 +39,7 @@ target_include_directories(${NAME} PRIVATE ${ROOT_DIR}/src)
 target_include_directories(${NAME} PRIVATE ${ROOT_DIR}/external)
 target_compile_features(   ${NAME} PRIVATE cxx_std_11)
 # target_compile_options(    ${NAME} PRIVATE -Wall -DGLOBAL_DEBUG -DASSETM_NO_ZIP -DDEBUG_TIMER -DDEBUG_OPENGL -DDEBUG_DRAW -DASSET_PATH=\"/Workspace/C/bovengine/_assets/\")
-target_compile_options(    ${NAME} PRIVATE -Wall -DGLOBAL_DEBUG) 
+target_compile_options(    ${NAME} PRIVATE -Wall -DGLOBAL_DEBUG) # -DPF_PRINT_LOCATION) 
 
 if(${CMAKE_GENERATOR} STREQUAL "MinGW Makefiles")
   target_compile_options(    ${NAME} PRIVATE -DDIRS_TO_WALK_BACK_TO_ROOT=1) 

@@ -1,0 +1,44 @@
+
+#
+|odin|Odin|
+|builtin|type|types|
+|nil|false|true|
+|ODIN_OS|Odin_OS_Type|ODIN_ARCH|Odin_Arch_Type|
+  $_$$g$defines/predeclared identifier$$:
+  nil          pointer with zero value
+  false        untyped boolean
+  true         untyped boolean
+  ODIN_OS      an enum of type $g$runtime.Odin_OS_Type$$ specifying 
+               the target platforms operating system
+  ODIN_ARCH    an enum of type $g$runtime.Odin_Arch_Type$$ specifying 
+               the target platforms architecture 
+
+  $_$$g$types$$:
+    $g$Odin_OS_Type$$ :: enum int {
+    	Unknown,
+    	Windows,
+    	Darwin,
+    	Linux,
+    	Essence,
+    	FreeBSD,
+    	OpenBSD,
+    	NetBSD,
+    	Haiku,
+    	WASI,
+    	JS,
+    	Orca,
+    	Freestanding,
+    }
+    $g$Odin_Arch_Type$$ :: enum int {
+    	Unknown,
+    	amd64,
+    	i386,
+    	arm32,
+    	arm64,
+    	wasm32,
+    	wasm64p32,
+    	riscv64,
+    }
+
+?< https://pkg.odin-lang.org/base/builtin/ >?
+#

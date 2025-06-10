@@ -2,7 +2,9 @@
 
 :: --- build  ---
 cd build/make
-cmake -G "MinGW Makefiles" .
+cmake -G "MinGW Makefiles" . -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+:: xcopy compile_commands.json ..\..\
+copy /y compile_commands.json ..\..\compile_commands.json	
 
 :: --- build vs19 ---
 copy /y CMakeLists.txt ../vs19/CMakeLists.txt

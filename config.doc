@@ -10,4 +10,5 @@
 
 // custom sheet paths
 [sheet_dir_rel] sheets\custom_sheets
+[sheet_dir_rel] sheets\odin
 // [sheet_dir] C:\workspace\c\term_docs\sheets\custom_sheets_02

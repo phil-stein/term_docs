@@ -25,7 +25,6 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
   {
     return; 
   }
-  // P_STR(dir_path);
   
 
   // recursively read the directory and its sub-directories
