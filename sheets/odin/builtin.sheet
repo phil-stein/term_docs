@@ -1,7 +1,8 @@
 
 #
 |odin|Odin|
-|builtin|type|types|
+|builtin|compile_time|compile-time|predeclared|identifiers|
+|type|types|
 |nil|false|true|
 |ODIN_OS|Odin_OS_Type|ODIN_ARCH|Odin_Arch_Type|
   $_$$g$defines/predeclared identifier$$:
