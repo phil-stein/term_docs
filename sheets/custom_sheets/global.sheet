@@ -240,6 +240,9 @@
 |P_LOC_U64|P_LOC_U32|P_LOC_U16|P_LOC_U8|
 |P_LOC_F32|P_LOC_F64|
 |P_LOC_BOOL|P_LOC_CHAR|P_LOC_STR|P_LOC_TXT|P_LOC_PTR|
+|PF_BIN8||PF_BIN16|PF_BIN32|
+|P_BIN8||P_BIN16|P_BIN32|
+|binary|bin|
   macros for printing variables
 
   // @DOC: print the different types, e.g. P_INT(variable), highlights variable name cyan
@@ -280,13 +283,71 @@
   \#define P_LOC_TXT(v)   P_TXT(v);  P_LOCATION()    
   \#define P_LOC_PTR(v)   P_PTR(v);  P_LOCATION()
 
-  example: 
-    int var = 123;
+  \#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+  \#define BYTE_TO_BINARY(byte)   \
+    ((byte) & 0x80 ? '1' : '0'),  \
+    ((byte) & 0x40 ? '1' : '0'),  \
+    ((byte) & 0x20 ? '1' : '0'),  \
+    ((byte) & 0x10 ? '1' : '0'),  \
+    ((byte) & 0x08 ? '1' : '0'),  \
+    ((byte) & 0x04 ? '1' : '0'),  \
+    ((byte) & 0x02 ? '1' : '0'),  \
+    ((byte) & 0x01 ? '1' : '0') 
+
+  \#define PF_BIN8(v)  printf(""BYTE_TO_BINARY_PATTERN"\n", BYTE_TO_BINARY(v)); 
+  \#define P_BIN8(v)   PF_COLOR(PF_CYAN); printf("%s", \\#v); PF_STYLE_RESET(); printf(": "); PF_BIN8(v); PF_IF_LOC();
+
+  \#define PF_BIN16(v)  printf(""BYTE_TO_BINARY_PATTERN"."BYTE_TO_BINARY_PATTERN"\n", \
+    BYTE_TO_BINARY(v>>8), BYTE_TO_BINARY(v)); 
+  \#define P_BIN16(v)   PF_COLOR(PF_CYAN); printf("%s", \\#v); PF_STYLE_RESET(); printf(": "); PF_BIN16(v); PF_IF_LOC();
+
+  \#define PF_BIN32(v)  printf(""BYTE_TO_BINARY_PATTERN"."BYTE_TO_BINARY_PATTERN"."BYTE_TO_BINARY_PATTERN"."BYTE_TO_BINARY_PATTERN"\n", \
+    BYTE_TO_BINARY(v>>24), BYTE_TO_BINARY(v>>16), BYTE_TO_BINARY(v>>8), BYTE_TO_BINARY(v)); 
+  \#define P_BIN32(v)   PF_COLOR(PF_CYAN); printf("%s", \\#v); PF_STYLE_RESET(); printf(": "); PF_BIN32(v); PF_IF_LOC();
+
+  example var = 123;
     P_INT(var);
     ->var: 123
     P_LOC_INT(var);
     ->var: 123
     -> -> file: <file>, line: <line-nr>
+#
+|global|global.h|global_h|
+|P_V|P_V()|STR_TYPE|STR_TYPE()|
+|__P_UNKNOWN|__P_BOOL|__P_UNSIGNED|__P_U64|__P_SIGNED|__P_FLOAT|__P_POINTER|
+|TEST_P_V|TEST_P_V()|
+|type|type-agnoiostic|variable|variable-type|variable-name|
+  the P_V($y$v$$) macro prints the given variable $y$v$$ in a type-agnostic way
+  the STR_TYPE($y$v$$) macro expands to the given variable $y$v$$'s type as string
+  
+  __P_UNKNOWN, __P_BOOL, __P_UNSIGNED, __P_U64, __P_SIGNED, __P_FLOAT, 
+  __P_POINTER are $|$\|INLINE\|$$ functions to achieve this
+  dont use them directly, use $|$\|P_INT\|$$ etc.
+
+  TEST_P_V() macros is just a $|$\|INLINE\|$$ function
+  testing functionality of P_V() and STR_TYPE()
+
+  ! uses global_types.h typedefs, i.e. u32, f32, etc.
+
+  example:
+    s32 i = 1234;
+    f32 f = 1234.567f;
+    P_V(i);
+    -> $y$s32$$\|$c$i$$: 1234
+    P_V(f);
+    -> $y$f32$$\|$c$f$$: 1234.567
+    
+    int   i = 1234;
+    float f = 1234.567f;
+    P_V(i);
+    -> $y$s32$$\|$c$i$$: 1234
+    P_V(f);
+    -> $y$f32$$\|$c$f$$: 1234.567
+
+    P_STR(STR_TYPE(i));
+    -> STR_TYPE(i): s32
+    P_STR(STR_TYPE(f));
+    -> STR_TYPE(f): f32
 #
 |global|global.h|global_h|
 |P_ERR|ASSERT|ERR|ERR_CHECK|P_ERR_CHECK|
@@ -334,11 +395,31 @@
 
 #
 |global|global.h|global_h|
+|PRAGA_WARNING|PRAGMA_MESSAGE|PRAGMA_ERROR|
+|warning|message|error|
+|Warning|Message|Error|
+|WARNING|MESSAGE|ERROR|
+|compiler|compile-time|compilation|
+  give compile time warnings / messages / errors
+  ! in clang/msvc all three are just messages
+
+  \#define PRAGMA_WARNING(x) 
+  \#define PRAGMA_MESSAGE(x) 
+  \#define PRAGMA_ERROR(x)   
+  
+  example: 
+    PRAGMA_WARNING(this is a warning);
+    PRAGMA_MESSAGE(this is a message);
+    PRAGMA_ERROR(this is an error);
+#
+|global|global.h|global_h|
 |P_C_VERSION|
 
   // @DOC: print the currently in use version of c
-  \#define P_C_VERSION()                     \
-    if (__STDC_VERSION__ >=  201710L)       \
+  \#define P_C_VERSION()                    \
+    if (__STDC_VERSION__ >  201710L)        \
+    { PF("-- using c23 --\n"); }            \
+    else if (__STDC_VERSION__ >=  201710L)  \
     { PF("-- using c18 --\n"); }            \
     else if (__STDC_VERSION__ >= 201112L)   \
     { PF("-- using c11 --\n"); }            \
@@ -348,7 +429,25 @@
     { PF("-- using c89/c90 --\n"); }
 #
 |global|global.h|global_h|
+|P_COMPILER_VERSION|P_COMPILER_VERSION()|
+|compiler|Compiler|COMPILER|
+|MSC_VER_STR|
+  P_COMPILER_VERSION() prints the currently used compiler 
+  and its version to $|$\|stdout\|$$
+  MSC_VER_STR is a string with the name of the version 
+  defined in _MSC_VER
+
+  ! only supports gcc, clang and msvc
+
+  example:
+    P_COMPILER_VERSION();
+      -> using mingw64 gcc version: 10.3.0
+      -> using clang version: 17.0.3
+      -> using msvc version: 17.9 (2022) | _MSC_VER: 1939 | _MSC_FULL_VER: 193933521
+#
+|global|global.h|global_h|
 |SPRINTF|STRCPY|MALLOC|CALLOC|REALLOC|FREE|
+|ARRFREE|HMFREE|SHFREE|
 
   // @DOC: wrappers around standard functions to make the safer, can be compiled out
   \#define SPRINTF(max, ...)        ASSERT(sprintf(__VA_ARGS__) < (max))                   

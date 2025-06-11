@@ -90,6 +90,16 @@ repos:
     > git remote add origin
     > git push -u origin
 #
+|git|
+|github|init|remote|url|
+  to show a remotes url for
+  push and pull use remote -v
+
+  example: 
+    > git remote -v
+    -> origin  https://github.com/phil-stein/term_docs.git (fetch)
+    -> origin  https://github.com/phil-stein/term_docs.git (push)
+#
 
 branches:
 #

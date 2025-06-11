@@ -46,7 +46,7 @@ void va_start(va_list list, int num_args)
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_va_start.htm >?
 #
 |c|C|
-|va_arg|
+|va_arg|va_args|
 |variadic|arguments|stdarg|stdarg.h|
 type va_arg(va_list list, type)
     get variadic argument of the stack

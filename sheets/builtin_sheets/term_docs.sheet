@@ -82,6 +82,21 @@
   ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
 |term_docs|
+|troubleshoot|trouble-shoot|
+  $g$output text is messed up$$:
+    try adding '-c' to your command to disable syntax highlighting, 
+    some terminals don't support it, like command prompt on windows 
+    on windows the new windows terminal, found in microsoft store, supports it
+    see $|$\|config-file\|$$ to permanently disable highlighting
+
+    disable [utf8] and [icons] in config.doc see $|$\|config-file\|$$
+      
+  $g$custom documentation doesnt show up$$:
+    check if its surrounded by `\\#`
+    and the tags are surrounded in `\|`
+
+#
+|term_docs|
 |custom-sheet|custom-sheets|sheet|sheets|
 |custom-docs|custom-doc|custom|
   documentation is stored in the .sheet files in the sheet folder
@@ -133,22 +148,63 @@
     $~$  use \ to escape \\# inside of tags$$
 
   $_$config file:$$
+    use of colors can be disabled, utf8 and icons can be enabled
     view $|$\|config-file\|$$
   
   ?< https://github.com/phil-stein/term_docs/tree/main >?
 #
 |term_docs|
-|config|config-file|confic.doc|
-|syntax|sheet_dir|sheet_dir_rel|
-|[syntax]|[sheet_dir]|[sheet_dir_rel]|
+|config|config-file|config.doc|
+|syntax|location|sheet_dir|sheet_dir_rel|
+|[syntax]|[location]|[sheet_dir]|[sheet_dir_rel]|
+|utf8|icons|error_icon|warning_icon|info_icon|link_icon|
+|[utf8]|[icons]|[error_icon]|[warning_icon]|[info_icon]|[link_icon]|
 
   config file is "root/config.doc"
- 
-  [syntax]: 
+  $$ 
+  $g$$_$boolean$$: true, false, TRUE, FALSE
+  $g$$_$number$$: 1.0, 0.0, etc.
+  $g$$_$color$$: black, red, green, yellow, blue, purple, cyan, white
+         BLACK, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE
+  $g$$_$string$$: "..." 
+
+  $p$[syntax]$$ : $g$$_$boolean$$
     enables or disables highlighting 
-    can be set to 1, true, 0, false
     true by default
-  [sheet_dir] and [sheet_dir_rel]: 
+  $p$[location]$$ : $g$$_$boolean$$
+    enables or disables printing location of .sheet file and line
+    false by default
+  $p$[utf8]$$ : $g$$_$boolean$$
+    enables or disables using utf8 character 
+    can be set to 1, true, 0, false
+    false by default 
+  $p$[icons]$$ : $g$$_$boolean$$
+    enables or disables using ?< nerdfont-icons: https://www.nerdfonts.com/ >?
+    can be set to 1, true, 0, false
+    false by default
+  $p$[title_color]$$  : $g$$_$color$$
+    color of the title
+  $p$[title_spacing]$$  : $g$$_$number$$
+    0.0 means title is left, 0.5 center, 1.0 right, etc.
+  $p$[border]$$ : $g$$_$string$$
+    char used to draw border above below docs, can be " "
+  $p$[seperator_left]$$ : $g$$_$string$$
+    char used at left of title 
+  $p$[seperator_right]$$ : $g$$_$string$$ 
+    char used at right of title
+  $p$[error_icon]$$ : $g$$_$string$$
+    set a string to replace \! in error messages 
+    can be set to string, currently max length is 8
+  $p$[warning_icon]$$ : $g$$_$string$$
+    set a string to replace \! in docs
+    can be set to string, currently max length is 8
+  $p$[info_icon]$$ : $g$$_$string$$
+    set a string to replace \~ in docs
+    can be set to string, currently max length is 8
+  $p$[link_icon]$$ : $g$$_$string$$
+    set a string to replace \? in docs
+    can be set to string, currently max length is 8
+  $p$[sheet_dir]$$ and $p$[sheet_dir_rel]$$ : $g$$_$string$$
     add a new path to check for .sheet files
     [sheet_dir_rel] is relative to root dir
     max is 8 right now
@@ -161,36 +217,69 @@
   example:
     $_$in config.doc:$$
     [syntax] true
-    [syntax] false
+    [location] true
+    [utf8]  true 
+    [icons] true
     
-    [builtin_sheets] false
-    [builtin_sheets] true
-   
-    // builtin sheets
-    [sheet_dir_rel] sheets/builtin_sheets/ 
+    [error_icon]   "" // "" "" "󰬟" ""
+    [warning_icon] "" //    
+    [info_icon]    "" //   
+    [link_icon]    "" //      
+
+    [title_color] red 
+    // [border] "" "" "" "" "󰥛" "󱑻" "󱑼
+    [border] "" // ascii: " " "-" "_" "." nerdfont: "" "" "" "" "󰥛" "󱑻" "󱑼
+    [seperator_left]  "" // ""
+    [seperator_right] "" // ""
+    [title_spacing] 0.05
     
-    // custom sheets
-    [sheet_dir_rel] src/sheets 
-    [sheet_dir] C:\custom_sheets
+    // builtin-sheets
+    [sheet_dir_rel] "sheets/builtin_sheets/"
+    
+    // custom sheet paths
+    [sheet_dir_rel] "sheets\custom_sheets"
+    // [sheet_dir] "C:\workspace\c\term_docs\sheets\custom_sheets_02"
 
     $_$in terminal:$$
     >doc -config
     -> $p$config.doc --------------------------------------$$
     ->
-    -> [syntax] false
     -> [syntax] true
-    ->
-    -> // builtin sheets
-    -> [sheet_dir_rel] sheets/builtin_sheets/ 
-    ->
-    -> // custom sheets
-    -> [sheet_dir_rel] src/sheets
-    -> [sheet_dir] C:\custom_sheets
+    -> [location] true
+    -> [utf8]  true 
+    -> [icons] true
+    -> 
+    -> [error_icon] "" // "" "" "󰬟" ""
+    -> [warning_icon] "" //    
+    -> [info_icon]    "" //   
+    -> [link_icon]    "" //      
+
+    -> [title_color] red 
+    -> // [border] "" "" "" "" "󰥛" "󱑻" "󱑼
+    -> [border] "" // ascii: " " "-" "_" "." nerdfont: "" "" "" "" "󰥛" "󱑻" "󱑼
+    -> [seperator_left]  "" // ""
+    -> [seperator_right] "" // ""
+    -> [title_spacing] 0.05
+    -> 
+    -> // builtin-sheets
+    -> [sheet_dir_rel] "sheets/builtin_sheets/"
+    -> 
+    -> // custom sheet paths
+    -> [sheet_dir_rel] "sheets\custom_sheets"
+    -> // [sheet_dir] "C:\workspace\c\term_docs\sheets\custom_sheets_02"
     ->
     -> $dim$-------------------------------------------------$$
     -> $C$config path$$: C:/Workspace/C/term_docs/config.doc
     -> $C$syntax$$: true
-    -> $r$max sheet paths$$: 8
+    -> $C$location$$: false
+    -> $C$utf8$$: true
+    -> $C$icons$$: true
+    -> $y$max icon name len$$: 8
+    -> $C$error_icon: ''
+    -> $C$warning_icon: ''
+    -> $C$info_icon: ''
+    -> $C$link_icon: ''
+    -> $y$max sheet paths$$: 8
     -> $C$path[0]$$: C:/<path-to-root>/sheets/builtin_sheets/
     -> $C$path[1]$$: C:/<path-to-root>/src/sheets/
     -> $C$path[2]$$: C:/custom_sheets/
@@ -274,7 +363,24 @@
      still preprocessor      \
      still preprocessor      
     no longer preprocessor
-    
+
+    [[attribute]]
+    [[attribute(xyz)]]
+    [[namespace::attribute]]
+    [[namespace::attribute(xyz)]]
+    [[attribute(xyz), attribute, namespace::attribute(xyz)]]
+    [not attribute]
+    [not attribute(xyz)]
+    [not namespace::attribute]
+    [not namespace::attribute(xyz)]
+    [not attribute(xyz), not attribute, not namespace::attribute(xyz)]]
+    [[attribute]] not part of attribute 
+    not part of attribute
+    [[attribute]  not part of attribute 
+    not part of attribute
+    [[attribute   not part of attribute 
+    not part of attribute
+
     ~ info
     ~ info ~ not info
     \~ not an info
@@ -345,6 +451,43 @@
     \#define MACRO 10
     \#define MACRO "string"
     \\#not a macro
+
+    '', '', '', '' -> seperators
+    '', '', '', '' -> seperators
+    ─│─│╭╮╯╰           -> rounded window corners
+    ─│─│┌┐┘└           -> window corners
+    ✗, ➜, ✓, ◍         -> useful random nerdfont chars
+    , ,  , , , , , , , ,  -> dapui chars
+    🛑, , , ,
+    ✹, ✚, ✭, ➜, ═, ✖, ✗, ✔, ☒,
+
+
+    $g$$_$icons$$:
+      $icon::bash$
+      $icon::text$
+      $icon::hello$
+      $icon:icon text:normal text$
+      in text, $icon::icon-text$, continuing text
+      highlighted $r$ $icon::icon-text$ red-text$$ text
+      highlighted $r$$icon::icon-text$red-text$$ text
+      highlighted $r$$icon::icon-text$$$ text
+
+    $file:"../test_01.txt"$
+    
+    $file:"../test_01.txt":2:40:5$
+    $file:"../test_01.txt":2:40:5$
+    
+    $file:"../test_01.txt":8:10:10$
+    
+    $file:"../test_02.txt"$
+    
+    $file:"../test_02.txt":4:40:40$
+    
+    $file:"../doesnt_exist.txt"$
+    
+    $file:"../test_01.txt":2:120:5$
+
+    $doc:"calloc"$
 
   ?< https://github.com/phil-stein/term_docs/tree/main >?
 #

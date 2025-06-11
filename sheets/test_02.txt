@@ -1,0 +1,5 @@
+start
+
+contents of test_02.txt
+
+end

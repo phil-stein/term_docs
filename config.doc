@@ -1,12 +1,30 @@
 
 // activate highlighting
-[syntax] 0
-[syntax] 1
 [syntax] false 
 [syntax] true 
 
+[location] false 
+
+[utf8]  true // test
+[icons] true
+
+// black, red, green, yellow, blue, purple, cyan, white
+[title_color] red 
+[border] "" // ascii: " " "-" "_" "." nerdfont: "" "" "" "" "󰥛" "󱑻" "󱑼
+[seperator_left]  "" // test
+[seperator_right] ""
+// [seperator_left]  ""
+// [seperator_right] ""
+// [title_spacing] 0.05 // 5% left 95% right
+[title_spacing] 8   // 8 chars left, rest right
+
+[error_icon] "" // "" "" "󰬟" ""
+[warning_icon] "" //    
+[info_icon]    "" //   
+[link_icon]    "" //      
+
 // builtin-sheets
-[sheet_dir_rel] sheets/builtin_sheets/
+[sheet_dir_rel] "sheets/builtin_sheets/" // test
 
 // custom sheet paths
 [sheet_dir_rel] sheets\custom_sheets

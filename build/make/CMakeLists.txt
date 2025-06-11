@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20.1)
+cmake_minimum_required(VERSION 3.31.4)
 
 set(NAME "doc")
 
@@ -35,17 +35,41 @@ add_executable(${NAME}
               )
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -std=gnu99")
 
+if(${CMAKE_GENERATOR} STREQUAL "MinGW Makefiles")
+  # set(CUSTOM_C_VERSION -std=c17)
+  set(CUSTOM_C_VERSION )  # setting c version in gcc causes errors
+  set(DIRS_TO_WALK_BACK -DDIRS_TO_WALK_BACK_TO_ROOT=1) 
+else()
+  set(CUSTOM_C_VERSION /std:c17)
+  set(DIRS_TO_WALK_BACK -DDIRS_TO_WALK_BACK_TO_ROOT=2) 
+endif()
+
+set(CUSTOM_LINK_OPTIONS
+  -g  # debug info
+  -pg # generate instumentation info for gprof
+  # -no-pie
+  )
+set(CUSTOM_COMPILE_OPTIONS
+  ${CUSTOM_C_VERSION}
+  ${DIRS_TO_WALK_BACK}
+  -g
+  -Wall
+  -D_CRT_SECURE_NO_WARNINGS
+  -DGLOBAL_DEBUG 
+  # -DPF_PRINT_LOCATION
+  -pg # generate instumentation info for gprof
+  # -no-pie
+  )
+
 target_include_directories(${NAME} PRIVATE ${ROOT_DIR}/src)
 target_include_directories(${NAME} PRIVATE ${ROOT_DIR}/external)
+<<<<<<< HEAD
 target_compile_features(   ${NAME} PRIVATE cxx_std_11)
 # target_compile_options(    ${NAME} PRIVATE -Wall -DGLOBAL_DEBUG -DASSETM_NO_ZIP -DDEBUG_TIMER -DDEBUG_OPENGL -DDEBUG_DRAW -DASSET_PATH=\"/Workspace/C/bovengine/_assets/\")
-target_compile_options(    ${NAME} PRIVATE -Wall -DGLOBAL_DEBUG) # -DPF_PRINT_LOCATION) 
+# target_compile_features(   ${NAME} PRIVATE cxx_std_11)
+target_compile_options(    ${NAME} PRIVATE ${CUSTOM_COMPILE_OPTIONS}) # -Wall -DGLOBAL_DEBUG) # -DPF_PRINT_LOCATION) 
+target_link_options(       ${NAME} PRIVATE ${CUSTOM_LINK_OPTIONS})
 
-if(${CMAKE_GENERATOR} STREQUAL "MinGW Makefiles")
-  target_compile_options(    ${NAME} PRIVATE -DDIRS_TO_WALK_BACK_TO_ROOT=1) 
-else() # if(${CMAKE_GENERATOR} STREQUAL "Visual Studio 2016 19")
-  target_compile_options(    ${NAME} PRIVATE -DDIRS_TO_WALK_BACK_TO_ROOT=2) 
-endif()
 # # -- link libs --
 # # set _build/... folder based on generator, i.e. mingw-gcc or vs19
 # if(${CMAKE_GENERATOR} STREQUAL "MinGW Makefiles")
@@ -80,5 +104,6 @@ endif()
 #   target_link_libraries(${NAME} ${ROOT_DIR}/_libs/win64/glfw3.lib)
 #   # message("!!! -> used .lib")
 # endif()
+
 
 

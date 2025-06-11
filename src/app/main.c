@@ -33,7 +33,17 @@ bool color_cmd = false;
 
 int main(int argc, char** argv)
 {
-  core_data_t* core_data = core_data_get();
+  // printf("");
+  // printf("\n");
+  // // wchar_t c = L"";
+  // // wprintf(&c);
+  // // printf("%s\n", \uf071);
+  // printf("\uf071 \n");
+  // abort();
+  // abort();
+
+  // core_data_t* core_data = core_data_get();
+  core_data->pf_out = stdout;
 
   // -- get executable name --
   // P_STR(_getcwd(NULL, 0));
@@ -129,7 +139,7 @@ int main(int argc, char** argv)
   // not enough arguments for documentation or definition
   if (word_arr_len < 1) 
   { 
-    DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
+    DOC_PF_COLOR(PF_RED); PF("[%s]", core_data->error_icon); DOC_PF_COLOR(PF_WHITE);  
     PF(" provide keyword to search or command, i.e. '"); 
     DOC_PF_COLOR(PF_CYAN); PF("-h"); DOC_PF_COLOR(PF_WHITE);
     PF("' for help.\n"); 

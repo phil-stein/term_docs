@@ -1,0 +1,16 @@
+
+|c|C|
+|calloc|
+|allocate|memory|dynamic-memory|stdlib|stdlib.h|
+void* calloc(size_t items, size_t size)   
+    allocate the specified amount of memory.
+    sets memory to 0.
+     needs to be freed using [free]
+     returns NULL on fail
+     included in <stdlib.h>
+    example: 
+      // array now has space for 10 int's
+      int* array = calloc(10, sizeof(int));
+
+< https://www.tutorialspoint.com/c_standard_library/c_function_calloc.html >
+

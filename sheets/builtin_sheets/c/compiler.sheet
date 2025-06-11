@@ -1,0 +1,274 @@
+compiler stuff, should prob get its own sheet:
+
+#
+|c|C|
+|compiler|macro|
+|c-version|version|c89|c99|c11|c17|c18|c24|
+|C-Version|Version|C89|C99|C11|C17|C18|C23|
+|__STDC_VERSION__|
+|-std=|-std=c89|-std=c90|-std=c99|-std=c11|-std=c17|-std=c23|
+|-std=gnu89|-std=gnu90|-std=gnu99|-std=gnu11|-std=gnu17|-std=gnu23|
+|-std:|-std:c89|-std:c90|-std:c99|-std:c11|-std:c17|-std:c23|
+|/std:|/std:c89|/std:c90|/std:c99|/std:c11|/std:c17|/std:c23|
+    c was originally made in 1972 by Dennis Ritchie, 
+    so theres been a lot of versions since then
+    if you want to check which version you are
+    currently compiling in use the macros shown below
+
+    setting a specific c version to use 
+    depends on the compiler see below
+
+    see $|$\|compiler-version\|$$ for checking 
+    which compiler is currently used
+    
+    __STDC_VERSION__:
+      201710L: c18
+      201112L: c11
+      199901L: c99
+
+    example:
+      // print version
+      \#define P_C_VERSION()                    \
+        if (__STDC_VERSION__ >  201710L)        \
+        { PF("-- using c23 --\n"); }            \
+        else if (__STDC_VERSION__ >=  201710L)  \
+        { PF("-- using c18 --\n"); }            \
+        else if (__STDC_VERSION__ >= 201112L)   \
+        { PF("-- using c11 --\n"); }            \
+        else if (__STDC_VERSION__ >= 199901L)   \
+        { PF("-- using c99 --\n"); }            \
+        else                                    \
+        { PF("-- using c89/c90 --\n"); }
+      
+      // set version in compiler
+      // in makefile / cmake / etc. / directly in terminal
+      
+      gcc -std=c90  // c89 / c90
+      gcc -std=c99  // c99
+      gcc -std=c11  // c11
+      gcc -std=c17  // c17 / 18
+      // c89 and c90 is the same version
+      // in gcc c99 implemnts corrertions of the early 2000s versions
+      // in gcc c11 and c17 only differ in the value '__STDC_VERSION__'
+
+      clang -std=c89 -std=c90   // c89 / c90
+      clang -std=gnu89          // c89 with gnu extensins
+      clang -std=c99
+      clang -std=gnu99          // c99 with gnu extensins
+      clang -std=c11
+      clang -std=gnu11          // c11 with gnu extensins
+      clang -std=c17
+      clang -std=gnu17          // c17 with gnu extensins
+
+      // msvc is a windows specific compiler made by
+      // microsoft for Visial Studio, etc.
+      // could not find older versions supported by msvc
+      // use '/' or '-' to start a command  
+      msvc /std:c11 -std:c11
+      msvc /std:c17 -std:c17
+
+      ?< gcc: https://gcc.gnu.org/onlinedocs/gcc/Standards.html >?
+      ?< clang: https://clang.llvm.org/docs/CommandGuide/clang.html >?
+      ?< msvc: https://docs.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-by-category?view=msvc-170 >?
+      ?<c: https://en.wikipedia.org/wiki/C_(programming_language) >?           
+#
+|c|C|
+|compiler|
+|__FILE__|__LINE__|__DATE__|__TIME__|
+|__func__|__FUNCTION__|__STDC__|__STDC_HOSTED__|__STDC_VERSION__|
+|file|line|date|time|function|function_name|
+|preprocessor|macro|basics|
+  
+  __FILE__:         is a marco that gets set to the 
+                    current file name during compilation
+  
+  __LINE__:         is a marco that gets set to the 
+                    current line during compilation
+
+  __DATE__:         is a mqacro that gets set to the date 
+                    on which the source was compiled to .o
+                    format is MM DD YYYY
+
+  __TIME__:         is a macro that gets set to the time
+                    at which the source was compiled to .o
+
+  __func__:         in C99+ this expands to the current
+                    functions name
+
+  __FUNCTION__:     expands to current function name
+                    only available in some compilers
+                    use __func__ instead is using C99+
+
+  __STDC__:         if set to 1 this means the compiler
+                    conforms to ISO C standards
+                    this should usually be the case
+  
+  __STDC_HOSTED__:  idk, but should generally be 1 
+
+  __STDC_VERSION__: gets set to the current c version
+                    i.e. C89, C99, etc., 
+                    see \|c-version\| for more info
+
+  example:
+    \#define PRINT_LOCATION() printf("file: \"%s\", line: %d\n", __FILE__, __LINE__)
+    file_a.c:
+    [83] PRINT_LOCATION();
+      -> file: "file_a.c", line: 83
+    file_b.c:
+    [10] PRINT_LOCATION();
+      -> file: "file_b.c", line: 10
+    
+    printf("compiled on: %s", __DATE__);
+    printf("compiled at: %s", __TIME__);
+    -> compiled on: Mar 24 2023
+    -> comnpiled at: 21:04:56
+    
+    printf("__func__: %s", __func__);
+    printf("__FUNCTION__: %s", __FUNCTION__);
+    -> __func__: func_name
+    -> __FUNCTION__: func_name
+
+    printf("__STDC__: %d", __STDC__);
+    printf("__STDC_HOSTED__: %d", __STDC_HOSTED__);
+    printf("__STDC_VERSION__: %d", __STDC_VERSION__);
+    -> __STDC__: 1
+    -> __STDC_HOSTED__: 1 
+    -> __STDC_VERSION__: 199901
+#
+|c|C|
+|compiler|
+|compiler-version|version|
+|__GNUC__|__MINGW32__|__MINGW64__|__clang__|_MSC_VER|__EMSCRIPTEN__|
+|__GNUC_MINOR__|__GNUC_PATCHLEVEL__|_MSC_FULL_VER|__OBJC__|
+|__clang_major__|__clang_minor__|__clang_patchlevel__|
+|c++|C++|__cplusplus|objectivec|objective-c|objective|
+|macro|preprocessor|basics|
+  compiler defining macros
+  ~ see \|c-version\| for checking/setting the c version
+  ~ when __MINGW32/64__ is def. __GNUC__ should also be
+
+  __GNUC__:             gcc compiler, major version
+  __GNUC_MINOR__:       gcc compiler, minor version
+  __GNUC_PATCHLEVEL__:  gcc compiler, patch version
+  __MINGW32__:          32 bit version of mingw
+  __MINGW64__:          64 bit version of mingw
+
+  __clang__:            clang compiler
+  __clang_major__:      clang compiler, major version
+  __clang_minor__:      clang compiler, minor version
+  __clang_patchlevel__: clang compiler, major version
+
+  _MSC_VER:             msvc compiler, short version, see $|$\|_MSV_VER\|$$ 
+  _MSC_FULL_VER:        msvc compiler, full version
+  
+  __EMSCRIPTEN__:       llvm to js or web-asm compiler
+
+  __cplusplus: actually compiling c++ code
+               c++ compilers can compile c
+               but you need to define extern "C"
+  __OBJC__:    defined when compiling using 
+               objective-c compiler
+  example:
+    in .h file
+    \#ifdef __cplusplus
+    extern "C" {
+    \#endif
+    void func();
+    \#ifdef __cplusplus
+    } // extern "C"
+    \#endif
+  ?< https://dev.to/tenry/predefined-c-c-macros-43id >?
+  ?< https://blog.kowalczyk.info/article/j/guide-to-predefined-macros-in-c-compilers-gcc-clang-msvc-etc..html >?
+  ?< https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170 >?
+  ?< https://learn.microsoft.com/en-us/cpp/overview/compiler-versions?view=msvc-170#service-releases-starting-with-visual-studio-2017 >?
+#
+|c|C|
+|compiler|
+|_MSC_VER|_MSC_FULL_VER|
+|msc|mscv|
+  microsofts c/c++ compiler
+  
+  _MSC_VER:             msvc compiler, short version, see $|$\|_MSV_VER\|$$ 
+  _MSC_FULL_VER:        msvc compiler, full version
+  
+  example:
+    \#if _MSC_VER <= 800
+      \#define MSC_VER_STR "1"
+    \#elif _MSC_VER <= 900
+      \#define MSC_VER_STR "3"
+    \#elif _MSC_VER <= 1020
+      \#define MSC_VER_STR "4"
+    \#elif _MSC_VER <= 1100
+      \#define MSC_VER_STR "5"
+    \#elif _MSC_VER <= 1200
+      \#define MSC_VER_STR "6"
+    \#elif _MSC_VER <= 1300
+      \#define MSC_VER_STR "7"
+    \#elif _MSC_VER <= 1310
+      \#define MSC_VER_STR "7.1 (2003)"
+    \#elif _MSC_VER <= 1400
+      \#define MSC_VER_STR "8 (2005)"
+    \#elif _MSC_VER <= 1500
+      \#define MSC_VER_STR "9 (2008)"
+    \#elif _MSC_VER <= 1600
+      \#define MSC_VER_STR "10 (2010)"
+    \#elif _MSC_VER <= 1700
+      \#define MSC_VER_STR "11 (2012)"
+    \#elif _MSC_VER <= 1800
+      \#define MSC_VER_STR "12 (2013)"
+    \#elif _MSC_VER <= 1900
+      \#define MSC_VER_STR "14 (2015)"
+    \#elif _MSC_VER <=  	1916  
+      \#define MSC_VER_STR "15 (2017)"
+    \#elif _MSC_VER <= 1929
+      \#define MSC_VER_STR "16 (2019)"
+    \#elif _MSC_VER <= 1930
+      \#define MSC_VER_STR "17.0 (2022)"
+    \#elif _MSC_VER <= 1931
+      \#define MSC_VER_STR "17.1 (2022)"
+    \#elif _MSC_VER <= 1932
+      \#define MSC_VER_STR "17.2 (2022)"
+    \#elif _MSC_VER <= 1933
+      \#define MSC_VER_STR "17.3 (2022)"
+    \#elif _MSC_VER <= 1934
+      \#define MSC_VER_STR "17.4 (2022)"
+    \#elif _MSC_VER <= 1935
+      \#define MSC_VER_STR "17.5 (2022)"
+    \#elif _MSC_VER <= 1936
+      \#define MSC_VER_STR "17.6 (2022)"
+    \#elif _MSC_VER <= 1937
+      \#define MSC_VER_STR "17.7 (2022)"
+    \#elif _MSC_VER <= 1938
+      \#define MSC_VER_STR "17.8 (2022)"
+    \#elif _MSC_VER <= 1939
+      \#define MSC_VER_STR "17.9 (2022)"
+    \#elif _MSC_VER <= 1940
+      \#define MSC_VER_STR "17.10 (2022)"
+    \#elif _MSC_VER > 1940
+      \#define MSC_VER_STR "newer than 17.10 (2022), which is _MSC_VER: 1940"
+    \#else
+      \#define MSC_VER_STR "unknown"
+    \#endif
+#
+|c|C|
+|_WIN32|_WIN64|__linux|__linux__|__APPLE__|__ANDROID__|
+|windows|linux|apple|macos|ios|android|operating_system|os|
+|macro|preprocessor|basics|
+  os specific macros
+
+  _WIN32:      is defined when on a windows 32/64 bit operating system
+  _WIN64:      is defined when on a windows 64 bit operating system
+  __linux
+  __linux__:   is defined when on a linux operating system
+  __APPLE__:   is defined when on a apple/macos/ios operating system
+  __ANDROID__: is defined when on a android operating system
+
+  example:
+    \#ifdef _WIN32
+      printf("running on windows");
+    \#elif  defined(__linux__)
+      printf("running on linux");
+    \#endid
+
+?< https://dev.to/tenry/predefined-c-c-macros-43id >?
+#

@@ -13,7 +13,7 @@
 
 void def_print_result(search_result_t* r)
 {
-  core_data_t* core_data = core_data_get();
+  // core_data_t* core_data = core_data_get();
 
   // @NOTE: no syntaxt highlighting
   if (!core_data->style_act)
@@ -226,7 +226,7 @@ bool def_search_section(const char* path, const char* file, const char* keyword,
 
 void def_search_and_print(char* dir_name, char* keyword, int* found_count)
 {
-  core_data_t* core_data = core_data_get();
+  // core_data_t* core_data = core_data_get();
     
   char* cwd = _getcwd(NULL, 0);
   cwd += 2; // cut off the "C:" before "\directory\..."

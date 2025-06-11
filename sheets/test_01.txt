@@ -1,0 +1,8 @@
+start
+
+contents of test_01.txt
+HelloThereMyNameIsBildoBanggingsIAmTheHeadElf*wink*UKnow
+TheYellowFoxJumpedOverTheCockLolThisIsLoremIpmus
+HelloThereMyNameIsBildoBanggingsIAmTheHeadElf*wink*UKnowLikeThisAPlayOnPotterLordAndTheHarryRckRing
+
+end

@@ -10,24 +10,35 @@ math functions:
 #
 #
 |c|C|
-|acos|
+|acos|acosf|acosl|
 |math|math.h|arc_cosine|arc|cosine|
+|pi|Pi|PI|
+float  acosf(float x)
 double acos(double x)
+long double acosl(long double arg);
     x: value between -1 to +1
     ~ return is between 0 to pi radians
+    ~ acos(-1) is pi
     ~ included in <math.h>
     example:
       double val = acos(0.9);
       // x radians * (180/PI) = x degree
       val *= 180 / 3.14159265; 
       val is 25.85504 degree
+
+      // pi using acos(-1)
+      const double pi = acos(-1);
+
+?< https://en.cppreference.com/w/c/numeric/math/acos>?
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_acos.htm >?
 #
 #
 |c|C|
-|asin|
+|asin|asinf|asinl|
 |math|math.h|arc_sine|arc|sine|
+float  asinf(float arg)
 double asin(double x)
+long double asinl(long double arg)
     x: value between -1 to +1
     ~ return is between -pi/2 to pi/2 radians
     ~ included in <math.h>
@@ -36,13 +47,17 @@ double asin(double x)
       // x radians * (180/PI) = x degree
       val *= 180 / 3.14159265;  
       val is 64.158067 degree
+
+?< https://en.cppreference.com/w/c/numeric/math/asin >?
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_asin.htm >?
 #
 #
 |c|C|
-|atan|
+|atan|atanf|atanl|
 |math|math.h|arc_tangent|arc|tangent|
+float  atanf(float x)
 double atan(double x)
+long double atanl(long double x)
     x: value between -1 to +1
     ~ return is between -pi/2 to pi/2 radians
     ~ included in <math.h>
@@ -51,13 +66,17 @@ double atan(double x)
       // x radians * (180/PI) = x degree
       val *= 180 / 3.14159265;  
       val is 45.0 degree
+
+?< https://en.cppreference.com/w/c/numeric/math/atan >?
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atan.htm >?
 #
 #
 |c|C|
-|atan2|
+|atan2|atan2f|atan2l|
 |math|math.h|atan|arc_tangent|arc|tangent|
+float  atan2f(float y, float x)
 double atan2(double y, double x)
+long double atan2l(long double y, long double x)
     x: value between -1 to +1
     ~ return is between -pi to pi radians
     ~ included in <math.h>
@@ -66,13 +85,17 @@ double atan2(double y, double x)
       // x radians * (180/PI) = x degree
       val *= 180 / 3.14159265;  
       val is 135.0 degree
+
+?< https://en.cppreference.com/w/c/numeric/math/atan2 >?
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_atan2.htm >?
 #
 #
 |c|C|
-|cos|
+|cos|cosf|cosl|
 |math|math.h|cosine|
 double cos(double x)
+float  cosf(float x)
+long double cosl(long double x)
     x: radian angle value
     ~ included in <math.h>
     example:
@@ -80,6 +103,8 @@ double cos(double x)
       double rad = 60.0 * (180/3.14159265);  
       double val = cos(rad);
       val is 0.5
+
+?< https://en.cppreference.com/w/c/numeric/math/cos >?
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_cos.htm >?
 #
 #
@@ -96,9 +121,11 @@ double cosh(double x)
 #
 #
 |c|C|
-|sin|
+|sin|sinf|sinl|
 |math|math.h|sine|
 double sin(double x)
+float  sinf(float x)
+long double sinl(long double x)
     x: radian angle value
     ~ included in <math.h>
     example:
@@ -106,6 +133,7 @@ double sin(double x)
       double rad = 45.0 * (180 / 3.14159265);  
       double val = sin(rad);
       val is 0.707107
+?< https://en.cppreference.com/w/c/numeric/math/sin >?
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_sin.htm >?
 #
 #
@@ -120,6 +148,35 @@ double sinh(double x)
       val is 0.521095 degree
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_sinh.htm >?
 #
+|c|C|
+|tan|tanf|tanl|
+|math|math.h|tangent|
+float  tanf(float arg)
+double tan(double arg)
+long double tanl(long double arg)
+  tangent of arg
+  ~ arg is in radians
+  ~ included in <math.h>
+  example:
+    const double pi = acos(-1);
+ 
+    // typical usage
+    printf("tan(pi*1/4) = %+f\n", tan(pi * 1 / 4)); //   45 deg
+    printf("tan(pi*3/4) = %+f\n", tan(pi * 3 / 4)); //  135 deg
+    printf("tan(pi*5/4) = %+f\n", tan(pi * 5 / 4)); // -135 deg
+    printf("tan(pi*7/4) = %+f\n", tan(pi * 7 / 4)); //  -45 deg
+    -> tan(pi*1/4) = +1.000000
+    -> tan(pi*3/4) = -1.000000
+    -> tan(pi*5/4) = +1.000000
+    -> tan(pi*7/4) = -1.000000
+ 
+    // special values
+    printf("tan(+0) = %f\n", tan(0.0));
+    printf("tan(-0) = %f\n", tan(-0.0))
+    -> tan(+0) = 0.000000
+    -> tan(-0) = -0.000000
+
+?< https://en.cppreference.com/w/c/numeric/math/tan >?
 #
 |c|C|
 |tanh|
@@ -213,26 +270,35 @@ double modf(double x, double* integer)
 #
 #
 |c|C|
-|pow|
-|math|math.h|power|power_of|
-double pow(double x, double y)
-    returns x^y
+|pow|powf|powl|
+|math|math.h|
+|power|power_of|base|eponent|
+double pow(double base, double exponent)
+float powf(float base, float exponent)
+long double powl(long double base, long double exponent)
+    returns base^exponent
     ~ included in <math.h>
     example:
       double rtn = pow(8.0, 3.0);
-      rtn is 512
+      -> rtn is 512
+      float rtn = pow(2.0, 8.0);
+      -> rtn is 256
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_pow.htm >?
-#
+?< https://en.cppreference.com/w/c/numeric/math/pow >?
 #
 |c|C|
-|sqrt|
-|math|math.h|squareroot|square_root|
+|sqrt|sqrtf|sqrtfl|
+|math|math.h|squareroot|square_root|square|root|
 double sqrt(double x)
+float  sqrtf(float x)
+long double sqrtl(long double x)
     returns squareroot of x
     ~ included in <math.h>
     example:
       double rtn = sqrt(4.0);
       rtn is 2.0
+
+?< https://en.cppreference.com/w/c/numeric/math/sqrt >?
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_sqrt.htm >?
 #
 #
@@ -253,9 +319,11 @@ double ceil(double x)
 #
 #
 |c|C|
-|fabs|
+|fabs|fabsf|fabsl|
 |math|math.h|absolute|abs|
-double fabs(double x)
+float  fabsf(float x);
+double fabs(double x);
+long double fabsl(long double x);
     returns absolute value of x
     turns neg. values pos, pos stay pos
     ~ included in <math.h>
@@ -264,8 +332,51 @@ double fabs(double x)
       double rtn1 = fabs( 10);
       rtn0 is 10.0
       rtn1 is 10.0
+
+?< https://en.cppreference.com/w/c/numeric/math/fabs >?
 ?< https://www.tutorialspoint.com/c_standard_library/c_function_fabs.htm >?
 #
+|c|C|
+|abs|labs|llabs|
+|math|math.h|absolute|
+int        abs( int n )
+long       labs( long n )
+long long llabs( long long n )
+  absolute value of n
+  ~ included in <math.h>
+
+  example:
+    printf("%d\n", abs(8));
+    ->8
+    printf("%d\n", abs(-8));
+    ->8
+
+?< https://en.cppreference.com/w/c/numeric/math/abs >?
+#
+|c|C|
+|div|ldiv|lldiv|
+|div_t|ldiv_t|lldiv_t|
+|quotient|remainder|
+|math|math.h|
+div_t     div( int x, int y )
+ldiv_t    ldiv( long x, long y )
+lldiv_t   lldiv( long long x, long long y )
+
+struct div_t   { int quot; int rem; };
+or:
+struct div_t   { int rem; int quot; };
+struct ldiv_t  { long quot; long rem; };
+or:
+struct ldiv_t  { long rem; long quot; };
+struct lldiv_t { long long quot; long long rem; };
+or:
+struct lldiv_t { long long rem; long long quot; };
+  
+  returns both the quotient and the remainder 
+  of the division of the numerator x by the denominator y
+  ~ included in <math.h>
+
+?< https://en.cppreference.com/w/c/numeric/math/div >?
 #
 |c|C|
 |floor|

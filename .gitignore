@@ -12,11 +12,15 @@
 *.rar
 *.zip
 
-# build-folder
+# build folder
 build/*
-!build/*/*.cap     # renderdoc
-!build/*/*.a       # libraries
-!build/*/*.bat     # batch files
+!build/*/*.bat   
+!build/*.bat     
 !build/*/CMakeLists.txt
 !build/*/*/CMakeLists.txt
-!build/*/.gitkeep
+!build/*.cmake
+!build/*/*.cmake
+!build/*/*/*.cmake
+
+# .cache folder 
+.cache/*
