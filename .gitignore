@@ -24,3 +24,9 @@ build/*
 
 # .cache folder 
 .cache/*
+
+.exe/*
+
+compile_commands.json
+gmon.out
+sh.exe.stackdump
