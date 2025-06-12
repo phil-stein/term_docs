@@ -1,0 +1,106 @@
+
+#
+|odin|Odin|
+|builtin|compile_time|compile-time|predeclared|identifiers|
+|type|types|
+|nil|false|true|
+|ODIN_OS|Odin_OS_Type|ODIN_ARCH|Odin_Arch_Type|OS|os|operating-system|
+|ODIN_BUILD_MODE|Odin_Build_Mode_Type|build-mode|
+  $_$$g$defines/predeclared identifier$$:
+  $p$nil$$                     pointer with zero value
+  $p$false$$                   untyped boolean
+  $p$true$$                    untyped boolean
+  $p$ODIN_OS$$                 a predeclared enum of type $g$runtime.Odin_OS_Type$$ specifying 
+                          the target platforms operating system
+  $p$ODIN_ARCH$$               a predeclared enum of type $g$runtime.Odin_Arch_Type$$ specifying 
+                          the target platforms architecture 
+  $p$ODIN_BUILD_MODE$$         a predeclared enum of type $g$runtime.Odin_Build_Mode_Type$$ 
+                          specifying the build mode
+  $p$ODIN_ERROR_POS_STYLE$$    an enum of type $g$runtime.Odin_Error_Pos_Type$$ 
+                          specifying whether errors should be stylized in the
+                          $syn$default (MSVC-like) style or a UNIX (GCC-like) style.
+                          Default = `path(1:2) \| Unix = `path:1:2:$$
+  $p$ODIN_PLATFORM_SUBTARGET$$ a predeclared enum of type $g$runtime.Odin_Platform_Subtarget_Type$$ 
+                          specifying the selected subtarget type only relevant for Darwin  
+
+  $_$$g$types$$:
+    $g$Odin_OS_Type$$ :: enum int {
+    	Unknown,
+    	Windows,
+    	Darwin,
+    	Linux,
+    	Essence,
+    	FreeBSD,
+    	OpenBSD,
+    	NetBSD,
+    	Haiku,
+    	WASI,
+    	JS,
+    	Orca,
+    	Freestanding,
+    }
+    $g$Odin_Arch_Type$$ :: enum int {
+    	Unknown,
+    	amd64,
+    	i386,
+    	arm32,
+    	arm64,
+    	wasm32,
+    	wasm64p32,
+    	riscv64,
+    }
+    $g$Odin_Build_Mode_Type$$ :: enum int {
+      Executable,
+      Dynamic,
+      Static,
+      Object,
+      Assembly,
+      LLVM_IR,
+    }
+    $g$Odin_Platform_Subtarget_Type$$ :: enum int {
+    	Default,
+    	iOS,
+    	Android,
+    }
+
+?< https://pkg.odin-lang.org/base/builtin/ >?
+#
+|odin|Odin|
+|len|lenght|cap|capacity|array|builtin|
+  len :: proc(v: Array_Type) -> int
+    The len built-in procedure returns the length of v according to its type:
+    
+    Array: the number of elements in v.
+    Pointer to (any) array: the number of elements in `v^` (even if `v` is `nil`).
+    Slice, dynamic array, or map: the number of elements in `v`; if `v` is `nil`, `len(v)` is zero.
+    String: the number of bytes in `v`
+    Enumerated array: the number elements in v.`
+    Enum type: the number of enumeration fields.
+    \\#soa array: the number of elements in `v`; if `v` is `nil`, `len(v)` is zero.
+    \\#simd vector: the number of elements in `v`.
+    
+    For some arguments, such as a string literal or a simple array expression, the result can be constant.
+
+    example:
+      arr : [10]int
+      fmt.println( "len: ", len(arr) )
+      -> len: 10
+#
+|odin|Odin|
+|cap|capacity|len|lenght|array|builtin|
+  cap :: proc(v: Array_Type) -> int
+    The cap built-in procedure returns the length of v according to its type:
+    
+    Array: the number of elements in v.
+    Pointer to (any) array: the number of elements in `v^` (even if `v` is `nil`).
+    Dynamic array, or map: the reserved number of elements in `v`; if `v` is `nil`, `len(v)` is zero.
+    Enum type: equal to `max(Enum)-min(Enum)+1`.
+    \\#soa dynamic array: the reserved number of elements in `v`; if `v` is `nil`, `len(v)` is zero.
+    
+    For some arguments, such as a string literal or a simple array expression, the result can be constant.
+
+    example:
+      arr := make( [dynamic]int, int 10 )
+      fmt.print( "cap: ", cap(arr) )
+      -> len: 10
+#

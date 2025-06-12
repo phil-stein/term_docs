@@ -1,0 +1,44 @@
+[
+{
+  "directory": "C:/Workspace/C/term_docs/build/make",
+  "command": "C:\\Compiler\\mingw64\\bin\\gcc.exe  @CMakeFiles/doc.dir/includes_C.rsp  -g -Wall -std=gnu99 -DDIRS_TO_WALK_BACK_TO_ROOT=1 -g -Wall -D_CRT_SECURE_NO_WARNINGS -DGLOBAL_DEBUG -pg -o CMakeFiles\\doc.dir\\C_\\Workspace\\C\\term_docs\\src\\app\\main.c.obj -c C:\\Workspace\\C\\term_docs\\src\\app\\main.c",
+  "file": "C:/Workspace/C/term_docs/src/app/main.c",
+  "output": "CMakeFiles/doc.dir/C_/Workspace/C/term_docs/src/app/main.c.obj"
+},
+{
+  "directory": "C:/Workspace/C/term_docs/build/make",
+  "command": "C:\\Compiler\\mingw64\\bin\\gcc.exe  @CMakeFiles/doc.dir/includes_C.rsp  -g -Wall -std=gnu99 -DDIRS_TO_WALK_BACK_TO_ROOT=1 -g -Wall -D_CRT_SECURE_NO_WARNINGS -DGLOBAL_DEBUG -pg -o CMakeFiles\\doc.dir\\C_\\Workspace\\C\\term_docs\\src\\app\\core_data.c.obj -c C:\\Workspace\\C\\term_docs\\src\\app\\core_data.c",
+  "file": "C:/Workspace/C/term_docs/src/app/core_data.c",
+  "output": "CMakeFiles/doc.dir/C_/Workspace/C/term_docs/src/app/core_data.c.obj"
+},
+{
+  "directory": "C:/Workspace/C/term_docs/build/make",
+  "command": "C:\\Compiler\\mingw64\\bin\\gcc.exe  @CMakeFiles/doc.dir/includes_C.rsp  -g -Wall -std=gnu99 -DDIRS_TO_WALK_BACK_TO_ROOT=1 -g -Wall -D_CRT_SECURE_NO_WARNINGS -DGLOBAL_DEBUG -pg -o CMakeFiles\\doc.dir\\C_\\Workspace\\C\\term_docs\\src\\app\\def.c.obj -c C:\\Workspace\\C\\term_docs\\src\\app\\def.c",
+  "file": "C:/Workspace/C/term_docs/src/app/def.c",
+  "output": "CMakeFiles/doc.dir/C_/Workspace/C/term_docs/src/app/def.c.obj"
+},
+{
+  "directory": "C:/Workspace/C/term_docs/build/make",
+  "command": "C:\\Compiler\\mingw64\\bin\\gcc.exe  @CMakeFiles/doc.dir/includes_C.rsp  -g -Wall -std=gnu99 -DDIRS_TO_WALK_BACK_TO_ROOT=1 -g -Wall -D_CRT_SECURE_NO_WARNINGS -DGLOBAL_DEBUG -pg -o CMakeFiles\\doc.dir\\C_\\Workspace\\C\\term_docs\\src\\app\\doc.c.obj -c C:\\Workspace\\C\\term_docs\\src\\app\\doc.c",
+  "file": "C:/Workspace/C/term_docs/src/app/doc.c",
+  "output": "CMakeFiles/doc.dir/C_/Workspace/C/term_docs/src/app/doc.c.obj"
+},
+{
+  "directory": "C:/Workspace/C/term_docs/build/make",
+  "command": "C:\\Compiler\\mingw64\\bin\\gcc.exe  @CMakeFiles/doc.dir/includes_C.rsp  -g -Wall -std=gnu99 -DDIRS_TO_WALK_BACK_TO_ROOT=1 -g -Wall -D_CRT_SECURE_NO_WARNINGS -DGLOBAL_DEBUG -pg -o CMakeFiles\\doc.dir\\C_\\Workspace\\C\\term_docs\\src\\app\\file_io.c.obj -c C:\\Workspace\\C\\term_docs\\src\\app\\file_io.c",
+  "file": "C:/Workspace/C/term_docs/src/app/file_io.c",
+  "output": "CMakeFiles/doc.dir/C_/Workspace/C/term_docs/src/app/file_io.c.obj"
+},
+{
+  "directory": "C:/Workspace/C/term_docs/build/make",
+  "command": "C:\\Compiler\\mingw64\\bin\\gcc.exe  @CMakeFiles/doc.dir/includes_C.rsp  -g -Wall -std=gnu99 -DDIRS_TO_WALK_BACK_TO_ROOT=1 -g -Wall -D_CRT_SECURE_NO_WARNINGS -DGLOBAL_DEBUG -pg -o CMakeFiles\\doc.dir\\C_\\Workspace\\C\\term_docs\\src\\app\\style.c.obj -c C:\\Workspace\\C\\term_docs\\src\\app\\style.c",
+  "file": "C:/Workspace/C/term_docs/src/app/style.c",
+  "output": "CMakeFiles/doc.dir/C_/Workspace/C/term_docs/src/app/style.c.obj"
+},
+{
+  "directory": "C:/Workspace/C/term_docs/build/make",
+  "command": "C:\\Compiler\\mingw64\\bin\\gcc.exe  @CMakeFiles/doc.dir/includes_C.rsp  -g -Wall -std=gnu99 -DDIRS_TO_WALK_BACK_TO_ROOT=1 -g -Wall -D_CRT_SECURE_NO_WARNINGS -DGLOBAL_DEBUG -pg -o CMakeFiles\\doc.dir\\C_\\Workspace\\C\\term_docs\\src\\app\\config.c.obj -c C:\\Workspace\\C\\term_docs\\src\\app\\config.c",
+  "file": "C:/Workspace/C/term_docs/src/app/config.c",
+  "output": "CMakeFiles/doc.dir/C_/Workspace/C/term_docs/src/app/config.c.obj"
+}
+]

@@ -27,6 +27,6 @@
 [sheet_dir_rel] "sheets/builtin_sheets/" // test
 
 // custom sheet paths
-[sheet_dir_rel] sheets\custom_sheets
-[sheet_dir_rel] sheets\odin
+[sheet_dir_rel] "sheets\custom_sheets"
+[sheet_dir_rel] "sheets\odin_docs"
 // [sheet_dir] C:\workspace\c\term_docs\sheets\custom_sheets_02

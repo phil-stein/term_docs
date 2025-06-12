@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.31.4)
+cmake_minimum_required(VERSION 3.28.0)
+# cmake_minimum_required(VERSION 3.31.4)
 
 set(NAME "doc")
 
@@ -63,7 +64,6 @@ set(CUSTOM_COMPILE_OPTIONS
 
 target_include_directories(${NAME} PRIVATE ${ROOT_DIR}/src)
 target_include_directories(${NAME} PRIVATE ${ROOT_DIR}/external)
-<<<<<<< HEAD
 target_compile_features(   ${NAME} PRIVATE cxx_std_11)
 # target_compile_options(    ${NAME} PRIVATE -Wall -DGLOBAL_DEBUG -DASSETM_NO_ZIP -DDEBUG_TIMER -DDEBUG_OPENGL -DDEBUG_DRAW -DASSET_PATH=\"/Workspace/C/bovengine/_assets/\")
 # target_compile_features(   ${NAME} PRIVATE cxx_std_11)
