@@ -317,12 +317,13 @@ to open a specific doc documentation via keybind <br>
 
 ## todo
   - [ ] update readme, example section, screenshots, etc.
+  - [ ] make command to disable looking at any command or \$X$ to escape commands
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
   - [ ] load keys for style.c from file, for custamization
   - [ ] c-syntax in macros, for numbers, strings, etc.
-  - [x] make sure all sheets use '-' as space in tags
+  - [ ] make sure all sheets use '-' as space in tags 'WIP'
   - [ ] replace file_io.c/.h with the one in bovengine
   - [ ] make github release
   - [ ] have $g_$ for green and underscore

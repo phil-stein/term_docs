@@ -30,6 +30,7 @@ extern "C" {
 #define COL_VALUE             PF_YELLOW
 #define COL_MACRO             PF_PURPLE
 #define COL_ATTRIBUTE         PF_PURPLE
+#define COL_FLOW_CTRL         PF_CYAN 
 
 
 #define DOC_PF(...)                   fprintf(core_data->pf_out, __VA_ARGS__)
@@ -138,7 +139,8 @@ INLINE void style_draw_line()
 //      style_highlight_c(txt, buf, &buf_pos, &i)
 //     }
 // return is whether to conzinue in that loop
-bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr); 
+// bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr); 
+bool style_highlight_lang(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr); 
 
 void style_highlight_c_comment(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr);
 

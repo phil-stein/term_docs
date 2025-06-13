@@ -48,7 +48,7 @@ void def_print_result(search_result_t* r)
 
     // highlight all c syntax
     // style_highlight_c(r->txt, buf, &buf_pos, (int*)&i);
-    if (style_highlight_c(r->txt, buf, &buf_pos, &i))
+    if (style_highlight_lang(r->txt, buf, &buf_pos, &i))
     { continue; }
     
     // -- copy from sec --

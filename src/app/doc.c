@@ -267,7 +267,7 @@ void doc_color_code_section(char* sec, int len)
     // highlight all c syntax
     if (syntax)
     { 
-      if (style_highlight_c(sec, buf, &buf_pos, &i))
+      if (style_highlight_lang(sec, buf, &buf_pos, &i))
       { continue; }
     }
     
@@ -774,7 +774,7 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
     skip_char = true; 
   }
 
-  // doc -> $doc:path/to/file.txt$
+  // doc -> $doc:"malloc"$
   if (sec_pos+5 < sec_len   &&
        sec[sec_pos]   == '$' && 
        (sec[sec_pos+1] == 'd' || sec[sec_pos+1] == 'D') && 
@@ -844,6 +844,59 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
     FREE(output);
     ERROR_LABEL:;
     skip_char = true; 
+  }
+  if (sec_pos+5 < sec_len   &&
+       sec[sec_pos]   == '$' && 
+       (sec[sec_pos+1] == 'l' || sec[sec_pos+1] == 'L') && 
+       (sec[sec_pos+2] == 'a' || sec[sec_pos+2] == 'A') && 
+       (sec[sec_pos+3] == 'n' || sec[sec_pos+3] == 'N') && 
+       (sec[sec_pos+4] == 'g' || sec[sec_pos+4] == 'G') && 
+       sec[sec_pos+5] == ':' )
+  { 
+    BUF_DUMP(); 
+    
+    sec_pos += 6; // skip $lang:
+
+    // get lang name 
+    char cmd_buf[256];
+    int  cmd_buf_pos = 0;
+    sec_pos++; // skip '"'
+    while (sec_pos < sec_len && sec[sec_pos] != '\n' && sec[sec_pos] != '\0' && sec[sec_pos] != '"')
+    { cmd_buf[cmd_buf_pos++] = sec[sec_pos] == '\\' ? '/' : sec[sec_pos]; sec_pos++; }
+    cmd_buf[cmd_buf_pos] = '\0';
+    sec_pos++; // skip '"'
+    if ( sec[sec_pos] != '$' ) 
+    { 
+      char c = sec[sec_pos +1];
+      sec[sec_pos +1] = '\0';
+
+      PF( "\n"); 
+      ERR( "$lang:\"xyz\"$ not terminated with $, but: %c\n -> segment: %s\n -> cmd_buf: %s\n", sec[sec_pos], sec, cmd_buf ); 
+      sec[sec_pos +1] = c;
+    }
+    sec_pos++; // skip '$'
+    P_STR(cmd_buf);
+    
+    if ( cmd_buf_pos >= 1 &&
+         ( cmd_buf[0] == 'c' || cmd_buf[0] == 'C' )
+       )
+    {
+      core_data->lang_type = LANG_C;
+      P( "LANG_C" );
+    }
+    else if ( cmd_buf_pos >= 4 &&
+              (
+                ( cmd_buf[0] == 'o' || cmd_buf[0] == 'O' ) &&
+                ( cmd_buf[1] == 'd' || cmd_buf[1] == 'D' ) &&
+                ( cmd_buf[2] == 'i' || cmd_buf[2] == 'I' ) &&
+                ( cmd_buf[3] == 'n' || cmd_buf[3] == 'N' )
+              )
+            )
+    {
+      core_data->lang_type = LANG_ODIN;
+      P( "LANG_ODIN" );
+    }
+    else { P_ERR( "unknown argument in $lang:xyz$ command: '%s'\n", cmd_buf ); }
   }
 
   #undef buf_pos

@@ -119,6 +119,16 @@ int main(int argc, char** argv)
       ERR_CHECK(word_arr_len < WORD_ARR_MAX, "more words than the word_arr arr can hold, max is: %d\n", WORD_ARR_MAX);
     }
   }
+
+  // @TMP:
+  const char tmp[] = "memset";
+  if ( argc <= 1 )
+  {
+    word_arr[0] = (char*)&tmp[0];
+    word_arr_len++;
+    // P_STR( word_arr[0] );
+    // P_V( word_arr_len );
+  }
   
   // -c / -color modifier
   if (color_cmd) 

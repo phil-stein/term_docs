@@ -12,6 +12,14 @@ extern "C" {
 
 #define CORE_ICONS_MAX 8
 
+typedef enum
+{
+  LANG_C,
+  LANG_ODIN,
+  LANG_TYPE_MAX,
+
+} LANG_TYPE;
+
 typedef struct core_data_t
 {
   char exec_path[CORE_PATH_MAX];      // path to executable
@@ -29,6 +37,7 @@ typedef struct core_data_t
   bool print_loc_act;                 // -loc command
   bool use_utf8;
   bool use_icons;
+  LANG_TYPE lang_type;
 
   char error_icon[CORE_ICONS_MAX];
   char warning_icon[CORE_ICONS_MAX];
@@ -56,6 +65,7 @@ typedef struct core_data_t
   .print_loc_act            = false,      \
   .use_utf8                 = false,      \
   .use_icons                = false,      \
+  .lang_type                = LANG_C,     \
   .error_icon               = "!",        \
   .warning_icon             = "!",        \
   .info_icon                = "~",        \

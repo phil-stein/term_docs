@@ -1,34 +1,76 @@
 #include "app/style.h"
 #include "app/doc.h"
 #include "app/core_data.h"
+#include "global/global_print.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 
+#define KEY_WORDS_MAX 40
 #define KEY_MAX 32
 
-const char key_types[][KEY_MAX] = 
-{ 
-  "unsigned", "const", "extern", "restrict", "volatile", "static", "auto", "register", "signed", 
-  "void", "char", "short", "int", "long", "float", "double", "bool", 
-  "struct", "enum", "typedef",
-  "size_t", "rsize_t", "errno_t", "FILE",
-  "u8", "u16", "u32", "u64", "u8", "s16", "s32", "s64", "f32", "f64"
-};
-const u32  key_types_len = sizeof(key_types) / sizeof(key_types[0]);   
+// --- c ---
 
-const char key_flow_ctrl[][KEY_MAX] = { "if", "else", "for", "while", "do", "switch"};
-const u32  key_flow_ctrl_len = sizeof(key_flow_ctrl) / sizeof(key_flow_ctrl[0]);
+#define KEY_TYPES_C \
+{ \
+  "unsigned", "const", "extern", "restrict", "volatile", "static", "auto", "register", "signed", \
+  "void", "char", "short", "int", "long", "float", "double", "bool", \
+  "struct", "enum", "typedef",\
+  "size_t", "rsize_t", "errno_t", "FILE",\
+  "u8", "u16", "u32", "u64", "u8", "s16", "s32", "s64", "f32", "f64"\
+}
+
+#define KEY_FLOW_CTRL_C { "if", "else", "for", "while", "do", "switch"}
+
 // @TODO: break & conmtinue dont get highlighted because they dont have () at the end
-const char key_flow_ctrl_cmd[][KEY_MAX] = { "return", "break", "continue", "case", "default", "goto" };
-const u32  key_flow_ctrl_cmd_len = sizeof(key_flow_ctrl_cmd) / sizeof(key_flow_ctrl_cmd[0]);
+#define KEY_FLOW_CTRL_CMD_C { "return", "break", "continue", "case", "default", "goto" }
 
-const char key_values[][KEY_MAX] = { "NULL", "true", "false" };
-const u32  key_values_len = sizeof(key_values) / sizeof(key_values[0]);
+#define KEY_VALUES_C { "NULL", "true", "false" }
 
-const char key_comment[][KEY_MAX] = { "@DOC:", "@TODO:", "@NOTE:", "@TMP:", "@BUGG:", "@OPTIMIZATION:" };
-const u32  key_comment_len = sizeof(key_comment) / sizeof(key_comment[0]);
+#define KEY_COMMENT_C { "@DOC:", "@TODO:", "@NOTE:", "@TMP:", "@BUGG:", "@OPTIMIZATION:" }
+
+// --- odin ---
+
+#define KEY_TYPES_ODIN                                                \
+{                                                                     \
+  "const", "@static", "dynamic",                                      \
+  "int", "uint", "bool", "rawptr",                                    \
+  "struct", "enum", "proc",                                           \
+  "u8", "u16", "u32", "u64", "u8", "s16", "s32", "s64", "f32", "f64"  \
+}
+
+#define KEY_FLOW_CTRL_ODIN { "if", "else", "for", "switch", "defer", "in", "when" }
+// @TODO: break & conmtinue dont get highlighted because they dont have () at the end
+#define KEY_FLOW_CTRL_CMD_ODIN { "return", "break", "continue", "case", "import", "package", "fallthrough" }
+
+#define KEY_VALUES_ODIN { "nil", "true", "false" }
+
+// --- all langs ---
+
+const char key_types[LANG_TYPE_MAX][KEY_WORDS_MAX][KEY_MAX] = { KEY_TYPES_C, KEY_TYPES_ODIN };
+const u32  key_types_c_len              = sizeof(key_types[LANG_C]) / sizeof(key_types[LANG_C][0]);   
+const u32  key_types_odin_len           = sizeof(key_types)[LANG_ODIN] / sizeof(key_types[LANG_ODIN][0]);   
+const int  key_types_len[LANG_TYPE_MAX] = { key_types_c_len,     key_types_odin_len };
+
+const char key_flow_ctrl[LANG_TYPE_MAX][KEY_WORDS_MAX][KEY_MAX] = { KEY_FLOW_CTRL_C, KEY_FLOW_CTRL_ODIN };
+const u32  key_flow_ctrl_c_len              = sizeof(key_flow_ctrl[LANG_C]) / sizeof(key_flow_ctrl[LANG_C][0]);
+const u32  key_flow_ctrl_odin_len           = sizeof(key_flow_ctrl[LANG_ODIN]) / sizeof(key_flow_ctrl[LANG_ODIN][0]);
+const int  key_flow_ctrl_len[LANG_TYPE_MAX] = { key_flow_ctrl_c_len,     key_flow_ctrl_odin_len };
+
+const char key_flow_ctrl_cmd[LANG_TYPE_MAX][KEY_WORDS_MAX][KEY_MAX] = { KEY_FLOW_CTRL_CMD_C, KEY_FLOW_CTRL_CMD_ODIN };
+const u32  key_flow_ctrl_cmd_c_len              = sizeof(key_flow_ctrl_cmd[LANG_C]) / sizeof(key_flow_ctrl_cmd[LANG_C][0]);
+const u32  key_flow_ctrl_cmd_odin_len           = sizeof(key_flow_ctrl_cmd[LANG_ODIN]) / sizeof(key_flow_ctrl_cmd[LANG_ODIN][0]);
+const int  key_flow_ctrl_cmd_len[LANG_TYPE_MAX] = { key_flow_ctrl_cmd_c_len,     key_flow_ctrl_cmd_odin_len };
+
+const char key_values[LANG_TYPE_MAX][KEY_WORDS_MAX][KEY_MAX] = { KEY_VALUES_C, KEY_VALUES_ODIN };
+const u32  key_values_c_len              = sizeof(key_values[LANG_C]) / sizeof(key_values[LANG_C][0]);
+const u32  key_values_odin_len           = sizeof(key_values[LANG_ODIN]) / sizeof(key_values[LANG_ODIN][0]);
+const int  key_values_len[LANG_TYPE_MAX] = { key_values_c_len,     key_values_odin_len };
+
+const char key_comment[LANG_TYPE_MAX][KEY_WORDS_MAX][KEY_MAX] = { KEY_COMMENT_C, KEY_COMMENT_C };
+const u32  key_comment_c_len = sizeof(key_comment[LANG_C]) / sizeof(key_comment[LANG_C][0]);
+const int  key_comment_len[LANG_TYPE_MAX] = { key_comment_c_len,     key_comment_c_len };
 
 // check if char is valid as an ending for a type name
 #define TYPE_START(c)    (isspace(c) || (c) == ',' || (c) == ';' || (c) == '(')
@@ -81,28 +123,39 @@ const u32  key_comment_len = sizeof(key_comment) / sizeof(key_comment[0]);
     }
 
 
+//
+// @TODO: factor out shared functionality between sytle_highlight_c/_odin and modify the rest to highlight odin
+//        make unique key_types, key_flow_ctrl, key_values, key_comments for c and odin
+//
 
 #define buf_pos (*buf_pos_ptr)
 #define txt_pos       (*i_ptr)
-bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr) 
+bool style_highlight_lang(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr) 
 {
   // core_data_t* core_data = core_data_get();
 
   // buf_pos & i are macros for _ptr equivalent
 
+  // PF( "in %s\n", __func__ );
+
   // -- types --
   if (txt_pos == 0 || TYPE_START(txt[txt_pos -1])) //  && txt[i -1] != '|') //  && !in_tag)  
   {
+    // P( "post if" );
+    // P_V(core_data->lang_type);
+    // P_V(key_types_len[core_data->lang_type]);
     // -- types --
-    for (u32 s = 0; s < key_types_len; ++s) // string
+    for (u32 s = 0; s < key_types_len[core_data->lang_type]; ++s) // string
     {
       // @UNSURE: could use strcmp()
       bool equal = false;
-      u32 len = strlen(key_types[s]);
+      u32 len = strlen(key_types[core_data->lang_type][s]);
+      if ( len <= 0 ) { continue; }
+      // P_STR(key_types[core_data->lang_type][s]);
       u32 c;
       for (c = 0; c < len; ++c)             // char
       {
-        equal = txt[txt_pos +c] == key_types[s][c];
+        equal = txt[txt_pos +c] == key_types[core_data->lang_type][s][c];
         if (!equal) { break; }
       }
       if (equal && TYPE_END(txt[txt_pos +len]))
@@ -111,17 +164,18 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
         return false;
       }
     }
+    // P( "post key_types" );
 
     // -- flow control --
-    for (u32 s = 0; s < key_flow_ctrl_cmd_len; ++s) // string
+    for (u32 s = 0; s < key_flow_ctrl_cmd_len[core_data->lang_type]; ++s) // string
     {
       // @UNSURE: could use strcmp()
       bool equal = false;
-      u32 len = strlen(key_flow_ctrl_cmd[s]);
+      u32 len = strlen(key_flow_ctrl_cmd[core_data->lang_type][s]);
       u32 c;
       for (c = 0; c < len; ++c)             // char
       {
-        equal = txt[txt_pos +c] == key_flow_ctrl_cmd[s][c];
+        equal = txt[txt_pos +c] == key_flow_ctrl_cmd[core_data->lang_type][s][c];
         if (!equal) { break; }
       }
       bool return_end = false;
@@ -129,46 +183,51 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       bool case_end = false;
       FLOW_CTRL_CMD_END_CASE(txt_pos+len, &case_end);
       if (equal && (( return_end || case_end) || 
-                      FLOW_CTRL_CMD_END(txt_pos +len)))
+                    FLOW_CTRL_CMD_END(txt_pos +len) || core_data->lang_type == LANG_ODIN ))
       {
-        DUMP_COLORED(len, COL_TYPE);
+        DUMP_COLORED(len, COL_FLOW_CTRL);
         return false;
       }
     }
-    for (u32 s = 0; s < key_flow_ctrl_len; ++s) // string
+    // P( "post key_flow_ctrl_cmd" );
+    for (u32 s = 0; s < key_flow_ctrl_len[core_data->lang_type]; ++s) // string
     {
       // @UNSURE: could use strcmp()
       bool equal = false;
-      u32 len = strlen(key_flow_ctrl[s]);
+      u32 len = strlen(key_flow_ctrl[core_data->lang_type][s]);
       u32 c;
       for (c = 0; c < len; ++c)             // char
       {
-        equal = txt[txt_pos +c] == key_flow_ctrl[s][c];
+        equal = txt[txt_pos +c] == key_flow_ctrl[core_data->lang_type][s][c];
         if (!equal) { break; }
       }
+      if (!equal) { continue; }
       bool else_end = false;
       u32 _c = txt_pos +len;
       else_end = txt[txt_pos +len] == '{';
       while(isspace(txt[_c]) && txt[_c] != '\0')
       { if (txt[_c +1] == '{') { else_end = true; break;} _c++; }
       
-    if (equal && (else_end || FLOW_CTRL_END(txt_pos +len)))
+      // if ( equal && ( else_end || FLOW_CTRL_END(txt_pos +len) || ( core_data->lang_type == LANG_ODIN && !isalnum(txt[txt_pos + len +1]) ) ) )
+      if ( equal && ( else_end || FLOW_CTRL_END(txt_pos +len) || ( core_data->lang_type == LANG_ODIN && !isalnum(txt[txt_pos +len]) ) ) )
       {
-        DUMP_COLORED(len, COL_TYPE);
+        DUMP_COLORED(len, COL_FLOW_CTRL);
+        // PF( "§:%c:%c", txt[txt_pos], txt[txt_pos + len] );
         return false;
       }
     }
+    // P( "post key_flow_ctrl" );
     
     // -- values --
-    for (u32 s = 0; s < key_values_len; ++s) // string
+    for (u32 s = 0; s < key_values_len[core_data->lang_type]; ++s) // string
     {
       // @UNSURE: could use strcmp()
       bool equal = false;
-      u32 len = strlen(key_values[s]);
+      u32 len = strlen(key_values[core_data->lang_type][s]);
       u32 c;
       for (c = 0; c < len; ++c)             // char
       {
-        equal = txt[txt_pos +c] == key_values[s][c];
+        equal = txt[txt_pos +c] == key_values[core_data->lang_type][s][c];
         if (!equal) { break; }
       }
       if (equal && VALUE_END(txt[txt_pos +len]))
@@ -177,6 +236,7 @@ bool style_highlight_c(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
         return false;
       }
     }
+    // P( "post key_values" );
 
   }
   
@@ -357,15 +417,15 @@ void style_highlight_c_comment(char* txt, char* buf, int* buf_pos_ptr, int* i_pt
   // starts with whitespace
   if (txt_pos <= 0 || !isspace(txt[txt_pos -1])) { return; }
 
-  for (u32 s = 0; s < key_comment_len; ++s) // string
+  for (u32 s = 0; s < key_comment_len[core_data->lang_type]; ++s) // string
   {
     // @UNSURE: could use strncmp()
     bool equal = false;
-    u32 len = strlen(key_comment[s]);
+    u32 len = strlen(key_comment[core_data->lang_type][s]);
     u32 c;
     for (c = 0; c < len; ++c)             // char
     {
-      equal = txt[txt_pos +c] == key_comment[s][c];
+      equal = txt[txt_pos +c] == key_comment[core_data->lang_type][s][c];
       if (!equal) { break; }
     }
     if (equal && isspace(txt[txt_pos +len]))
