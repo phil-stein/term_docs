@@ -176,7 +176,7 @@ int main(int argc, char** argv)
     for (int i = 0; i < core_data->sheet_paths_len; ++i)
     {
       // PF("sheet_path[%d]: %s\n", i, core_data->sheet_paths[i]);
-      doc_search_dir(core_data->sheet_paths[i], (const char**)word_arr, word_arr_len, &found_count);
+      doc_search_dir(core_data->sheet_paths[i], (const char**)word_arr, word_arr_len, &found_count, 0 /* no PRINT_FLAGS needed */ );
     }
   }
   else if (HAS_FLAG(mode, SEARCH_DEFINITION))

@@ -316,8 +316,10 @@ to open a specific doc documentation via keybind <br>
   - [ ] GetModuleFileName in main.c only works on windows
 
 ## todo
-  - [ ] update readme, example section, screenshots, etc.
-  - [ ] make command to disable looking at any command or \$X$ to escape commands
+  - [X] !!! make command to disable looking at any command or \$X$ to escape commands
+  - [ ] !!! finish odin syntax highlighting `WIP`
+  - [ ] ??? more languages, glsl, slang, lua, zig, jai (eventually), etc.
+  - [ ] !!! update readme, example section, screenshots, etc.
   - [ ] search structure/enum definitions in specified dir
   - [ ] search function / structure references
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...

@@ -574,3 +574,95 @@ $lang:"ODIN"$
 
 
 #
+|term_docs|
+|doc|docs|test|cmd|
+
+
+    $file:"../test_01.txt"$
+    \$file:"../test_01.txt"$
+
+    $doc:"calloc"$
+    \$doc:"calloc"$
+
+    $g$$_$icons$$:
+      $icon::bash$
+      $icon::text$
+      $icon::hello$
+      $icon:icon text:normal text$
+      in text, $icon::icon-text$, continuing text
+      highlighted $r$ $icon::icon-text$ red-text$$ text
+      highlighted $r$$icon::icon-text$red-text$$ text
+      highlighted $r$$icon::icon-text$$$ text
+    \$g$\$_$icons$$:
+      \$icon::bash$
+      \$icon::text$
+      \$icon::hello$
+      \$icon:icon text:normal text$
+      in text, \$icon::icon-text$, continuing text
+      highlighted \$r$ \$icon::icon-text$ red-text$$ text
+      highlighted \$r$\$icon::icon-text$red-text$$ text
+      highlighted \$r$\$icon::icon-text$$$ text
+
+    c-highlighting:
+      int var = func(float f);  // active
+      if (var == f) { struct }
+      else { func(); }
+      $syn$
+      int var = func(float f);  // inactive
+      if (var == f) { struct }
+      else { func(); }
+      $$
+      int var = func(float f);  // active
+      if (var == f) { struct }
+      else { func(); }
+      \$syn$
+      int var = func(float f);  // inactive
+      if (var == f) { struct }
+      else { func(); }
+      \$$
+
+    $~$set info style$$ normal again
+    $!$set warn style$$ normal again
+    $?$set link style$$ normal again
+    $|$set tag style$$ normal again
+    $|$not_tag$|$ $$ $not_tag$ finds this
+    \$\~$set info style\$$ normal again
+    \$\!$set warn style\$$ normal again
+    \$\?$set link style\$$ normal again
+    \$\|$set tag style\$$ normal again
+    \$\|$not_tag$\|$ \$$ $not_tag$ finds this
+
+    $black$black$$ <- black text
+    $red$red$$
+    $green$green$$
+    $yellow$yellow$$
+    $blue$blue$$
+    $purple$purple$$
+    $cyan$cyan$$
+    $red$red $green$green $yellow$yellow $blue$blue $purple$purple $cyan$cyan $$
+    $RED$red $GREEN$green $YELLOW$yellow $BLUE$blue $PURPLE$purple $CYAN$cyan $$
+    $r$red $g$green $y$yellow $b$blue $p$purple $c$cyan $$
+    $R$red $G$green $Y$yellow $B$blue $P$purple $C$cyan $$
+
+    \$black$black\$$ <- black text
+    \$red$red\$$
+    \$green$green\$$
+    \$yellow$yellow\$$
+    \$blue$blue\$$
+    \$purple$purple\$$
+    \$cyan$cyan\$$
+    \$red$red \$green$green \$yellow$yellow \$blue$blue \$purple$purple \$cyan$cyan $$
+    \$RED$red \$GREEN$green \$YELLOW$yellow \$BLUE$blue \$PURPLE$purple \$CYAN$cyan $$
+    \$r$red $g\$green \$y$yellow \$b$blue \$p$purple \$c$cyan $$
+    \$R$red $G\$green \$Y$yellow \$B$blue \$P$purple \$C$cyan $$
+    
+    changing $italic$mode italic $red$color$white$ hello $$ normal
+    $dim$mode dim,$$ $italic$$dim$ italic dim$$
+    $underline$underline$$ normal
+    $/$italic$$ normal $_$underline$$ normal $%$dim$$ \? $$
+    changing $italic$mode italic $red$color$white$ hello $$ normal
+    \$dim$mode dim,\$$ $italic\$$dim\$ italic dim\$$
+    \$underline$underline\$$ normal
+    \$/$italic\$$ normal \$_$underline\$$ normal \$%$dim\$$ \? \$$
+
+#

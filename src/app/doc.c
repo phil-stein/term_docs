@@ -4,6 +4,7 @@
 #include "app/core_data.h"
 #include "global/global.h"
 #include "global/global_print.h"
+#include "global/global_types.h"
 
 #include <ctype.h>
 #include <direct.h>
@@ -19,7 +20,7 @@ u32 default_pf_style = PF_NORMAL;
 char cur_file_path[CUR_FILE_PATH_MAX];
 
 // @TODO: make keword an array and check all keywords are in section
-void doc_search_dir(const char* dir_path, const char** keywords, int keywords_len, int* n)
+void doc_search_dir(const char* dir_path, const char** keywords, int keywords_len, int* n, PRINT_FLAGS print_flags)
 {
   char path[256];
   struct dirent* dp;
@@ -52,7 +53,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
                       dir_path[strlen(dir_path) -1] == '\\' ? "" : "\\";
         SPRINTF(300, buf, "%s%s%s", dir_path, slash, dp->d_name);
         // P_STR(buf);
-        if (doc_search_file(buf, dp->d_name, keywords, keywords_len)) 
+        if (doc_search_file(buf, dp->d_name, keywords, keywords_len, print_flags)) 
         { 
           *n += 1;
         }
@@ -65,7 +66,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
       strcat(path, "\\");
       strcat(path, dp->d_name);
       
-      doc_search_dir(path, keywords, keywords_len, n); // search recursively
+      doc_search_dir(path, keywords, keywords_len, n, print_flags); // search recursively
     }
   }
 
@@ -73,7 +74,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
   closedir(dir);
 }
 
-bool doc_search_file(const char* path, const char* file, const char** keywords, int keywords_len)
+bool doc_search_file(const char* path, const char* file, const char** keywords, int keywords_len, PRINT_FLAGS print_flags)
 {
   if (!check_file_exists(path)) { return false; }
   int txt_len = 0;
@@ -177,7 +178,7 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
         DOC_PF(": %d\n", lines_count);
       }
       STRCPY(cur_file_path, path);
-      doc_print_section(txt + start, end - start, keywords, keywords_len, file, lines_count);
+      doc_print_section(txt + start, end - start, keywords, keywords_len, file, lines_count, print_flags);
       sections_found_count++;
     }
 
@@ -191,7 +192,7 @@ bool doc_search_file(const char* path, const char* file, const char** keywords, 
 }
 
 
-void doc_print_section(char* sec, int sec_len, const char** keywords, int keywords_len, const char* file, const int line)
+void doc_print_section(char* sec, int sec_len, const char** keywords, int keywords_len, const char* file, const int line, PRINT_FLAGS print_flags)
 {
   // core_data_t* core_data = core_data_get();
   
@@ -202,11 +203,13 @@ void doc_print_section(char* sec, int sec_len, const char** keywords, int keywor
   char title[256];
   SPRINTF(64, title, "    %s[%d] |%s    ", file, line, _keywords);
 
-  style_draw_title(title);
+  if ( !HAS_FLAG(print_flags, PRINT_NO_TITLE) )
+  { style_draw_title(title); }
   
   doc_color_code_section(sec, sec_len);
    
-  style_draw_line();
+  if ( !HAS_FLAG(print_flags, PRINT_NO_BOTTOM_LINE) )
+  { style_draw_line(); }
 }
 
   
@@ -440,7 +443,13 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
   #define skip_char (*skip_char_ptr)
   
   
-  // core_data_t* core_data = core_data_get();
+  // escaped cmd-code
+  if (sec_pos >= 1 && sec[sec_pos -1] == '\\' && sec[sec_pos] == '$')
+  {
+    (*buf_pos_ptr)--; // skip the \ that escaped the command
+    BUF_DUMP(); // RESET_STYLE();  SET_STYLE(default_pf_style, default_pf_color); 
+    return;
+  }
 
   if (sec[sec_pos] == '$' && sec[sec_pos+1] == '$')                             // reset to normal
   { 
@@ -805,12 +814,12 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
     int found_count = 0;  // counts found matches for keyword
     const char* keywords[] = { (const char*)cmd_buf };
     int keywords_len = 1;
-    P_STR(keywords[0]);
+    // P_STR(keywords[0]);
     core_data->style_act = false;
     core_data->use_icons = false;
     for (int i = 0; i < core_data->sheet_paths_len; ++i)
     {
-      doc_search_dir(core_data->sheet_paths[i], keywords, keywords_len, &found_count);
+      doc_search_dir(core_data->sheet_paths[i], keywords, keywords_len, &found_count, PRINT_NO_TITLE | PRINT_NO_BOTTOM_LINE);
     }
     if (found_count <= 0) { DOC_PF("not find nothing\n"); goto ERROR_LABEL; }
     core_data->pf_out = stdout;
@@ -830,7 +839,7 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
     fclose(doc_file);
     output[output_len -1] = '\0';
 
-    P_STR(output);
+    // P_STR(output);
     int  box_width  = core_data->text_box_width;
     int  box_height = core_data->text_box_height;
     #define BOX_INDENT_MAX 32
