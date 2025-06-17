@@ -1,27 +1,44 @@
 
 #
 |odin|Odin|
-|builtin|compile_time|compile-time|predeclared|identifiers|
+|builtin|compile-time|predeclared|identifiers|
 |type|types|
 |nil|false|true|
+|windows|Windows|linux|Linux|unix|Unix|
 |ODIN_OS|Odin_OS_Type|ODIN_ARCH|Odin_Arch_Type|OS|os|operating-system|
 |ODIN_BUILD_MODE|Odin_Build_Mode_Type|build-mode|
+|ODIN_WINDOWS_SUBSYSTEM|ODIN_VENDOR|ODIN_VERSION|compiler|vendor|version|
+|ODIN_ROOT|ODIN_DEBUG|ODIN_DISABLE_ASSERT|
+|ODIN_DEFAULT_TO_NIL_ALLOCATOR|ODIN_DEFAULT_TO_PANIC_ALLOCATOR|ODIN_CRT|
+$lang:"odin"$
   $_$$g$defines/predeclared identifier$$:
-  $p$nil$$                     pointer with zero value
-  $p$false$$                   untyped boolean
-  $p$true$$                    untyped boolean
-  $p$ODIN_OS$$                 a predeclared enum of type $g$runtime.Odin_OS_Type$$ specifying 
-                          the target platforms operating system
-  $p$ODIN_ARCH$$               a predeclared enum of type $g$runtime.Odin_Arch_Type$$ specifying 
-                          the target platforms architecture 
-  $p$ODIN_BUILD_MODE$$         a predeclared enum of type $g$runtime.Odin_Build_Mode_Type$$ 
-                          specifying the build mode
-  $p$ODIN_ERROR_POS_STYLE$$    an enum of type $g$runtime.Odin_Error_Pos_Type$$ 
-                          specifying whether errors should be stylized in the
-                          $syn$default (MSVC-like) style or a UNIX (GCC-like) style.
-                          Default = `path(1:2) \| Unix = `path:1:2:$$
-  $p$ODIN_PLATFORM_SUBTARGET$$ a predeclared enum of type $g$runtime.Odin_Platform_Subtarget_Type$$ 
-                          specifying the selected subtarget type only relevant for Darwin  
+  $p$nil$$                             pointer with zero value
+  $p$false$$                           untyped boolean
+  $p$true$$                            untyped boolean
+  $p$ODIN_OS$$                         a predeclared enum of type $g$runtime.Odin_OS_Type$$ specifying 
+                                  the target platforms operating system
+  $p$ODIN_ARCH$$                       a predeclared enum of type $g$runtime.Odin_Arch_Type$$ specifying 
+                                  the target platforms architecture 
+  $p$ODIN_BUILD_MODE$$                 a predeclared enum of type $g$runtime.Odin_Build_Mode_Type$$ 
+                                  specifying the build mode
+  $p$ODIN_ERROR_POS_STYLE$$            an enum of type $g$runtime.Odin_Error_Pos_Type$$ 
+                                  specifying whether errors should be stylized in the
+                                  $syn$default (MSVC-like) style or a UNIX (GCC-like) style.
+                                  Default = `path(1:2) \| Unix = `path:1:2:$$
+  $p$ODIN_PLATFORM_SUBTARGET$$         a predeclared enum of type $g$runtime.Odin_Platform_Subtarget_Type$$ 
+                                  specifying the selected subtarget type only relevant for Darwin  
+  $p$ODIN_WINDOWS_SUBSYSTEM$$          a string specifying the current Windows subsystem, 
+                                  only useful on Windows targets 
+  $p$ODIN_VENDOR$$                     a string specifying the current Odin compiler vendor
+  $p$ODIN_VERSION$$                    a string specifying the current Odin compiler version
+  $p$ODIN_ROOT$$                       a string with the path to the Odin root directory 
+  $p$ODIN_DEBUG$$                      true if -debug was set at compilation, otherwise false 
+  $p$ODIN_DISABLE_ASSERT$$             true if -disable-assert was set at compilation, otherwise false 
+  $p$ODIN_DEFAULT_TO_NIL_ALLOCATOR$$   true if -default-to-nil-allocator was set at compilation, otherwise false 
+  $p$ODIN_DEFAULT_TO_PANIC_ALLOCATOR$$ true if -default-to-panic-allocator was set at compilation, otherwise false 
+  $p$ODIN_CRT$$                        true if -no-crt was set at compilation
+                                  disallowing the C Run Time library, otherwise false
+
 
   $_$$g$types$$:
     $g$Odin_OS_Type$$ :: enum int {
@@ -67,6 +84,7 @@
 #
 |odin|Odin|
 |len|lenght|cap|capacity|array|builtin|
+$lang:"odin"$
   len :: proc(v: Array_Type) -> int
     The len built-in procedure returns the length of v according to its type:
     
@@ -88,6 +106,7 @@
 #
 |odin|Odin|
 |cap|capacity|len|lenght|array|builtin|
+$lang:"odin"$
   cap :: proc(v: Array_Type) -> int
     The cap built-in procedure returns the length of v according to its type:
     
@@ -103,4 +122,6 @@
       arr := make( [dynamic]int, int 10 )
       fmt.print( "cap: ", cap(arr) )
       -> len: 10
+#
+
 #

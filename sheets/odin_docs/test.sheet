@@ -1,0 +1,156 @@
+#
+|odin|Odin|
+|test|test-file|
+$lang:"odin"$
+package term_docs_odin_test
+
+import "core:fmt"
+
+main :: proc()
+{
+  fmt.println( "hello world" )
+  arr_01 := make( [dynamic]int, 10 )
+  fmt.println( "cap: ", cap(arr_01) )
+
+  arr_02 : [10]int
+  fmt.println( "len: ", len(arr_02) )
+}
+
+// @TODO: highlight proc names
+procedure :: proc( arg0: int, arg1: []f32, arg2: rawptr ) -> ( res0: int, res1: f64 )
+{
+  if arg2 \!= nil
+  {
+    index : int
+    index = arg0 
+    return arg0, f64(arg1[index])
+  }
+  else { return arg0, 0.0 }
+}
+
+structure :: struct
+{
+  m0 : int,
+  m1 : f32,
+  m2 : string,
+  m3 : struct
+  {
+    m3_0 : bool,
+    m3_1 : int^,
+  },
+}
+Enumeration :: enum
+{
+  A,
+  B,
+  C,
+}
+
+flag : Enumeration = .A
+if Enumeration.A in flag {}
+
+#
+|odin|Odin|
+|test|
+$lang:"odin"$
+
+window_create :: proc( width_perc, height_perc: f32, pos_x_perc, pos_y_perc: f32, title: cstring, type: Window_Type, vsync: bool ) -> bool
+{
+  // enable error logging for glfw
+  glfw.SetErrorCallback( cast(glfw.ErrorProc)error_callback )
+
+
+    // Initialise GLFW
+    if (glfw.Init() == glfw.FALSE)
+    {
+      fmt.printf( "Failed to initialize GLFW !!!\n" )
+        return false
+    }
+  glfw.WindowHint( glfw.CONTEXT_VERSION_MAJOR, 4 )
+    glfw.WindowHint( glfw.CONTEXT_VERSION_MINOR, 6 )
+    glfw.WindowHint( glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE )
+    // glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true); // @TODO: implement this, page 439 in learnopengl
+
+    data.monitor   = glfw.GetPrimaryMonitor()
+    mode      := glfw.GetVideoMode( data.monitor )
+    data.monitor_width  = int(mode.width)
+    data.monitor_height = int(mode.height)
+
+    glfw.WindowHint_int( glfw.RED_BITS,     mode.red_bits )
+    glfw.WindowHint_int( glfw.GREEN_BITS,   mode.green_bits )
+    glfw.WindowHint_int( glfw.BLUE_BITS,    mode.blue_bits )
+    glfw.WindowHint_int( glfw.REFRESH_RATE, mode.refresh_rate )
+
+    width  := int( f32(data.monitor_width)  * width_perc )
+    height := int( f32(data.monitor_height) * height_perc )
+
+    // open a window and create its opengl context
+    if type == Window_Type.FULLSCREEN
+    {
+      data.window = glfw.CreateWindow( mode.width, mode.height, title, data.monitor, nil )
+        data.window_width  = int(mode.width)
+        data.window_height = int(mode.height)
+    }
+    else
+    {
+      data.window = glfw.CreateWindow( cast(c.int)width, cast(c.int)height, title, nil, nil )
+        data.window_width  = width
+        data.window_height = height
+
+        pos_x := c.int( f32(data.monitor_width)  * pos_x_perc )
+        pos_y := c.int( f32(data.monitor_height) * pos_y_perc )
+        glfw.SetWindowPos( data.window, pos_x, pos_y )
+    }
+
+  if data.window == nil
+  {
+    fmt.printf( "Failed to open GLFW window.\n" )
+      glfw.Terminate()
+      return false
+  }
+
+  // make the window's context current
+  glfw.MakeContextCurrent( data.window )
+
+    glfw.SwapInterval( vsync ? 1 : 0 )  // disable vsync
+    data.vsync_enabled = vsync
+
+    // gl.load_up_to( 3, 3, glfw.gl_set_proc_address )
+    gl.load_up_to( 4, 6, glfw.gl_set_proc_address )
+
+    // tell opengl the size of our window
+    w, h := glfw.GetFramebufferSize( data.window )
+    gl.Viewport( 0, 0, w, h )
+
+    // maximize window
+    if ( type == Window_Type.MAXIMIZED )
+    {
+      glfw.MaximizeWindow( data.window )
+    }
+  data.window_type = type
+
+    // set the resize callback
+    glfw.SetFramebufferSizeCallback( data.window, cast(glfw.FramebufferSizeProc)resize_callback )
+    // @NOTE: causes inability to restore maximized after fullscreen, also framebuffers crash when minimizing to system tray
+    glfw.SetWindowMaximizeCallback( data.window,  cast(glfw.WindowMaximizeProc)maximize_callback); 
+
+  glfw.SetWindowAttrib( data.window, glfw.FOCUS_ON_SHOW, 1 )  // 1: true
+                                                              // glfwSetWindowAttrib(window, GLFW_AUTO_ICONIFY, true);
+    glfw.RequestWindowAttention( data.window )
+
+
+    // During init, enable debug output
+    gl.Enable( gl.DEBUG_OUTPUT )
+    gl.DebugMessageCallback( gl.debug_proc_t(opengl_debug_callback), nil )
+    gl.Enable( gl.DEBUG_OUTPUT_SYNCHRONOUS )
+
+    camera_set_pers_mat( f32(data.window_width), f32(data.window_height) )
+
+    data.monitor_size_cm_width, data.monitor_size_cm_height = window_get_monitor_size_cm()
+    data.monitor_dpi_width, data.monitor_dpi_height = window_get_monitor_dpi()
+    data.monitor_ppi_width, data.monitor_ppi_height = window_get_monitor_ppi()
+
+    return true
+}
+
+// #

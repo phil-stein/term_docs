@@ -427,6 +427,11 @@
     $?$set link style$$ normal again
     $|$set tag style$$ normal again
     $|$not_tag$|$ $$ $not_tag$ finds this
+
+    $g$$_$escaped commands$$:
+    \$r$text\$$
+    \$\!$text\$$
+    \$doc:"calloc"$
     
     ~ info, $cyan$cyan$$ info ~ not info
     ~ info, $cyan$cyan$$ info 
@@ -472,6 +477,11 @@
       highlighted $r$$icon::icon-text$red-text$$ text
       highlighted $r$$icon::icon-text$$$ text
 
+
+  ?< https://github.com/phil-stein/term_docs/tree/main >?
+#
+|term_docs|
+|test|file-cmd|
     $file:"../test_01.txt"$
     
     $file:"../test_01.txt":2:40:5$
@@ -487,9 +497,15 @@
     
     $file:"../test_01.txt":2:120:5$
 
-    $doc:"calloc"$
+    $file:"../../src/app/main.c":2:120:9999$
 
-  ?< https://github.com/phil-stein/term_docs/tree/main >?
+#
+|term_docs|
+|test|doc-cmd|
+
+    $doc:"calloc"$
+    
+$doc:"calloc"$
 #
 |term_docs|
 |custom-name|
@@ -564,6 +580,20 @@ $lang:"ODIN"$
     }
 
   }
+    if ()       if()
+    else if ()  else if()
+    else{}      else {} 
+    for ()      for()
+    switch ()   switch()
+    
+    return; return val; break; continue; case 23: default:
+    default
+    return
+    returns
+    returning
+    
+    if else for while do switch
+    return break continue case default
 
   --- c ---
   $lang:"c"$

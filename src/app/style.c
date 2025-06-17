@@ -35,14 +35,14 @@
 #define KEY_TYPES_ODIN                                                \
 {                                                                     \
   "const", "@static", "dynamic",                                      \
-  "int", "uint", "bool", "rawptr",                                    \
+  "int", "uint", "bool", "rawptr", "string",                          \
   "struct", "enum", "proc",                                           \
   "u8", "u16", "u32", "u64", "u8", "s16", "s32", "s64", "f32", "f64"  \
 }
 
 #define KEY_FLOW_CTRL_ODIN { "if", "else", "for", "switch", "defer", "in", "when" }
 // @TODO: break & conmtinue dont get highlighted because they dont have () at the end
-#define KEY_FLOW_CTRL_CMD_ODIN { "return", "break", "continue", "case", "import", "package", "fallthrough" }
+#define KEY_FLOW_CTRL_CMD_ODIN { "return", "break", "continue", "case", "import", "package", "fallthrough", "->" }
 
 #define KEY_VALUES_ODIN { "nil", "true", "false" }
 
@@ -73,7 +73,8 @@ const u32  key_comment_c_len = sizeof(key_comment[LANG_C]) / sizeof(key_comment[
 const int  key_comment_len[LANG_TYPE_MAX] = { key_comment_c_len,     key_comment_c_len };
 
 // check if char is valid as an ending for a type name
-#define TYPE_START(c)    (isspace(c) || (c) == ',' || (c) == ';' || (c) == '(')
+#define TYPE_START_C(c)    (isspace(c) || (c) == ',' || (c) == ';' || (c) == '(')
+#define TYPE_START_ODIN(c)    (isspace(c) || (c) == ',' || (c) == ';' || (c) == '(' || !isalnum(c) )
 // check if char is valid as an ending for a type name
 #define TYPE_END(c)      (isspace(c) || (c) == '*' || !isalnum(c))
 
@@ -82,7 +83,8 @@ const int  key_comment_len[LANG_TYPE_MAX] = { key_comment_c_len,     key_comment
                                        { if (txt[_c] == ';') {(*b) = true; break;} _c++; } }
 #define FLOW_CTRL_CMD_END_CASE(c, b)   { u32 _c = c; while(txt[_c] != '\n' && txt[_c] != '\0') \
                                        { if (txt[_c] == ':') {(*b) = true; break;} _c++; } }
-#define FLOW_CTRL_CMD_END(c)  ((c) == ';')
+#define FLOW_CTRL_CMD_END_C(c)     ( (c) == ';' )
+#define FLOW_CTRL_CMD_END_ODIN(c)  ( (c) == ';' || (c) == ':' || isspace(c) )
 
 // eisther if[(] or if[ ] or else[ if] or [else]
 #define FLOW_CTRL_END(c) (txt[c] == '(' ||                                \
@@ -139,7 +141,9 @@ bool style_highlight_lang(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
   // PF( "in %s\n", __func__ );
 
   // -- types --
-  if (txt_pos == 0 || TYPE_START(txt[txt_pos -1])) //  && txt[i -1] != '|') //  && !in_tag)  
+  if (txt_pos == 0 || 
+      ( core_data->lang_type == LANG_C    && TYPE_START_C(txt[txt_pos -1]) ) ||
+      ( core_data->lang_type == LANG_ODIN && TYPE_START_ODIN(txt[txt_pos -1]) ) ) //  && txt[i -1] != '|') //  && !in_tag)  
   {
     // P( "post if" );
     // P_V(core_data->lang_type);
@@ -183,7 +187,8 @@ bool style_highlight_lang(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
       bool case_end = false;
       FLOW_CTRL_CMD_END_CASE(txt_pos+len, &case_end);
       if (equal && (( return_end || case_end) || 
-                    FLOW_CTRL_CMD_END(txt_pos +len) || core_data->lang_type == LANG_ODIN ))
+                    FLOW_CTRL_CMD_END_C(txt[txt_pos +len]) || 
+                    ( core_data->lang_type == LANG_ODIN && FLOW_CTRL_CMD_END_ODIN(txt[txt_pos + len]) ) ))
       {
         DUMP_COLORED(len, COL_FLOW_CTRL);
         return false;
@@ -252,6 +257,25 @@ bool style_highlight_lang(char* txt, char* buf, int* buf_pos_ptr, int* i_ptr)
     BUF_DUMP();
     DOC_PF_COLOR(PF_WHITE);
     DOC_PF_STYLE_RESET();
+  }
+  
+  // -- typedefinitions - odin --
+  if ( core_data->lang_type == LANG_ODIN )
+  {
+    j = 0; int k = 0;
+    while(isalnum(txt[txt_pos +j]) || txt[txt_pos +j] == '_') 
+    { j++; }
+    while( isspace(txt[txt_pos +j +k]) ) 
+    { k++; }
+    if ( txt[txt_pos +j +k] == ':' && (txt[txt_pos +j +k +1] == ':' ))
+    {
+      BUF_DUMP();
+      DOC_PF_COLOR(COL_FUNC);
+      while (j > 0) { buf[buf_pos++] = txt[txt_pos++]; j--; }
+      BUF_DUMP();
+      DOC_PF_COLOR(PF_WHITE);
+      DOC_PF_STYLE_RESET();
+    }
   }
  
   // -- values --

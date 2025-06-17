@@ -9,6 +9,8 @@
 #include <ctype.h>
 #include <direct.h>
 #include <dirent/dirent.h>
+#include <libloaderapi.h>
+#include <string.h>
 
 u32 cur_pf_color = PF_WHITE; 
 u32 cur_pf_style = PF_NORMAL;
@@ -808,7 +810,27 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
  
     // FILE* doc_file = tmpfile();
     // FILE* doc_file = tmpnam("./doc_cmd.txt");
-    FILE* doc_file = fopen("bin/doc_cmd.tmp", "w+");
+    // char* cwd = _getcwd(NULL, 0);
+    // P_STR(cwd);
+    // char p[512];
+    // GetModuleFileNameA( NULL, p, 256 );
+    // P_STR(p);
+    // P_STR(core_data->exec_path);
+    //
+    char path[CORE_PATH_MAX];
+    STRNCPY(path, core_data->exec_path, CORE_PATH_MAX);
+    int dirs_walk_back = 1 + DIRS_TO_WALK_BACK_TO_ROOT;
+    for (u32 i = strlen(path) -1; i > 0; --i)
+    {
+      if (path[i] == '\\' || path[i] == '/')
+      { dirs_walk_back--; if (dirs_walk_back <= 0) { break; } }
+      path[i] = '\0';
+    }
+    // P_STR( path );
+    strncat_s( path, CORE_PATH_MAX, "bin\\doc_cmd.tmp", CORE_PATH_MAX );
+    // P_STR( path );
+    // FILE* doc_file = fopen("bin/doc_cmd.tmp", "w+");
+    FILE* doc_file = fopen( path, "w+" );
     if (doc_file == NULL) { P_ERR("failed executing $doc:\"%s\"$ output\n", cmd_buf);  goto ERROR_LABEL;}
     core_data->pf_out = doc_file;
     int found_count = 0;  // counts found matches for keyword
@@ -865,6 +887,7 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
     BUF_DUMP(); 
     
     sec_pos += 6; // skip $lang:
+    if ( sec[sec_pos] != '"' ) { P_ERR( "$lang:\"XYZ\"$ language name (XYZ) not in parenthesis i.e. \"XYZ\"\n -> cmd_buf: %s\n", sec ); goto ERROR_LABEL; } 
 
     // get lang name 
     char cmd_buf[256];
@@ -884,7 +907,7 @@ void doc_color_code_color_codes(char* sec, int sec_len, char* buf, int* buf_pos_
       sec[sec_pos +1] = c;
     }
     sec_pos++; // skip '$'
-    P_STR(cmd_buf);
+    // P_STR(cmd_buf);
     
     if ( cmd_buf_pos >= 1 &&
          ( cmd_buf[0] == 'c' || cmd_buf[0] == 'C' )

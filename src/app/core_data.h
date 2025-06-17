@@ -7,7 +7,7 @@ extern "C" {
 
 #include "global/global.h"
 
-#define CORE_PATH_MAX   256
+#define CORE_PATH_MAX   512
 #define CORE_SHEET_PATHS_MAX 8
 
 #define CORE_ICONS_MAX 8

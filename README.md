@@ -316,22 +316,34 @@ to open a specific doc documentation via keybind <br>
   - [ ] GetModuleFileName in main.c only works on windows
 
 ## todo
+ __!!!__ -> important
+ __???__ -> unsure if gonna do
+ __---__ -> not very important
   - [X] !!! make command to disable looking at any command or \$X$ to escape commands
-  - [ ] !!! finish odin syntax highlighting `WIP`
+  - [X] !!! finish odin syntax highlighting 
+  - [ ] !!! add odin documentation
+  - [ ] !!! force tabs to be two spaces
+  - [ ] ??? add enum member highlighting and types when after : or inbetween a : X = b
   - [ ] ??? more languages, glsl, slang, lua, zig, jai (eventually), etc.
+  - [ ] --- fix $file:"..."$ & $doc:"..."$ command text box
+  - [ ] --- $file:"..."$ add '-' arg for indent width height args to use default/infinite/terminal-width 
+  - [ ] --- add support for 24bit color range like nvim
+  - [ ] --- add $type$, $func$, etc. to set color to whatever type/func/etc. color is rn
   - [ ] !!! update readme, example section, screenshots, etc.
-  - [ ] search structure/enum definitions in specified dir
-  - [ ] search function / structure references
+  - [ ] --- make sure all sheets use '-' as space in tags `WIP`
+  - [ ] ??? have $g_$ for green and underscore
+  - [ ] ??? convert into some style format and then print that rather than directly print
+  - [ ] ??? search structure/enum definitions in specified dir
+  - [ ] ??? search function / structure references
+    - i.e. use numbers not used by ascii for styling
+    - could then use in non terminal applications
+  - [ ] ??? convert image to terminal output, use imcat ?
+  - [ ] ??? use fzf or custom solution to fuzzy find tags / incomplete search
   - [ ] incomplete search, i.e. func_ -> func_a, func_b, ...
   - [ ] load keys for style.c from file, for custamization
   - [ ] c-syntax in macros, for numbers, strings, etc.
-  - [ ] make sure all sheets use '-' as space in tags 'WIP'
   - [ ] replace file_io.c/.h with the one in bovengine
   - [ ] make github release
-  - [ ] have $g_$ for green and underscore
-  - [ ] convert into some style format and then print that rather than directly print
-    - i.e. use numbers not useb by ascii for styling
-    - could then use in non terminal applications
   - [ ] online documentation
     - use curl or something
     - have 'offline' defenition in sheet file but use 
@@ -343,8 +355,6 @@ to open a specific doc documentation via keybind <br>
   - [x] add nerdfont/devicon support -> `$icon:'✖':x$`
     - https://www.nerdfonts.com/cheat-sheet
     - https://dev.to/rdentato/utf-8-strings-in-c-1-3-42a4, https://dev.to/rdentato/utf-8-strings-in-c-2-3-3kp1, https://dev.to/rdentato/utf-8-strings-in-c-3-3-2pc7
-  - [ ] make tabs be two spaces
-  - [ ] convert image to terminal output ?
   - [ ] make string values in config.doc be abled to have "..." or '...'
   - [ ] add [print] or print() to config.doc
   - [ ] add $file:path/to/file.txt$ to print out contents of file
