@@ -322,6 +322,7 @@ to open a specific doc documentation via keybind <br>
   - [X] !!! make command to disable looking at any command or \$X$ to escape commands
   - [X] !!! finish odin syntax highlighting 
   - [ ] !!! add odin documentation
+  - [ ] !!! @BUGG: |odin|test-file| segment prints starting hash
   - [ ] !!! force tabs to be two spaces
   - [ ] ??? add enum member highlighting and types when after : or inbetween a : X = b
   - [ ] ??? more languages, glsl, slang, lua, zig, jai (eventually), etc.

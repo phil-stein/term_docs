@@ -1,16 +1,82 @@
 
-|c|C|
-|calloc|
-|allocate|memory|dynamic-memory|stdlib|stdlib.h|
-void* calloc(size_t items, size_t size)   
-    allocate the specified amount of memory.
-    sets memory to 0.
-     needs to be freed using [free]
-     returns NULL on fail
-     included in <stdlib.h>
-    example: 
-      // array now has space for 10 int's
-      int* array = calloc(10, sizeof(int));
+|term_docs|
+|doc|docs|doc_help|
+|help|h|-help|-h|--help|--h|
+|-c|-color|config|-d|
+|-loc|loc|location|
+  modifiers:
+    -color:
+    -c:      disable syntax highlighting (color)
+    -d:      search for defenition of func in .h file
+    -config: print config file
+    -loc:    print documentation location
+    doc <...> -c
+    doc <...> -d
+    doc <...> -c -d
+    doc -d <...>
+    doc <...> -d <...>
 
-< https://www.tutorialspoint.com/c_standard_library/c_function_calloc.html >
+  search for documentation:
+    tag: |<tag>|
+    doc <tag>
+    doc <tag1> <tag2> ...
+  
+  search for definition:
+    doc <dir> <func-name> -d
+    doc - <dir> <func-name>
+
+  custom documentation:
+    see |custom-docs|
+
+  custom name:
+    see |custom-name|
+
+  config file:$
+    view |config-file|
+    doc -config to print config file
+
+  example:
+    >doc malloc
+      -> stdlib.sheet|malloc -------------------------------
+      -> 
+      -> |malloc|
+      -> |allocate|memory|dynamic memory|
+      -> void* malloc(size_t size)
+      ->     allocate the specified amount of memory.
+      ->      needs to be freed using [free]
+      ->      size is in bytes
+      ->      returns NULL on fail
+      ->      included in <stdlib.h>
+      ->     example:
+      ->       // array now has space for 10 int's
+      ->       int* array = malloc(10 * sizeof(int));
+      -> 
+      -> < https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm >
+      -> --------------------------------------------------
+    
+    location:
+    >doc malloc -loc
+      -> ->location:
+      ->  -> file: <path>\<sheet-name>.sheet
+      ->  -> line: <line-nr>
+      -> ...
+    
+    look for section with both git and log as tags
+    otherwise (>doc log) would also find math.h log()
+    >doc git log
+      -> ...
+    
+    >doc ../src function -d
+      -> function -----------------------------
+      -> 
+      -> // comment
+      -> void function(int arg);
+      ->   -> file: 'src/file0.h' line: 34
+      ->   
+      -> void function(char arg);
+      ->   -> file: 'src/file1.h' line: 92
+      -> 
+      -> --------------------------------------
+
+  < https://github.com/phil-stein/term_docs/tree/main >
 

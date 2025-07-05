@@ -22,7 +22,7 @@ u32 default_pf_style = PF_NORMAL;
 char cur_file_path[CUR_FILE_PATH_MAX];
 
 // @TODO: make keword an array and check all keywords are in section
-void doc_search_dir(const char* dir_path, const char** keywords, int keywords_len, int* n, PRINT_FLAGS print_flags)
+void check_search_dir(const char* dir_path, const char** keywords, int keywords_len, int* n, PRINT_FLAGS print_flags)
 {
   char path[256];
   struct dirent* dp;
@@ -76,7 +76,7 @@ void doc_search_dir(const char* dir_path, const char** keywords, int keywords_le
   closedir(dir);
 }
 
-bool doc_search_file(const char* path, const char* file, const char** keywords, int keywords_len, PRINT_FLAGS print_flags)
+bool check_search_file(const char* path, const char* file, const char** keywords, int keywords_len, PRINT_FLAGS print_flags)
 {
   if (!check_file_exists(path)) { return false; }
   int txt_len = 0;

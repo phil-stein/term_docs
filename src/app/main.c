@@ -4,6 +4,8 @@
 #include "app/file_io.h"
 #include "app/core_data.h"
 #include "app/config.h"
+#include "global/global_print.h"
+#include <string.h>
 
 // order is important, io_util & str_util before global
 #define IO_UTIL_IMPLEMENTATION       // only define once
@@ -21,10 +23,18 @@
 
 typedef enum
 {
-  SEARCH_DOCUMENTATION  = FLAG(0),
-  SEARCH_DEFINITION     = FLAG(1),
-  SEARCH_SEARCH         = FLAG(2),
-}search_mode_t;
+  MODE_DOCUMENTATION  = FLAG(0),
+  MODE_DEFINITION     = FLAG(1),
+  MODE_SEARCH         = FLAG(2),
+  MODE_CHECK          = FLAG(3),
+} op_mode_t; // operating mode for doc exe
+#define P_OP_MODE_T(_m)                                           \
+  PF_COLOR(PF_CYAN); PF( "%s: ", #_m ); PF_STYLE_RESET();         \ 
+  PF( "%s\n", (_m) == MODE_DOCUMENTATION ? "MODE_DOCUMENTATION" : \
+              (_m) == MODE_DEFINITION    ? "MODE_DEFINITION" :    \
+              (_m) == MODE_SEARCH        ? "MODE_SEARCH" :        \
+              (_m) == MODE_CHECK         ? "MODE_CHECK" :         \
+              "UNKNOWN" );
 
 // activated by '-config'
 bool print_config_cmd = false;
@@ -59,7 +69,7 @@ int main(int argc, char** argv)
  
   // ---- commands ----
 
-  search_mode_t mode = SEARCH_DOCUMENTATION;  // search docs by default
+  op_mode_t mode = MODE_DOCUMENTATION;  // search docs by default
   u32 cmd_count = 0;
   #define WORD_ARR_MAX 24
   char* word_arr[WORD_ARR_MAX] = { NULL }; // all words, aka. not commands, like malloc, git, etc.
@@ -67,9 +77,12 @@ int main(int argc, char** argv)
   for (u32 i = 1; i < argc; ++i)
   {
     // // @NOTE: '-h' or '-help' for help is in term_docs.sheet
+    //
+    int argv_i_len = strlen(argv[i]);
     
     // @NOTE: '-config' to print config file
-    if (argv[i][0] == '-'  && 
+    if (argv_i_len == 7 &&
+        argv[i][0] == '-'  && 
         argv[i][1] == 'c'  && 
         argv[i][2] == 'o'  && 
         argv[i][3] == 'n'  && 
@@ -81,10 +94,11 @@ int main(int argc, char** argv)
       print_config_cmd = true;
     }
     // @NOTE: '-c' or '-color' to disable color and styles
-    else if ((argv[i][0] == '-'  && 
+    else if ((argv_i_len == 2  &&
+              argv[i][0] == '-'  && 
               argv[i][1] == 'c') ||
-             
-             (argv[i][0] == '-'  && 
+             (argv_i_len == 6 &&
+              argv[i][0] == '-'  && 
               argv[i][1] == 'c'  && 
               argv[i][2] == 'o'  && 
               argv[i][3] == 'l'  && 
@@ -94,7 +108,8 @@ int main(int argc, char** argv)
       cmd_count++;
       color_cmd = true;
     }
-    else if (argv[i][0] == '-'  && 
+    else if (argv_i_len == 4 &&
+             argv[i][0] == '-'  && 
              argv[i][1] == 'l'  && 
              argv[i][2] == 'o'  && 
              argv[i][3] == 'c'  ) 
@@ -105,11 +120,23 @@ int main(int argc, char** argv)
     
     // -- modes --
 
-    else if (argv[i][0] == '-' && 
+    else if (argv_i_len == 2 &&
+             argv[i][0] == '-' && 
              argv[i][1] == 'd')      // -d: definnition
     {
       cmd_count++;
-      mode = SEARCH_DEFINITION;
+      mode = MODE_DEFINITION;
+    }
+    else if (argv_i_len == 6 &&
+             argv[i][0] == '-'  && 
+             argv[i][1] == 'c'  && 
+             argv[i][2] == 'h'  && 
+             argv[i][3] == 'e'  && 
+             argv[i][4] == 'c'  && 
+             argv[i][5] == 'k'  ) 
+    {
+      cmd_count++;
+      mode = MODE_CHECK;
     }
 
     // if none of the commands its a word, i.e. 'malloc', 'function', etc.
@@ -121,7 +148,10 @@ int main(int argc, char** argv)
   }
 
   // @TMP:
-  const char tmp[] = "memset";
+  // P_OP_MODE_T(mode);
+
+  // @TMP:
+  const char tmp[] = "file-cmd";
   if ( argc <= 1 )
   {
     word_arr[0] = (char*)&tmp[0];
@@ -143,6 +173,12 @@ int main(int argc, char** argv)
   // P_STR(config_path);
   config_read_config_file(core_data->config_path, print_config_cmd);
 
+  if (HAS_FLAG(mode, MODE_CHECK))
+  {
+    P( "check" );
+    goto label_end_of_main;
+  }
+
   // -- arguments --
   
   // too few arguments, at least 1, i.e. 2 because doc counts
@@ -160,7 +196,7 @@ int main(int argc, char** argv)
 
   int found_count = 0;  // counts found matches for keyword
   
-  if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
+  if (HAS_FLAG(mode, MODE_DOCUMENTATION))
   {
     // // @TMP: print word_arr
     // for (int i = 0; i < word_arr_len; ++i)
@@ -179,7 +215,7 @@ int main(int argc, char** argv)
       doc_search_dir(core_data->sheet_paths[i], (const char**)word_arr, word_arr_len, &found_count, 0 /* no PRINT_FLAGS needed */ );
     }
   }
-  else if (HAS_FLAG(mode, SEARCH_DEFINITION))
+  else if (HAS_FLAG(mode, MODE_DEFINITION))
   {
     if (word_arr_len < 2) // need dir and keyword
     {
@@ -199,7 +235,7 @@ int main(int argc, char** argv)
   // DOC_P_INT(found_count);
   if (found_count <= 0)
   { 
-    if (HAS_FLAG(mode, SEARCH_DOCUMENTATION))
+    if (HAS_FLAG(mode, MODE_DOCUMENTATION))
     {
       DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
       PF(" could not find keyword%s '", word_arr_len > 1 ? "s" : ""); 
@@ -214,7 +250,7 @@ int main(int argc, char** argv)
       DOC_PF_COLOR(PF_WHITE); 
       PF("' in sheets.\n");
     }
-    else if (HAS_FLAG(mode, SEARCH_DEFINITION))
+    else if (HAS_FLAG(mode, MODE_DEFINITION))
     {
       DOC_PF_COLOR(PF_RED); PF("[!]"); DOC_PF_COLOR(PF_WHITE);  
       PF(" could not find function defenition '"); 
@@ -230,6 +266,8 @@ int main(int argc, char** argv)
     else { P_ERR("unnkown mode"); }
   }
   
+  label_end_of_main:;
+
   DOC_PF_COLOR(PF_WHITE);
   DOC_PF_STYLE_RESET();
 	return 0;
